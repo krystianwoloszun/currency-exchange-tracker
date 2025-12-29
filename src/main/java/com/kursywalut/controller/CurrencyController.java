@@ -6,6 +6,7 @@ import com.kursywalut.service.NbpService;
 
 import java.math.BigDecimal;
 
+/* Obsługa HTTP */
 @RestController
 @RequestMapping("/api/currency")
 @RequiredArgsConstructor
@@ -18,11 +19,12 @@ public class CurrencyController {
         return nbpService.getRate(code.toUpperCase());
     }
 
-    @GetMapping("/convert")
-    public BigDecimal convert(
-            @RequestParam BigDecimal amount,
-            @RequestParam String code
-    ) {
-        return nbpService.convert(amount, code.toUpperCase());
+    @GetMapping("/converttopln")
+    public BigDecimal convertToPLN(@RequestParam BigDecimal amount, @RequestParam String code) {
+        return nbpService.convertToPLN(amount, code.toUpperCase());
+    }
+    @GetMapping("/convertfrompln")
+    public BigDecimal convertFomPLN(@RequestParam BigDecimal amount, @RequestParam String code) {
+        return nbpService.convertFromPLN(amount, code.toUpperCase());
     }
 }
