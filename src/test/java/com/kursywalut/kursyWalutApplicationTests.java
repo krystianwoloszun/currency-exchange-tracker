@@ -1,0 +1,13 @@
+package com.kursywalut;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class kursyWalutApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
