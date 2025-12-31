@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 
 @Data
 public class Rate {
-    private String effectiveDate;
-    private BigDecimal mid; //sredni kurs walut
+    private String currency; // nazwa waluty
+    private String code;     // kod waluty (USD, EUR)
+    private BigDecimal mid;  // kurs
 }

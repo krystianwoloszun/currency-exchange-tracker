@@ -1,15 +1,18 @@
 package com.kursywalut.controller;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-
-//tu nic nie ma jeszcze
-@RestController
+@Controller
 public class HomeController {
-
+    // pobiera ze /static
     @GetMapping("/")
-    public String home() {
-        return "Kursy Walut API działa poprawnie";
+    public String index() {
+        return "index.html";
+    }
+
+    @GetMapping("/calculator")
+    public String calculator() {
+        return "calculator.html";
     }
 }

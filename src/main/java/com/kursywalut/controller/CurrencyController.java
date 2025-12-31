@@ -1,10 +1,13 @@
 package com.kursywalut.controller;
 
+import com.kursywalut.model.ConversionDirection;
+import com.kursywalut.model.Rate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import com.kursywalut.service.NbpService;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /* Obsługa HTTP */
 @RestController
@@ -19,12 +22,15 @@ public class CurrencyController {
         return nbpService.getRate(code.toUpperCase());
     }
 
-    @GetMapping("/converttopln")
-    public BigDecimal convertToPLN(@RequestParam BigDecimal amount, @RequestParam String code) {
-        return nbpService.convertToPLN(amount, code.toUpperCase());
+    @GetMapping("/convert")
+    public BigDecimal convert(@RequestParam BigDecimal amount, @RequestParam String code, @RequestParam ConversionDirection direction) {
+        return direction == ConversionDirection.TO_PLN ? nbpService.convertToPLN(amount, code) : nbpService.convertFromPLN(amount, code);
     }
-    @GetMapping("/convertfrompln")
-    public BigDecimal convertFomPLN(@RequestParam BigDecimal amount, @RequestParam String code) {
-        return nbpService.convertFromPLN(amount, code.toUpperCase());
+
+    @GetMapping("/available")
+    public List<Rate> availableCurrencies() {
+        return nbpService.getAvailableCurrencies();
     }
+
+
 }
