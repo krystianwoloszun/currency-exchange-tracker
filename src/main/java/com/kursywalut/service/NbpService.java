@@ -4,7 +4,9 @@ import com.kursywalut.exception.NbpCodeNotFoundException;
 import com.kursywalut.model.NbpResponse;
 import com.kursywalut.model.NbpTableResponse;
 import com.kursywalut.model.Rate;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -17,6 +19,8 @@ import java.util.List;
 /* Logika do NBP */
 @Service
 @RequiredArgsConstructor
+@Getter
+@Setter
 public class NbpService {
 
     private final RestTemplate restTemplate;
