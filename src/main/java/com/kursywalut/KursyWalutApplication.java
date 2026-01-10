@@ -13,7 +13,7 @@ public class KursyWalutApplication {
 
 
 
-
+//
 //package com.kursywalut;
 //
 //import com.kursywalut.service.NbpService;
@@ -47,5 +47,6 @@ public class KursyWalutApplication {
 //        String b = "USD";
 //        System.out.println("Przeliczono "+ a + "[" + b + "]" + " na " + nbpService.convertToPLN(a, b) + "[PLN] po kursie: " + nbpService.getRate(b));
 //        System.out.println("Przeliczono "+ a + "[PLN]" + " na " + nbpService.convertFromPLN(a, b) + "[" + b + "]" + "po kursie: " + nbpService.getRate(b));
+//        System.out.println(nbpService.getAvailableCurrencies());
 //    }
 //}

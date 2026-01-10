@@ -12,6 +12,7 @@ import java.util.List;
 /* Obsługa HTTP */
 @RestController
 @RequestMapping("/api/currency")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class CurrencyController {
 
