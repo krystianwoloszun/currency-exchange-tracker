@@ -17,7 +17,7 @@ function convert() {
     const code = document.getElementById('currencySelect').value;
     const direction = document.getElementById('direction').value;
 
-    fetch(`/api/currency/convert?amount=${amount}&code=${code}&direction=${direction}`)
+    fetch(`/api/currency/conversion?amount=${amount}&code=${code}&direction=${direction}`)
         .then(res => res.text())
         .then(result => {
             document.getElementById('result').innerText = result;

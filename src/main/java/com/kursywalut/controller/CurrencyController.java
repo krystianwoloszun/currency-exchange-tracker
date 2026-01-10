@@ -17,9 +17,9 @@ public class CurrencyController {
 
     private final NbpService nbpService;
 
-    @GetMapping("/{code}")
+    @GetMapping("/{code:[A-Z]{3}}")
     public BigDecimal getRate(@PathVariable String code) {
-        if (code == null || code.isBlank() || code.length() != 3) {
+        if (code == null || code.isBlank() || code.length() != 3){
             throw new IllegalArgumentException("Kod waluty musi mieć 3 znaki i nie może być pusty");
         }
 
