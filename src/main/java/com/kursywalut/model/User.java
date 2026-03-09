@@ -1,7 +1,6 @@
 package com.kursywalut.model;
 import jakarta.persistence.*;
 import lombok.*;
-//KLASA UZYTKOWNIKA, ZROBIC LOGOWANIE
 @Entity
 @Table(name = "users")
 @Data
