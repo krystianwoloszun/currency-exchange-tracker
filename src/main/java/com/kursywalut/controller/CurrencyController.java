@@ -9,7 +9,7 @@ import com.kursywalut.service.NbpService;
 import java.math.BigDecimal;
 import java.util.List;
 
-/* Obsługa HTTP */
+//Obsluga HTTP
 @RestController
 @RequestMapping("/api/currency")
 @CrossOrigin(origins = "http://localhost:5173")

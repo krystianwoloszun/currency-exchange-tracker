@@ -1,5 +1,6 @@
 package com.kursywalut.service;
 
+import com.kursywalut.exception.UsernameAlreadyExistsException;
 import com.kursywalut.model.User;
 
 import com.kursywalut.repository.UserRepository;
@@ -22,6 +23,9 @@ public class UserService implements UserDetailsService {
 
     //Rejestracja
     public User registerUser(String username, String password) {
+        if (userRepository.findByUsername(username).isPresent()) {
+            throw new UsernameAlreadyExistsException("Username already exists");
+        }
         String encodedPassword = passwordEncoder.encode(password);
         User user = User.builder().username(username).password(encodedPassword).build();
         return userRepository.save(user);

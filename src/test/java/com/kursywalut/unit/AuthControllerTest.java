@@ -43,4 +43,19 @@ public class AuthControllerTest {
 
         mockMvc.perform(post("/api/auth/login").contentType(MediaType.APPLICATION_JSON).content(loginJson)).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.isEmptyString())));
     }
+
+    @Test
+    public void testRegisterDuplicateReturnsConflict() throws Exception {
+        String registerJson = """
+                {
+                    "username": "testuser",
+                    "password": "password123"
+                }
+                """;
+
+        mockMvc.perform(post("/api/auth/register").contentType(MediaType.APPLICATION_JSON).content(registerJson))
+                .andExpect(status().isConflict())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Username already exists"));
+    }
 }
