@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import CurrencyPage from "./pages/CurrencyPage";
 import Login from "./components/Login";
 import { clearToken, getToken } from "./auth/token";
+import styles from "./App.module.css";
 
 function App() {
   const [token, setTokenState] = useState(() => getToken());
@@ -17,18 +18,21 @@ function App() {
   return (
     <div className="App">
       {isAuthed ? (
-        <div>
-          <div style={{ display: "flex", justifyContent: "flex-end", padding: "12px 16px" }}>
+        <div className={styles.authed}>
+          <div className={styles.topBar}>
             <button onClick={logout}>Logout</button>
           </div>
-          <CurrencyPage onUnauthorized={logout} />
+          <div className={styles.content}>
+            <CurrencyPage onUnauthorized={logout} />
+          </div>
         </div>
       ) : (
-        <Login onLogin={(t) => setToken(t)} />
+        <div className={styles.page}>
+          <Login onLogin={(t) => setToken(t)} />
+        </div>
       )}
     </div>
   );
 }
 
 export default App;
-

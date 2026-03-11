@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getAvailableCurrencies, convertCurrency } from "../api/currencyApi";
 import { AuthError } from "../api/apiFetch";
 import { clearToken } from "../auth/token";
+import styles from "./Calculator.module.css";
 
 export default function Calculator({ onUnauthorized }) {
   const [currencies, setCurrencies] = useState([]);
@@ -62,31 +63,19 @@ export default function Calculator({ onUnauthorized }) {
     }
   };
 
-  if (loading) return <p>Ladowanie walut...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (loading) return <p className={styles.loading}>Ladowanie walut...</p>;
+  if (error) return <p className={styles.error}>{error}</p>;
 
   return (
-    <div
-      style={{
-        maxWidth: "500px",
-        margin: "50px auto",
-        padding: "30px",
-        backgroundColor: "#fff",
-        borderRadius: "10px",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-        fontFamily: "Arial, sans-serif",
-      }}
-    >
-      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-        Kalkulator walut (NBP)
-      </h2>
+    <div className={styles.root}>
+      <h2 className={styles.title}>Kalkulator walut (NBP)</h2>
 
-      <div style={{ marginBottom: "15px" }}>
+      <div className={styles.field}>
         <label>Waluta: </label>
         <select
           value={code}
           onChange={(e) => setCode(e.target.value)}
-          style={{ padding: "5px", width: "100%" }}
+          className={styles.select}
         >
           {currencies.map((c) => (
             <option key={c.code} value={c.code}>
@@ -96,58 +85,36 @@ export default function Calculator({ onUnauthorized }) {
         </select>
       </div>
 
-      <div style={{ marginBottom: "15px" }}>
+      <div className={styles.field}>
         <label>Kwota: </label>
         <input
           type="number"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           step="0.01"
-          style={{ padding: "5px", width: "100%" }}
+          className={styles.input}
         />
       </div>
 
-      <div style={{ marginBottom: "15px" }}>
+      <div className={styles.field}>
         <label>Kierunek: </label>
         <select
           value={direction}
           onChange={(e) => setDirection(e.target.value)}
-          style={{ padding: "5px", width: "100%" }}
+          className={styles.select}
         >
           <option value="TO_PLN">Waluta -&gt; PLN</option>
           <option value="FROM_PLN">PLN -&gt; Waluta</option>
         </select>
       </div>
 
-      <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <button
-          onClick={handleConvert}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#007bff",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
+      <div className={styles.actions}>
+        <button onClick={handleConvert} className={styles.primaryButton}>
           Przelicz
         </button>
       </div>
 
-      {result !== null && (
-        <div
-          style={{
-            marginTop: "25px",
-            fontSize: "18px",
-            fontWeight: "bold",
-            textAlign: "center",
-            color: "black"
-          }}
-        >
-          Wynik: {result}
-        </div>
-      )}
+      {result !== null && <div className={styles.result}>Wynik: {result}</div>}
     </div>
   );
 }

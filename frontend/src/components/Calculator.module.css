@@ -1,0 +1,57 @@
+.root {
+  width: 100%;
+}
+
+.title {
+  text-align: center;
+  margin: 0 0 20px;
+}
+
+.field {
+  margin-bottom: 15px;
+}
+
+.select {
+  padding: 6px 8px;
+  width: 100%;
+}
+
+.input {
+  padding: 6px 8px;
+  width: 100%;
+}
+
+.actions {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.primaryButton {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.primaryButton:hover {
+  background-color: #0069d9;
+}
+
+.result {
+  margin-top: 25px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  color: black
+}
+
+.error {
+  color: #c62828;
+}
+
+.loading {
+  text-align: center;
+}
+
