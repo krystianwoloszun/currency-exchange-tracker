@@ -19,4 +19,14 @@ public class RestExceptionHandler {
     public ResponseEntity<Map<String, String>> handleNbpCodeNotFound(NbpCodeNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", ex.getMessage()));
     }
+
+    @ExceptionHandler(InvalidCurrencyRequestException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidCurrencyRequest(InvalidCurrencyRequestException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(NoAvailableCurrenciesException.class)
+    public ResponseEntity<Map<String, String>> handleNoAvailableCurrencies(NoAvailableCurrenciesException ex) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(Map.of("message", ex.getMessage()));
+    }
 }
