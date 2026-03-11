@@ -1,6 +1,7 @@
 package com.kursywalut.service;
 
 import com.kursywalut.exception.NbpCodeNotFoundException;
+import com.kursywalut.exception.NbpUnavailableException;
 import com.kursywalut.model.NbpResponse;
 import com.kursywalut.model.NbpTableResponse;
 import com.kursywalut.model.Rate;
@@ -10,6 +11,8 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -41,8 +44,10 @@ public class NbpService {
         String url = rateUrl + "/" + code + "?format=json";
         try {
             return restTemplate.getForObject(url, NbpResponse.class);
-        } catch (HttpClientErrorException e) {
+        } catch (HttpClientErrorException.NotFound e) {
             throw new NbpCodeNotFoundException("Nie znaleziono kursu dla kodu: " + code);
+        } catch (HttpClientErrorException | HttpServerErrorException | ResourceAccessException e) {
+            throw new NbpUnavailableException("NBP is temporarily unavailable");
         }
     }
 
