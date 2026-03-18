@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {AuthError} from "../api/apiFetch";
 import {getAvailableCurrencies, getRateHistory} from "../api/currencyApi";
 import {clearToken} from "../auth/token";
+import HistoryChart from "../components/HistoryChart";
 import HistoryModule from "../components/HistoryModule";
 import "./HistoryPage.css";
 
@@ -70,28 +71,28 @@ export default function HistoryPage({onUnauthorized}) {
         };
     }, [onUnauthorized]);
 
-    const handleSubmit = async () => {
-        if (!code) {
+    const fetchHistory = async (nextCode, nextStartDate, nextEndDate) => {
+        if (!nextCode) {
             setError("Wybierz walute.");
             return;
         }
 
-        if (!startDate || !endDate) {
+        if (!nextStartDate || !nextEndDate) {
             setError("Wybierz zakres dat.");
             return;
         }
 
-        if (startDate > endDate) {
+        if (nextStartDate > nextEndDate) {
             setError("Data poczatkowa nie moze byc pozniejsza niz koncowa.");
             return;
         }
 
-        if (startDate < HISTORY_MIN_DATE || endDate < HISTORY_MIN_DATE) {
-            setError("Historia kursow walut jest dostepna od 02-01-2002.");
+        if (nextStartDate < HISTORY_MIN_DATE || nextEndDate < HISTORY_MIN_DATE) {
+            setError("Historia kursow walut jest dostepna od 2002-01-02.");
             return;
         }
 
-        if (countDaysInclusive(startDate, endDate) > HISTORY_MAX_DAYS) {
+        if (countDaysInclusive(nextStartDate, nextEndDate) > HISTORY_MAX_DAYS) {
             setError("Zakres dat dla historii kursow nie moze przekraczac 93 dni.");
             return;
         }
@@ -99,7 +100,7 @@ export default function HistoryPage({onUnauthorized}) {
         try {
             setLoadingHistory(true);
             setError("");
-            const data = await getRateHistory(code, startDate, endDate);
+            const data = await getRateHistory(nextCode, nextStartDate, nextEndDate);
             setHistory(Array.isArray(data) ? data : []);
         } catch (err) {
             if (err instanceof AuthError) {
@@ -115,6 +116,10 @@ export default function HistoryPage({onUnauthorized}) {
         }
     };
 
+    const handleSubmit = async () => {
+        await fetchHistory(code, startDate, endDate);
+    };
+
     return (
         <div className="history-page">
             <header className="history-header">
@@ -122,12 +127,11 @@ export default function HistoryPage({onUnauthorized}) {
                 <p>Sprawdz kurs wybranej waluty w zadanym zakresie dat.</p>
             </header>
 
-            <section className="history-chart-placeholder">
-                <div className="history-chart-copy">
-                    <h2>Wykres czasowy</h2>
-                    <p>To miejsce jest przygotowane pod przyszly wykres historii kursu dla wybranej waluty.</p>
-                </div>
-            </section>
+            <HistoryChart
+                history={history}
+                code={code}
+                loading={loadingHistory}
+            />
 
             <HistoryModule
                 currencies={currencies}
