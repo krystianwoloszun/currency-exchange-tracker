@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.temporal.ChronoUnit;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,6 +18,9 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class CurrencyController {
+
+    private static final LocalDate HISTORY_MIN_DATE = LocalDate.of(2002, 1, 2); //dane z nbp sa dostepne od 02.01.2002, okres pobranych danych nie moze przekraczac 93 dni
+    private static final long HISTORY_MAX_DAYS = 93;
 
     private final NbpService nbpService;
 
@@ -30,17 +34,22 @@ public class CurrencyController {
     }
 
     @GetMapping("/{code:[A-Z]{3}}/history")
-    public List<Rate> getRateHistory(
-            @PathVariable String code,
-            @RequestParam LocalDate startDate,
-            @RequestParam LocalDate endDate
-    ) {
+    public List<Rate> getRateHistory(@PathVariable String code, @RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
         if (code == null || code.isBlank() || code.length() != 3) {
             throw new InvalidCurrencyRequestException("Kod waluty musi miec 3 znaki i nie moze byc pusty");
         }
 
         if (startDate.isAfter(endDate)) {
             throw new InvalidCurrencyRequestException("Data poczatkowa nie moze byc pozniejsza niz data koncowa");
+        }
+
+        if (startDate.isBefore(HISTORY_MIN_DATE) || endDate.isBefore(HISTORY_MIN_DATE)) {
+            throw new InvalidCurrencyRequestException("Historia kursow walut jest dostepna od 2002-01-02");
+        }
+
+        long requestedDays = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+        if (requestedDays > HISTORY_MAX_DAYS) {
+            throw new InvalidCurrencyRequestException("Zakres dat dla historii kursow nie moze przekraczac 93 dni");
         }
 
         return nbpService.getRateHistory(code.toUpperCase(), startDate, endDate);

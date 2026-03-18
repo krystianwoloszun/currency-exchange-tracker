@@ -19,3 +19,8 @@ export async function getRate(code) {
     return apiFetch(`${API_BASE}/${code}`);
 }
 
+export async function getRateHistory(code, startDate, endDate) {
+    const params = new URLSearchParams({startDate, endDate});
+    return apiFetch(`${API_BASE}/${code}/history?${params.toString()}`);
+}
+
