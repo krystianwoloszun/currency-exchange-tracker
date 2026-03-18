@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {AuthError} from "../api/apiFetch";
 import {getAvailableCurrencies, getRateHistory} from "../api/currencyApi";
 import {clearToken} from "../auth/token";
+import HistoryModule from "../components/HistoryModule";
 import "./HistoryPage.css";
 
 const HISTORY_MIN_DATE = "2002-01-02"; //dane z nbp sa dostepne od 02.01.2002, okres pobranych danych nie moze przekraczac 93 dni
@@ -86,7 +87,7 @@ export default function HistoryPage({onUnauthorized}) {
         }
 
         if (startDate < HISTORY_MIN_DATE || endDate < HISTORY_MIN_DATE) {
-            setError("Historia kursow walut jest dostepna od 2002-01-02.");
+            setError("Historia kursow walut jest dostepna od 02-01-2002.");
             return;
         }
 
@@ -121,86 +122,29 @@ export default function HistoryPage({onUnauthorized}) {
                 <p>Sprawdz kurs wybranej waluty w zadanym zakresie dat.</p>
             </header>
 
-            <main className="history-main">
-                <div className="history-form">
-                    <div className="history-field">
-                        <label htmlFor="history-currency">Waluta</label>
-                        <select
-                            id="history-currency"
-                            value={code}
-                            onChange={(e) => setCode(e.target.value)}
-                            disabled={loadingCurrencies}
-                        >
-                            {currencies.map((currency) => (
-                                <option key={currency.code} value={currency.code}>
-                                    {currency.currency} ({currency.code})
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="history-field">
-                        <label htmlFor="history-start-date">Od</label>
-                        <input
-                            id="history-start-date"
-                            type="date"
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                            min={HISTORY_MIN_DATE}
-                            max={endDate || undefined}
-                        />
-                    </div>
-
-                    <div className="history-field">
-                        <label htmlFor="history-end-date">Do</label>
-                        <input
-                            id="history-end-date"
-                            type="date"
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                            min={startDate || HISTORY_MIN_DATE}
-                            max={defaultEndDate()}
-                        />
-                    </div>
-
-                    <button type="button" className="history-button" onClick={handleSubmit} disabled={loadingCurrencies || loadingHistory}>
-                        {loadingHistory ? "Ladowanie..." : "Pokaz historie"}
-                    </button>
+            <section className="history-chart-placeholder">
+                <div className="history-chart-copy">
+                    <h2>Wykres czasowy</h2>
+                    <p>To miejsce jest przygotowane pod przyszly wykres historii kursu dla wybranej waluty.</p>
                 </div>
+            </section>
 
-                <p className="history-hint">
-                    Historia kursow NBP jest dostepna od 2002-01-02, a jedno zapytanie moze obejmowac maksymalnie 93 dni.
-                </p>
-
-                {error && <p className="history-error">{error}</p>}
-
-                {!error && history.length > 0 && (
-                    <div className="history-results">
-                        <table className="history-table">
-                            <thead>
-                            <tr>
-                                <th>Data</th>
-                                <th>Kod</th>
-                                <th>Kurs</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {history.map((entry) => (
-                                <tr key={`${entry.code}-${entry.effectiveDate}`}>
-                                    <td>{entry.effectiveDate}</td>
-                                    <td>{entry.code}</td>
-                                    <td>{Number(entry.mid).toFixed(4)} PLN</td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-
-                {!error && !loadingHistory && history.length === 0 && (
-                    <p className="history-empty">Wybierz parametry i kliknij "Pokaz historie".</p>
-                )}
-            </main>
+            <HistoryModule
+                currencies={currencies}
+                code={code}
+                startDate={startDate}
+                endDate={endDate}
+                history={history}
+                loadingCurrencies={loadingCurrencies}
+                loadingHistory={loadingHistory}
+                error={error}
+                minDate={HISTORY_MIN_DATE}
+                maxDate={defaultEndDate()}
+                onCodeChange={setCode}
+                onStartDateChange={setStartDate}
+                onEndDateChange={setEndDate}
+                onSubmit={handleSubmit}
+            />
         </div>
     );
 }
