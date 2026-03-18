@@ -12,6 +12,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -81,5 +82,32 @@ class NbpServiceTest{
         BigDecimal amount = new BigDecimal("40");
         BigDecimal result = nbpService.convertFromPLN(amount, "USD");
         assertEquals(new BigDecimal("10.00"), result);
+    }
+
+    @Test
+    void testGetRateHistory_success() {
+        Rate rate1 = new Rate();
+        rate1.setMid(new BigDecimal("4.10"));
+        rate1.setEffectiveDate(LocalDate.of(2026, 3, 10));
+
+        Rate rate2 = new Rate();
+        rate2.setMid(new BigDecimal("4.20"));
+        rate2.setEffectiveDate(LocalDate.of(2026, 3, 11));
+
+        NbpResponse response = new NbpResponse();
+        response.setCurrency("dolar amerykanski");
+        response.setCode("USD");
+        response.setRates(List.of(rate1, rate2));
+
+        when(restTemplate.getForObject(anyString(), eq(NbpResponse.class))).thenReturn(response);
+
+        List<Rate> result = nbpService.getRateHistory("USD", LocalDate.of(2026, 3, 10), LocalDate.of(2026, 3, 11));
+
+        assertEquals(2, result.size());
+        assertEquals("USD", result.get(0).getCode());
+        assertEquals("dolar amerykanski", result.get(0).getCurrency());
+        assertEquals(new BigDecimal("4.10"), result.get(0).getMid());
+        assertEquals(LocalDate.of(2026, 3, 10), result.get(0).getEffectiveDate());
+        assertEquals(LocalDate.of(2026, 3, 11), result.get(1).getEffectiveDate());
     }
 }

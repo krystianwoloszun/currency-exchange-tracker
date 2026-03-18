@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -26,6 +27,23 @@ public class CurrencyController {
         }
 
         return nbpService.getRate(code.toUpperCase());
+    }
+
+    @GetMapping("/{code:[A-Z]{3}}/history")
+    public List<Rate> getRateHistory(
+            @PathVariable String code,
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate
+    ) {
+        if (code == null || code.isBlank() || code.length() != 3) {
+            throw new InvalidCurrencyRequestException("Kod waluty musi miec 3 znaki i nie moze byc pusty");
+        }
+
+        if (startDate.isAfter(endDate)) {
+            throw new InvalidCurrencyRequestException("Data poczatkowa nie moze byc pozniejsza niz data koncowa");
+        }
+
+        return nbpService.getRateHistory(code.toUpperCase(), startDate, endDate);
     }
 
     @GetMapping("/conversion")

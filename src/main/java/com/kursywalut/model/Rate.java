@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -13,4 +14,5 @@ public class Rate {
     private String currency; // nazwa waluty
     private String code;     // kod waluty (USD, EUR)
     private BigDecimal mid;  // kurs
+    private LocalDate effectiveDate; // data kursu dla historii
 }

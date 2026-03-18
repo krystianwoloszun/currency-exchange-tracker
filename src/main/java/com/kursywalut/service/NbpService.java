@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
 
 /* Logika do NBP */
@@ -50,6 +51,17 @@ public class NbpService {
             throw new NbpUnavailableException("NBP is temporarily unavailable");
         }
     }
+    // Historia kursw jednej waluty
+    public NbpResponse getNbpHistoryResponse(String code, LocalDate startDate, LocalDate endDate) {
+        String url = rateUrl + "/" + code + "/" + startDate + "/" + endDate + "?format=json";
+        try {
+            return restTemplate.getForObject(url, NbpResponse.class);
+        } catch (HttpClientErrorException.NotFound e) {
+            throw new NbpCodeNotFoundException("Nie znaleziono kursu dla kodu: " + code);
+        } catch (HttpClientErrorException | HttpServerErrorException | ResourceAccessException e) {
+            throw new NbpUnavailableException("NBP is temporarily unavailable");
+        }
+    }
 
     // Lista walut
     public List<Rate> getAvailableCurrencies() {
@@ -68,6 +80,18 @@ public class NbpService {
     // Kurs jednej waluty
     public BigDecimal getRate(String currencyCode) {
         return extractRate(getNbpResponse(currencyCode));
+    }
+
+    public List<Rate> getRateHistory(String currencyCode, LocalDate startDate, LocalDate endDate) {
+        NbpResponse response = getNbpHistoryResponse(currencyCode, startDate, endDate);
+
+        if (response == null || response.getRates() == null || response.getRates().isEmpty()) {
+            throw new NbpUnavailableException("NBP is temporarily unavailable");
+        }
+
+        return response.getRates().stream()
+                .map(rate -> new Rate(response.getCurrency(), response.getCode(), rate.getMid(), rate.getEffectiveDate()))
+                .toList();
     }
 
     // Waluta → PLN
