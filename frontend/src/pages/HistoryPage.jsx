@@ -88,7 +88,7 @@ export default function HistoryPage({onUnauthorized}) {
         }
 
         if (nextStartDate < HISTORY_MIN_DATE || nextEndDate < HISTORY_MIN_DATE) {
-            setError("Historia kursow walut jest dostepna od 2002-01-02.");
+            setError("Historia kursow walut jest dostepna od 02.01.2002.");
             return;
         }
 

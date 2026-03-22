@@ -1,7 +1,25 @@
 import "./HistoryChart.css";
 
+const rateFormatter = new Intl.NumberFormat("pl-PL", {
+    minimumFractionDigits: 4,
+    maximumFractionDigits: 4,
+});
+
+function formatRateValue(value) {
+    return rateFormatter.format(Number(value));
+}
+
+function formatDateValue(value) {
+    if (!value || !value.includes("-")) {
+        return value;
+    }
+
+    const [year, month, day] = value.split("-");
+    return `${day}.${month}.${year}`;
+}
+
 function formatRateLabel(value) {
-    return `${value.toFixed(4)} PLN`;
+    return `${formatRateValue(value)} PLN`;
 }
 
 function buildYAxisTicks(min, max, top, innerHeight, count = 5) {
@@ -25,7 +43,7 @@ function buildXAxisTicks(history, left, innerWidth) {
 
     const indexes = Array.from(new Set([0, Math.floor((history.length - 1) / 2), history.length - 1]));
     return indexes.map((index) => ({
-        label: history[index].effectiveDate,
+        label: formatDateValue(history[index].effectiveDate),
         x: left + (history.length === 1 ? innerWidth / 2 : (index * innerWidth) / (history.length - 1)),
     }));
 }
@@ -51,7 +69,7 @@ function buildChartPoints(history) {
     const dots = history.map((entry, index) => {
         const x = left + (history.length === 1 ? innerWidth / 2 : (index * innerWidth) / (history.length - 1));
         const y = top + innerHeight - ((Number(entry.mid) - min) / spread) * innerHeight;
-        return {x, y, label: entry.effectiveDate, value: Number(entry.mid).toFixed(4)};
+        return {x, y, label: formatDateValue(entry.effectiveDate), value: formatRateValue(entry.mid)};
     });
 
     return {
@@ -99,7 +117,7 @@ export default function HistoryChart({history, code, loading}) {
                             <g key={`y-${tick.y}`}>
                                 <line x1={left} y1={tick.y} x2={width - 16} y2={tick.y} className="history-chart-grid"/>
                                 <text x={left - 10} y={tick.y + 4} textAnchor="end" className="history-chart-axis-label">
-                                    {tick.value.toFixed(4)}
+                                    {formatRateValue(tick.value)}
                                 </text>
                             </g>
                         ))}

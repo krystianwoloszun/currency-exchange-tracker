@@ -1,5 +1,23 @@
 import "./HistoryModule.css";
 
+const rateFormatter = new Intl.NumberFormat("pl-PL", {
+    minimumFractionDigits: 4,
+    maximumFractionDigits: 4,
+});
+
+function formatRateValue(value) {
+    return rateFormatter.format(Number(value));
+}
+
+function formatDateValue(value) {
+    if (!value || !value.includes("-")) {
+        return value;
+    }
+
+    const [year, month, day] = value.split("-");
+    return `${day}.${month}.${year}`;
+}
+
 export default function HistoryModule({
     currencies,
     code,
@@ -83,9 +101,9 @@ export default function HistoryModule({
                         <tbody>
                         {history.map((entry) => (
                             <tr key={`${entry.code}-${entry.effectiveDate}`}>
-                                <td>{entry.effectiveDate}</td>
+                                <td>{formatDateValue(entry.effectiveDate)}</td>
                                 <td>{entry.code}</td>
-                                <td>{Number(entry.mid).toFixed(4)} PLN</td>
+                                <td>{formatRateValue(entry.mid)} PLN</td>
                             </tr>
                         ))}
                         </tbody>
