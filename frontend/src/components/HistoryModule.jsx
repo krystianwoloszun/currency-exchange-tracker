@@ -94,7 +94,6 @@ export default function HistoryModule({
                         <thead>
                         <tr>
                             <th>Data</th>
-                            <th>Kod</th>
                             <th>Kurs</th>
                         </tr>
                         </thead>
@@ -102,7 +101,6 @@ export default function HistoryModule({
                         {history.map((entry) => (
                             <tr key={`${entry.code}-${entry.effectiveDate}`}>
                                 <td>{formatDateValue(entry.effectiveDate)}</td>
-                                <td>{entry.code}</td>
                                 <td>{formatRateValue(entry.mid)} PLN</td>
                             </tr>
                         ))}

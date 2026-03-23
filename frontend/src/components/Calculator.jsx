@@ -67,6 +67,20 @@ export default function Calculator({onUnauthorized}) {
         }
     };
 
+    const handleAmountChange = (value) => {
+        if (value === "") {
+            setAmount("");
+            return;
+        }
+
+        if (Number(value) < 0) {
+            setAmount("0");
+            return;
+        }
+
+        setAmount(value);
+    };
+
     if (loading) return <p className={styles.loading}>Ladowanie walut...</p>;
     if (error) return <p className={styles.error}>{error}</p>;
 
@@ -89,22 +103,37 @@ export default function Calculator({onUnauthorized}) {
                 <input
                     type="number"
                     value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
+                    onChange={(e) => handleAmountChange(e.target.value)}
                     step="0.01"
+                    min="0"
                     className={styles.input}
                 />
             </div>
 
             <div className={styles.field}>
                 <label>Kierunek: </label>
-                <select
-                    value={direction}
-                    onChange={(e) => setDirection(e.target.value)}
-                    className={styles.select}
-                >
-                    <option value="TO_PLN">Waluta -&gt; PLN</option>
-                    <option value="FROM_PLN">PLN -&gt; Waluta</option>
-                </select>
+                <div className={styles.radioGroup}>
+                    <label className={styles.radioOption}>
+                        <input
+                            type="radio"
+                            name="direction"
+                            value="TO_PLN"
+                            checked={direction === "TO_PLN"}
+                            onChange={(e) => setDirection(e.target.value)}
+                        />
+                        <span>Waluta -&gt; PLN</span>
+                    </label>
+                    <label className={styles.radioOption}>
+                        <input
+                            type="radio"
+                            name="direction"
+                            value="FROM_PLN"
+                            checked={direction === "FROM_PLN"}
+                            onChange={(e) => setDirection(e.target.value)}
+                        />
+                        <span>PLN -&gt; Waluta</span>
+                    </label>
+                </div>
             </div>
 
             <div className={styles.actions}>
