@@ -38,6 +38,12 @@
   flex: 1;
 }
 
+.bannerInfo {
+  flex: 1;
+  color: #dbeafe;
+  text-align: center;
+}
+
 .navButton {
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.12);
@@ -75,6 +81,10 @@
 
   .nav {
     justify-content: center;
+  }
+
+  .bannerInfo {
+    text-align: left;
   }
 
   .logoutButton {

@@ -42,8 +42,14 @@ function App() {
                     </footer>
                 </div>
             ) : (
-                <div className={styles.page}>
-                    <Login onLogin={(t) => setToken(t)}/>
+                <div className={styles.authed}>
+                    <NavigationBanner/>
+                    <div className={styles.page}>
+                        <Login onLogin={(t) => setToken(t)}/>
+                    </div>
+                    <footer className={styles.footer}>
+                        <span>© 2026 Krystian Wołoszun. All Rights Reserved.</span>
+                    </footer>
                 </div>
             )}
         </div>
