@@ -7,37 +7,79 @@ export default function Login({onLogin}) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("");
+
+    const validateCredentials = () => {
+        const normalizedUsername = username.trim();
+        const normalizedPassword = password.trim();
+
+        if (!normalizedUsername || !normalizedPassword) {
+            setMessage("Uzupelnij nazwe uzytkownika i haslo.");
+            setMessageType("error");
+            return null;
+        }
+
+        return {
+            username: normalizedUsername,
+            password: normalizedPassword,
+        };
+    };
+
+    const translateAuthMessage = (rawMessage, fallback) => {
+        const normalized = String(rawMessage || "").trim().toLowerCase();
+
+        if (!normalized) return fallback;
+        if (normalized.includes("invalid username or password")) return "Nieprawidlowa nazwa uzytkownika lub haslo.";
+        if (normalized.includes("user registered successfully")) return "Uzytkownik zostal zarejestrowany pomyslnie.";
+        if (normalized.includes("username already exists")) return "Uzytkownik o tej nazwie juz istnieje.";
+        if (normalized.includes("unauthorized")) return "Brak autoryzacji.";
+        if (normalized.includes("forbidden")) return "Brak dostepu.";
+        if (normalized.includes("server error")) return "Blad serwera.";
+
+        return rawMessage;
+    };
 
     const handleLogin = async () => {
+        const credentials = validateCredentials();
+        if (!credentials) return;
+
         try {
             const token = await apiFetch("http://localhost:8080/api/auth/login", {
                 method: "POST",
-                body: JSON.stringify({username, password}),
+                body: JSON.stringify(credentials),
             });
 
             setToken(token);
             onLogin?.(token);
-            setMessage("Login successful!");
+            setMessage("Logowanie powiodlo sie.");
+            setMessageType("success");
         } catch (error) {
             if (error instanceof AuthError) {
-                setMessage(error.message || "Unauthorized");
+                setMessage(translateAuthMessage(error.message, "Brak autoryzacji."));
+                setMessageType("error");
                 return;
             }
-            setMessage(error?.message || "Server error");
+            setMessage(translateAuthMessage(error?.message, "Blad serwera."));
+            setMessageType("error");
         }
     };
 
     const handleRegister = async () => {
+        const credentials = validateCredentials();
+        if (!credentials) return;
+
         try {
             const res = await apiFetch("http://localhost:8080/api/auth/register", {
                 method: "POST",
-                body: JSON.stringify({username, password}),
+                body: JSON.stringify(credentials),
             });
 
-            if (typeof res === "string") setMessage(res);
-            else setMessage("Registered");
+            if (typeof res === "string") setMessage(translateAuthMessage(res, "Rejestracja zakonczona powodzeniem."));
+            else setMessage("Rejestracja zakonczona powodzeniem.");
+            setMessageType("success");
         } catch (error) {
-            setMessage(error?.message || "Server error");
+            setMessage(translateAuthMessage(error?.message, "Blad serwera."));
+            setMessageType("error");
         }
     };
 
@@ -80,9 +122,10 @@ export default function Login({onLogin}) {
                     <button type="button" className={styles.secondaryButton} onClick={handleRegister}>Zarejestruj</button>
                 </div>
 
-                {message && <p className={styles.message}>{message}</p>}
+                <div className={styles.messageSlot}>
+                    {message && <p className={`${styles.message} ${messageType === "error" ? styles.messageError : styles.messageSuccess}`}>{message}</p>}
+                </div>
             </section>
         </div>
     );
 }
-

@@ -14,6 +14,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-height: 420px;
   padding: 36px;
   border-radius: 28px;
   color: #f8fafc;
@@ -47,6 +48,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-height: 420px;
   padding: 32px 28px;
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.94);
@@ -114,8 +116,25 @@
 }
 
 .message {
-  margin: 16px 0 0;
-  color: #16324f;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.messageSlot {
+  min-height: 68px;
+  margin-top: 16px;
+}
+
+.messageSuccess {
+  background: #e8f7ee;
+  color: #166534;
+}
+
+.messageError {
+  background: #fef2f2;
+  color: #b91c1c;
 }
 
 @media (max-width: 860px) {
@@ -131,6 +150,7 @@
 
   .hero,
   .card {
+    min-height: 0;
     padding: 24px 18px;
     border-radius: 22px;
   }
