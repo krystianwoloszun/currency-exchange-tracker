@@ -43,29 +43,45 @@ export default function Login({onLogin}) {
 
     return (
         <div className={styles.root}>
-            <h2 className={styles.title}>Login / Register</h2>
+            <section className={styles.hero}>
+                <span className={styles.eyebrow}>Kursy Walut</span>
+                <h1 className={styles.heroTitle}>Zaloguj sie do aplikacji NBP</h1>
+                <p className={styles.heroText}>
+                    Szybki dostep do kalkulatora walut, historii kursow i bocznych paneli z aktualnymi notowaniami.
+                </p>
+            </section>
 
-            <input
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className={styles.input}
-            />
+            <section className={styles.card}>
+                <h2 className={styles.title}>Logowanie i rejestracja</h2>
 
-            <input
-                placeholder="Password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={styles.input}
-            />
+                <label className={styles.field}>
+                    <span>Nazwa uzytkownika</span>
+                    <input
+                        placeholder="Wpisz nazwe uzytkownika"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        className={styles.input}
+                    />
+                </label>
 
-            <div className={styles.actions}>
-                <button onClick={handleLogin}>Login</button>
-                <button onClick={handleRegister}>Register</button>
-            </div>
+                <label className={styles.field}>
+                    <span>Haslo</span>
+                    <input
+                        placeholder="Wpisz haslo"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className={styles.input}
+                    />
+                </label>
 
-            {message && <p className={styles.message}>{message}</p>}
+                <div className={styles.actions}>
+                    <button type="button" className={styles.primaryButton} onClick={handleLogin}>Zaloguj</button>
+                    <button type="button" className={styles.secondaryButton} onClick={handleRegister}>Zarejestruj</button>
+                </div>
+
+                {message && <p className={styles.message}>{message}</p>}
+            </section>
         </div>
     );
 }
