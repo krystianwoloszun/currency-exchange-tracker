@@ -37,6 +37,9 @@ function App() {
                     <div className={styles.content}>
                         {renderPage()}
                     </div>
+                    <footer className={styles.footer}>
+                        <span>© 2026 Krystian Wołoszun. All Rights Reserved.</span>
+                    </footer>
                 </div>
             ) : (
                 <div className={styles.page}>

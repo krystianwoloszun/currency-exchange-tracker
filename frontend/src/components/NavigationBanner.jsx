@@ -8,6 +8,11 @@ const navItems = [
 export default function NavigationBanner({currentPage, onNavigate, onLogout}) {
     return (
         <header className={styles.banner}>
+            <div className={styles.brandBlock}>
+                <span className={styles.eyebrow}>Kursy Walut</span>
+                <strong className={styles.title}>Aplikacja NBP</strong>
+            </div>
+
             <nav className={styles.nav} aria-label="Nawigacja aplikacji">
                 {navItems.map((item) => (
                     <button
