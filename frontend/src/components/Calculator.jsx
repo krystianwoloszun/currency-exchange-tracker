@@ -1,51 +1,23 @@
 import {useEffect, useState} from "react";
-import {getAvailableCurrencies, convertCurrency} from "../api/currencyApi";
+import {convertCurrency} from "../api/currencyApi";
 import {AuthError} from "../api/apiFetch";
 import {clearToken} from "../auth/token";
 import styles from "./Calculator.module.css";
 
-export default function Calculator({onUnauthorized}) {
-    const [currencies, setCurrencies] = useState([]);
+export default function Calculator({currencies = [], onUnauthorized}) {
     const [code, setCode] = useState("");
     const [amount, setAmount] = useState("");
     const [direction, setDirection] = useState("TO_PLN");
     const [result, setResult] = useState(null);
     const [resultCurrency, setResultCurrency] = useState("");
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
 
     const formattedResult = result !== null ? `${Number(result).toFixed(2)} ${resultCurrency}` : null;
 
     useEffect(() => {
-        let mounted = true;
-        setLoading(true);
-
-        getAvailableCurrencies()
-            .then((data) => {
-                if (!mounted) return;
-                setCurrencies(data);
-                if (data.length > 0) setCode(data[0].code);
-                setError("");
-            })
-            .catch((err) => {
-                if (!mounted) return;
-                if (err instanceof AuthError) {
-                    clearToken();
-                    onUnauthorized?.();
-                    setError("Brak dostepu. Zaloguj sie ponownie.");
-                    return;
-                }
-                setError("Nie udalo sie pobrac walut. Sprobuj pozniej.");
-            })
-            .finally(() => {
-                if (!mounted) return;
-                setLoading(false);
-            });
-
-        return () => {
-            mounted = false;
-        };
-    }, [onUnauthorized]);
+        if (currencies.length > 0 && !currencies.some((currency) => currency.code === code)) {
+            setCode(currencies[0].code);
+        }
+    }, [code, currencies]);
 
     const handleConvert = async () => {
         if (!amount || Number(amount) <= 0) {
@@ -80,9 +52,6 @@ export default function Calculator({onUnauthorized}) {
 
         setAmount(value);
     };
-
-    if (loading) return <p className={styles.loading}>Ladowanie walut...</p>;
-    if (error) return <p className={styles.error}>{error}</p>;
 
     return (<div className={styles.root}>
             <div className={styles.field}>

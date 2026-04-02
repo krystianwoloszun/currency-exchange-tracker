@@ -4,6 +4,7 @@ import {getAvailableCurrencies, getRateHistory} from "../api/currencyApi";
 import {clearToken} from "../auth/token";
 import HistoryChart from "../components/HistoryChart";
 import HistoryModule from "../components/HistoryModule";
+import RatesSidebar from "../components/RatesSidebar";
 import "./HistoryPage.css";
 
 const HISTORY_MIN_DATE = "2002-01-02"; //dane z nbp sa dostepne od 02.01.2002, okres pobranych danych nie moze przekraczac 93 dni
@@ -127,28 +128,36 @@ export default function HistoryPage({onUnauthorized}) {
                 <p>Sprawdz kurs wybranej waluty w zadanym zakresie dat.</p>
             </header>
 
-            <HistoryChart
-                history={history}
-                code={code}
-                loading={loadingHistory}
-            />
+            <main className="history-layout">
+                <aside className="history-sidebar">
+                    <RatesSidebar currencies={currencies}/>
+                </aside>
 
-            <HistoryModule
-                currencies={currencies}
-                code={code}
-                startDate={startDate}
-                endDate={endDate}
-                history={history}
-                loadingCurrencies={loadingCurrencies}
-                loadingHistory={loadingHistory}
-                error={error}
-                minDate={HISTORY_MIN_DATE}
-                maxDate={defaultEndDate()}
-                onCodeChange={setCode}
-                onStartDateChange={setStartDate}
-                onEndDateChange={setEndDate}
-                onSubmit={handleSubmit}
-            />
+                <section className="history-main">
+                    <HistoryChart
+                        history={history}
+                        code={code}
+                        loading={loadingHistory}
+                    />
+
+                    <HistoryModule
+                        currencies={currencies}
+                        code={code}
+                        startDate={startDate}
+                        endDate={endDate}
+                        history={history}
+                        loadingCurrencies={loadingCurrencies}
+                        loadingHistory={loadingHistory}
+                        error={error}
+                        minDate={HISTORY_MIN_DATE}
+                        maxDate={defaultEndDate()}
+                        onCodeChange={setCode}
+                        onStartDateChange={setStartDate}
+                        onEndDateChange={setEndDate}
+                        onSubmit={handleSubmit}
+                    />
+                </section>
+            </main>
         </div>
     );
 }
