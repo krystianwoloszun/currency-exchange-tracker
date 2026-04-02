@@ -2,16 +2,17 @@ import "flag-icons/css/flag-icons.min.css";
 import "./RatesSidebar.css";
 
 const FEATURED_COUNTRIES = [
-    {code: "USD", country: "Stany Zjednoczone", flagCode: "us"},
-    {code: "CAD", country: "Kanada", flagCode: "ca"},
-    {code: "GBP", country: "Wielka Brytania", flagCode: "gb"},
-    {code: "CHF", country: "Szwajcaria", flagCode: "ch"},
-    {code: "CZK", country: "Czechy", flagCode: "cz"},
-    {code: "HUF", country: "Wegry", flagCode: "hu"},
-    {code: "NOK", country: "Norwegia", flagCode: "no"},
-    {code: "SEK", country: "Szwecja", flagCode: "se"},
-    {code: "DKK", country: "Dania", flagCode: "dk"},
-    {code: "JPY", country: "Japonia", flagCode: "jp"},
+    {code: "USD", flagCode: "us"},
+    {code: "EUR", flagCode: "eu"},
+    {code: "CAD", flagCode: "ca"},
+    {code: "GBP", flagCode: "gb"},
+    {code: "CHF", flagCode: "ch"},
+    {code: "CZK", flagCode: "cz"},
+    {code: "HUF", flagCode: "hu"},
+    {code: "NOK", flagCode: "no"},
+    {code: "SEK", flagCode: "se"},
+    {code: "DKK", flagCode: "dk"},
+    {code: "JPY", flagCode: "jp"},
 ];
 
 function formatRate(value) {
@@ -36,18 +37,15 @@ export default function RatesSidebar({currencies}) {
             <div className="rates-sidebar-list">
                 {items.map((item) => (
                     <article key={item.code} className="rates-card">
-                        <div className="rates-flag" aria-hidden="true">
-                            <span className={`fi fi-${item.flagCode}`}></span>
+                        <div className="rates-card-main">
+                            <div className="rates-flag" aria-hidden="true">
+                                <span className={`fi fi-${item.flagCode}`}></span>
+                            </div>
+                            <strong className="rates-currency-name">{item.rate.currency}</strong>
                         </div>
-                        <div className="rates-card-body">
-                            <div className="rates-card-top">
-                                <strong>{item.country}</strong>
-                                <span>{item.code}</span>
-                            </div>
-                            <div className="rates-card-bottom">
-                                <span>{item.rate.currency}</span>
-                                <strong>{formatRate(item.rate.mid)}</strong>
-                            </div>
+                        <div className="rates-card-meta">
+                            <span className="rates-code">{item.code}</span>
+                            <strong className="rates-value">{formatRate(item.rate.mid)} PLN</strong>
                         </div>
                     </article>
                 ))}
