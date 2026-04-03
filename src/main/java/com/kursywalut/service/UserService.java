@@ -4,6 +4,8 @@ import com.kursywalut.exception.InvalidPasswordException;
 import com.kursywalut.exception.UsernameAlreadyExistsException;
 import com.kursywalut.model.User;
 import com.kursywalut.repository.UserRepository;
+import com.kursywalut.validation.PasswordPolicyValidator;
+import com.kursywalut.validation.PasswordValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

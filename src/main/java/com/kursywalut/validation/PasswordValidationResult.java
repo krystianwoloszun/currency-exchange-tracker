@@ -1,4 +1,4 @@
-package com.kursywalut.service;
+package com.kursywalut.validation;
 
 import java.util.List;
 
