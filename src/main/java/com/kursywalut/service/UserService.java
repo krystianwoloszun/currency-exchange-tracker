@@ -1,8 +1,8 @@
 package com.kursywalut.service;
 
+import com.kursywalut.exception.InvalidPasswordException;
 import com.kursywalut.exception.UsernameAlreadyExistsException;
 import com.kursywalut.model.User;
-
 import com.kursywalut.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,11 +20,17 @@ public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordPolicyValidator passwordPolicyValidator;
 
     //Rejestracja
     public User registerUser(String username, String password) {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new UsernameAlreadyExistsException("Username already exists");
+        }
+        PasswordValidationResult validationResult = passwordPolicyValidator.validate(password);
+        if (!validationResult.valid()) {
+            throw new InvalidPasswordException("Hasło musi zawierać: " + String.join(", ", validationResult.errors()) + ".");
         }
         String encodedPassword = passwordEncoder.encode(password);
         User user = User.builder().username(username).password(encodedPassword).build();

@@ -58,4 +58,19 @@ public class AuthControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").value("Username already exists"));
     }
+
+    @Test
+    public void testRegisterWeakPasswordReturnsBadRequest() throws Exception {
+        String registerJson = """
+                {
+                    "username": "newuser",
+                    "password": "password123"
+                }
+                """;
+
+        mockMvc.perform(post("/api/auth/register").contentType(MediaType.APPLICATION_JSON).content(registerJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Hasło musi zawierać: przynajmniej 1 wielka litera, przynajmniej 1 znak specjalny."));
+    }
 }

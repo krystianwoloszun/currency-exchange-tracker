@@ -31,6 +31,12 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(body(HttpStatus.CONFLICT, "USERNAME_EXISTS", ex.getMessage(), request));
     }
 
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidPassword(InvalidPasswordException ex, HttpServletRequest request) {
+        log.warn("Invalid password: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body(HttpStatus.BAD_REQUEST, "INVALID_PASSWORD", ex.getMessage(), request));
+    }
+
     @ExceptionHandler(NbpCodeNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleNbpCodeNotFound(NbpCodeNotFoundException ex, HttpServletRequest request) {
         log.warn("NBP code not found: {}", ex.getMessage());

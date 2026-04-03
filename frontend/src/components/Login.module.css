@@ -88,6 +88,24 @@
   margin-top: 18px;
 }
 
+.requirements {
+  margin: 14px 0 0;
+  padding-left: 20px;
+  color: #475569;
+}
+
+.requirementItem {
+  margin-top: 6px;
+}
+
+.requirementMet {
+  color: #166534;
+}
+
+.requirementUnmet {
+  color: #b91c1c;
+}
+
 .primaryButton,
 .secondaryButton {
   flex: 1;
@@ -120,11 +138,14 @@
   padding: 12px 14px;
   border-radius: 12px;
   font-weight: 600;
+  line-height: 1.45;
 }
 
 .messageSlot {
-  min-height: 68px;
+  min-height: 132px;
   margin-top: 16px;
+  display: flex;
+  align-items: flex-start;
 }
 
 .messageSuccess {

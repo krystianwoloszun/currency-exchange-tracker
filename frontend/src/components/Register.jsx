@@ -1,13 +1,23 @@
 import {useState} from "react";
-import {apiFetch, AuthError} from "../api/apiFetch";
-import {setToken} from "../auth/token";
+import {apiFetch} from "../api/apiFetch";
 import styles from "./Login.module.css";
 
-export default function Login({onLogin, onGoToRegister}) {
+const PASSWORD_REQUIREMENTS = [
+    {id: "length", label: "minimum 8 znaków", test: (value) => value.length >= 8},
+    {id: "uppercase", label: "przynajmniej 1 wielka litera", test: (value) => /[A-Z]/.test(value)},
+    {id: "lowercase", label: "przynajmniej 1 mała litera", test: (value) => /[a-z]/.test(value)},
+    {id: "digit", label: "przynajmniej 1 cyfra", test: (value) => /\d/.test(value)},
+    {id: "special", label: "przynajmniej 1 znak specjalny", test: (value) => /[^A-Za-z0-9]/.test(value)},
+];
+
+export default function Register({onBackToLogin}) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
+
+    const getPasswordValidationErrors = (value) =>
+        PASSWORD_REQUIREMENTS.filter((requirement) => !requirement.test(value)).map((requirement) => requirement.label);
 
     const validateCredentials = () => {
         const normalizedUsername = username.trim();
@@ -28,7 +38,8 @@ export default function Login({onLogin, onGoToRegister}) {
         const normalized = String(rawMessage || "").trim().toLowerCase();
 
         if (!normalized) return fallback;
-        if (normalized.includes("invalid username or password")) return "Nieprawidłowa nazwa użytkownika lub hasło.";
+        if (normalized.includes("user registered successfully")) return "Użytkownik został zarejestrowany pomyślnie.";
+        if (normalized.includes("username already exists")) return "Użytkownik o tej nazwie już istnieje.";
         if (normalized.includes("unauthorized")) return "Brak autoryzacji.";
         if (normalized.includes("forbidden")) return "Brak dostępu.";
         if (normalized.includes("server error")) return "Błąd serwera.";
@@ -36,43 +47,46 @@ export default function Login({onLogin, onGoToRegister}) {
         return rawMessage;
     };
 
-    const handleLogin = async () => {
+    const handleRegister = async () => {
         const credentials = validateCredentials();
         if (!credentials) return;
 
+        const passwordErrors = getPasswordValidationErrors(credentials.password);
+        if (passwordErrors.length > 0) {
+            setMessage(`Hasło musi zawierać: ${passwordErrors.join(", ")}.`);
+            setMessageType("error");
+            return;
+        }
+
         try {
-            const token = await apiFetch("http://localhost:8080/api/auth/login", {
+            const res = await apiFetch("http://localhost:8080/api/auth/register", {
                 method: "POST",
                 body: JSON.stringify(credentials),
             });
 
-            setToken(token);
-            onLogin?.(token);
-            setMessage("Logowanie powiodło się.");
+            if (typeof res === "string") setMessage(translateAuthMessage(res, "Rejestracja zakończona powodzeniem."));
+            else setMessage("Rejestracja zakończona powodzeniem.");
             setMessageType("success");
         } catch (error) {
-            if (error instanceof AuthError) {
-                setMessage(translateAuthMessage(error.message, "Brak autoryzacji."));
-                setMessageType("error");
-                return;
-            }
             setMessage(translateAuthMessage(error?.message, "Błąd serwera."));
             setMessageType("error");
         }
     };
 
+    const passwordErrors = getPasswordValidationErrors(password);
+
     return (
         <div className={styles.root}>
             <section className={styles.hero}>
                 <span className={styles.eyebrow}>Kursy Walut</span>
-                <h1 className={styles.heroTitle}>Zaloguj się do aplikacji NBP</h1>
+                <h1 className={styles.heroTitle}>Załóż konto w aplikacji NBP</h1>
                 <p className={styles.heroText}>
-                    Szybki dostęp do kalkulatora walut, historii kursów i bocznych paneli z aktualnymi notowaniami.
+                    Utwórz konto, aby korzystać z kalkulatora walut, historii kursów i bieżących notowań.
                 </p>
             </section>
 
             <section className={styles.card}>
-                <h2 className={styles.title}>Logowanie</h2>
+                <h2 className={styles.title}>Rejestracja</h2>
 
                 <label className={styles.field}>
                     <span>Nazwa użytkownika</span>
@@ -95,9 +109,20 @@ export default function Login({onLogin, onGoToRegister}) {
                     />
                 </label>
 
+                <ul className={styles.requirements}>
+                    {PASSWORD_REQUIREMENTS.map((requirement) => {
+                        const isMet = !passwordErrors.includes(requirement.label);
+                        return (
+                            <li key={requirement.id} className={`${styles.requirementItem} ${isMet ? styles.requirementMet : styles.requirementUnmet}`}>
+                                {requirement.label}
+                            </li>
+                        );
+                    })}
+                </ul>
+
                 <div className={styles.actions}>
-                    <button type="button" className={styles.primaryButton} onClick={handleLogin}>Zaloguj</button>
-                    <button type="button" className={styles.secondaryButton} onClick={onGoToRegister}>Przejdź do rejestracji</button>
+                    <button type="button" className={styles.primaryButton} onClick={handleRegister}>Zarejestruj</button>
+                    <button type="button" className={styles.secondaryButton} onClick={onBackToLogin}>Wróć do logowania</button>
                 </div>
 
                 <div className={styles.messageSlot}>
