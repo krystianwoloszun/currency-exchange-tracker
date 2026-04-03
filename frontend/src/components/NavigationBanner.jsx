@@ -38,7 +38,7 @@ export default function NavigationBanner({currentPage, onNavigate, onLogout}) {
 
             {showLogout && (
                 <button type="button" className={styles.logoutButton} onClick={onLogout}>
-                    Logout
+                    Wyloguj się
                 </button>
             )}
         </header>

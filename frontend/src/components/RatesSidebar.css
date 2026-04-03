@@ -43,15 +43,17 @@
 }
 
 .rates-flag {
-    width: 36px;
-    min-width: 36px;
+    width: 44px;
+    min-width: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .rates-flag .fi {
-    width: 28px;
+    display: inline-block;
+    width: 34px;
+    font-size: 34px;
     line-height: 1;
     border-radius: 4px;
     box-shadow: 0 6px 12px rgba(15, 23, 42, 0.18);
