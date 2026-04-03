@@ -43,6 +43,12 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body(HttpStatus.NOT_FOUND, "NBP_CODE_NOT_FOUND", ex.getMessage(), request));
     }
 
+    @ExceptionHandler(GoldPriceNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleGoldPriceNotFound(GoldPriceNotFoundException ex, HttpServletRequest request) {
+        log.warn("Gold price not found: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body(HttpStatus.NOT_FOUND, "GOLD_PRICE_NOT_FOUND", ex.getMessage(), request));
+    }
+
     @ExceptionHandler(NbpUnavailableException.class)
     public ResponseEntity<ApiErrorResponse> handleNbpUnavailable(NbpUnavailableException ex, HttpServletRequest request) {
         log.warn("NBP unavailable: {}", ex.getMessage());
@@ -53,6 +59,12 @@ public class RestExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleInvalidCurrencyRequest(InvalidCurrencyRequestException ex, HttpServletRequest request) {
         log.warn("Invalid currency request: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body(HttpStatus.BAD_REQUEST, "INVALID_CURRENCY_REQUEST", ex.getMessage(), request));
+    }
+
+    @ExceptionHandler(InvalidGoldRequestException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidGoldRequest(InvalidGoldRequestException ex, HttpServletRequest request) {
+        log.warn("Invalid gold request: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body(HttpStatus.BAD_REQUEST, "INVALID_GOLD_REQUEST", ex.getMessage(), request));
     }
 
     @ExceptionHandler(NoAvailableCurrenciesException.class)
