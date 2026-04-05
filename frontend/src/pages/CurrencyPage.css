@@ -66,10 +66,16 @@
 @media (max-width: 900px) {
     .currency-layout {
         grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
     }
 
     .currency-sidebar {
         position: static;
+        order: 2;
+    }
+
+    .currency-main {
+        order: 1;
     }
 }
 
