@@ -41,7 +41,8 @@ export default function Login({onLogin, onGoToRegister}) {
         if (!credentials) return;
 
         try {
-            const token = await apiFetch("http://localhost:8080/api/auth/login", {
+            const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+            const token = await apiFetch(`${apiBase}/api/auth/login`, {
                 method: "POST",
                 body: JSON.stringify(credentials),
             });

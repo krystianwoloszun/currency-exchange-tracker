@@ -1,6 +1,7 @@
 import {useMemo, useState} from "react";
 import CurrencyPage from "./pages/CurrencyPage";
 import HistoryPage from "./pages/HistoryPage";
+import GoldPage from "./pages/GoldPage";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import NavigationBanner from "./components/NavigationBanner";
@@ -23,6 +24,8 @@ function App() {
 
     const renderPage = () => {
         switch (currentPage) {
+            case "gold":
+                return <GoldPage onUnauthorized={logout}/>;
             case "history":
                 return <HistoryPage onUnauthorized={logout}/>;
             case "calculator":

@@ -3,6 +3,7 @@ import styles from "./NavigationBanner.module.css";
 const navItems = [
     {id: "calculator", label: "Kalkulator"},
     {id: "history", label: "Historia"},
+    {id: "gold", label: "Złoto"},
 ];
 
 export default function NavigationBanner({currentPage, onNavigate, onLogout}) {
