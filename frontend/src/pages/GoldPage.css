@@ -48,10 +48,16 @@
 @media (max-width: 900px) {
     .gold-layout {
         grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
     }
 
     .gold-sidebarWrap {
         position: static;
+        order: 2;
+    }
+
+    .gold-main {
+        order: 1;
     }
 }
 

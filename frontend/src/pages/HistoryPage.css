@@ -48,10 +48,16 @@
 @media (max-width: 900px) {
     .history-layout {
         grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
     }
 
     .history-sidebar {
         position: static;
+        order: 2;
+    }
+
+    .history-main {
+        order: 1;
     }
 }
 
