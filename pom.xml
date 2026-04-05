@@ -13,7 +13,7 @@
     </parent>
 
     <groupId>com.kursywalut</groupId>
-    <artifactId>NbpApp</artifactId>
+    <artifactId>kursywalut</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>kursywalut</name>
     <description>Aplikacja do przeliczania walut</description>
