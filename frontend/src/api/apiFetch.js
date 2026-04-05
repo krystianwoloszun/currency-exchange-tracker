@@ -49,7 +49,9 @@ export async function apiFetch(url, options = {}) {
         headers.set("Authorization", `Bearer ${token}`);
     }
 
+    console.log("Fetching:", url);
     const response = await fetch(url, {...options, headers});
+    console.log("Response status:", response.status, "URL:", url);
 
     if (response.ok) {
         const ct = contentType(response.headers);
@@ -62,6 +64,8 @@ export async function apiFetch(url, options = {}) {
         (data && typeof data === "object" && "message" in data && String(data.message)) ||
         (typeof data === "string" && data) ||
         `Request failed (status ${response.status})`;
+
+    console.error("API Error:", message, "URL:", url, "Status:", response.status);
 
     if (response.status === 401 || response.status === 403) {
         throw new AuthError(message, {status: response.status, data});
