@@ -1,6 +1,6 @@
 import {apiFetch} from "./apiFetch";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api/gold";
+const API_BASE = `${import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api"}/gold`;
 
 export async function getCurrentGoldPrice() {
     return apiFetch(API_BASE);

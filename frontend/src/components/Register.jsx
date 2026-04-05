@@ -59,8 +59,8 @@ export default function Register({onBackToLogin}) {
         }
 
         try {
-            const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
-            const res = await apiFetch(`${apiBase}/api/auth/register`, {
+            const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api";
+            const res = await apiFetch(`${apiBase}/auth/register`, {
                 method: "POST",
                 body: JSON.stringify(credentials),
             });
