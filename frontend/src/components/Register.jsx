@@ -13,6 +13,7 @@ const PASSWORD_REQUIREMENTS = [
 export default function Register({onBackToLogin}) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
 
@@ -22,8 +23,14 @@ export default function Register({onBackToLogin}) {
     const validateCredentials = () => {
         const normalizedUsername = username.trim();
 
-        if (!normalizedUsername || !password) {
-            setMessage("Uzupełnij nazwę użytkownika i hasło.");
+        if (!normalizedUsername || !password || !confirmPassword) {
+            setMessage("Uzupełnij nazwę użytkownika, hasło i potwierdzenie hasła.");
+            setMessageType("error");
+            return null;
+        }
+
+        if (password !== confirmPassword) {
+            setMessage("Hasła się nie zgadzają.");
             setMessageType("error");
             return null;
         }
@@ -108,6 +115,17 @@ export default function Register({onBackToLogin}) {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            className={styles.input}
+                        />
+                    </label>
+
+                    <label className={styles.field}>
+                        <span>Potwierdź hasło</span>
+                        <input
+                            placeholder="Wpisz hasło ponownie"
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
                             className={styles.input}
                         />
                     </label>
