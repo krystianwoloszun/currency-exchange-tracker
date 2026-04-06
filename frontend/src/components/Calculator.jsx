@@ -21,7 +21,7 @@ export default function Calculator({currencies = [], onUnauthorized}) {
 
     const handleConvert = async () => {
         if (!amount || Number(amount) <= 0) {
-            alert("Podaj poprawna kwote!");
+            alert("Podaj poprawną kwotę!");
             return;
         }
         try {
@@ -32,10 +32,10 @@ export default function Calculator({currencies = [], onUnauthorized}) {
             if (err instanceof AuthError) {
                 clearToken();
                 onUnauthorized?.();
-                alert("Brak dostepu. Zaloguj sie ponownie.");
+                 alert("Brak dostępu. Zaloguj się ponownie.");
                 return;
             }
-            alert(err?.message || "Wystapil blad podczas konwersji");
+            alert(err?.message || "Wystąpił błąd podczas konwersji");
         }
     };
 

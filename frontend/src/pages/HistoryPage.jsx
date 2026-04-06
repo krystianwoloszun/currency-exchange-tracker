@@ -7,7 +7,7 @@ import HistoryModule from "../components/HistoryModule";
 import RatesSidebar from "../components/RatesSidebar";
 import "./HistoryPage.css";
 
-const HISTORY_MIN_DATE = "2002-01-02"; //dane z nbp sa dostepne od 02.01.2002, okres pobranych danych nie moze przekraczac 93 dni
+const HISTORY_MIN_DATE = "2002-01-02"; //dane z NBP są dostępne od 02.01.2002, okres pobranych danych nie może przekraczać 93 dni
 const HISTORY_MAX_DAYS = 93;
 
 function defaultStartDate() {
@@ -57,10 +57,10 @@ export default function HistoryPage({onUnauthorized}) {
                 if (err instanceof AuthError) {
                     clearToken();
                     onUnauthorized?.();
-                    setError("Brak dostepu. Zaloguj sie ponownie.");
+                    setError("Brak dostępu. Zaloguj się ponownie.");
                     return;
                 }
-                setError("Nie udalo sie pobrac walut. Sprobuj pozniej.");
+                setError("Nie udało się pobrać walut. Spróbuj później.");
             })
             .finally(() => {
                 if (!mounted) return;
@@ -74,7 +74,7 @@ export default function HistoryPage({onUnauthorized}) {
 
     const fetchHistory = async (nextCode, nextStartDate, nextEndDate) => {
         if (!nextCode) {
-            setError("Wybierz walute.");
+            setError("Wybierz walutę.");
             return;
         }
 
@@ -84,17 +84,17 @@ export default function HistoryPage({onUnauthorized}) {
         }
 
         if (nextStartDate > nextEndDate) {
-            setError("Data poczatkowa nie moze byc pozniejsza niz koncowa.");
+            setError("Data początkowa nie może być później niż końcowa.");
             return;
         }
 
         if (nextStartDate < HISTORY_MIN_DATE || nextEndDate < HISTORY_MIN_DATE) {
-            setError("Historia kursow walut jest dostepna od 02.01.2002.");
+            setError("Historia kursów walut jest dostępna od 02.01.2002.");
             return;
         }
 
         if (countDaysInclusive(nextStartDate, nextEndDate) > HISTORY_MAX_DAYS) {
-            setError("Zakres dat dla historii kursow nie moze przekraczac 93 dni.");
+            setError("Zakres dat dla historii kursów nie może przekraczać 93 dni.");
             return;
         }
 
@@ -107,11 +107,11 @@ export default function HistoryPage({onUnauthorized}) {
             if (err instanceof AuthError) {
                 clearToken();
                 onUnauthorized?.();
-                setError("Brak dostepu. Zaloguj sie ponownie.");
+                setError("Brak dostępu. Zaloguj się ponownie.");
                 return;
             }
             setHistory([]);
-            setError(err?.message || "Nie udalo sie pobrac historii kursow.");
+            setError(err?.message || "Nie udało się pobrać historii kursów.");
         } finally {
             setLoadingHistory(false);
         }
@@ -124,8 +124,8 @@ export default function HistoryPage({onUnauthorized}) {
     return (
         <div className="history-page">
             <header className="history-header">
-                <h1>Historia kursow walut</h1>
-                <p>Sprawdz kurs wybranej waluty w zadanym zakresie dat.</p>
+                <h1>Historia kursów walut</h1>
+                <p>Sprawdź kurs wybranej waluty w zadanym zakresie dat.</p>
             </header>
 
             <main className="history-layout">

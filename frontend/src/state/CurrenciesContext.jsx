@@ -30,10 +30,10 @@ export function CurrenciesProvider({ children, onUnauthorized }) {
       } catch (err) {
         if (err instanceof AuthError) {
           onUnauthorized?.();
-          setError("Brak dostepu. Zaloguj sie ponownie.");
+          setError("Brak dostępu. Zaloguj się ponownie.");
           return;
         }
-        setError(err?.message || "Nie udalo sie pobrac walut.");
+        setError(err?.message || "Nie udało się pobrać walut.");
       } finally {
         if (!background) setLoading(false);
       }

@@ -78,12 +78,12 @@ export default function HistoryModule({
                 </div>
 
                 <button type="button" className="history-button" onClick={onSubmit} disabled={loadingCurrencies || loadingHistory}>
-                    {loadingHistory ? "Ladowanie..." : "Pokaz historie"}
+                    {loadingHistory ? "Ładowanie..." : "Pokaż historię"}
                 </button>
             </div>
 
             <p className="history-hint">
-                Historia kursow NBP jest dostepna od 2002-01-02, a jedno zapytanie moze obejmowac maksymalnie 93 dni.
+                Historia kursów NBP jest dostępna od 2002-01-02, a jedno zapytanie może obejmować maksymalnie 93 dni.
             </p>
 
             {error && <p className="history-error">{error}</p>}
@@ -110,7 +110,7 @@ export default function HistoryModule({
             )}
 
             {!error && !loadingHistory && history.length === 0 && (
-                <p className="history-empty">Wybierz parametry i kliknij "Pokaz historie".</p>
+                <p className="history-empty">Wybierz parametry i kliknij "Pokaż historię".</p>
             )}
         </section>
     );

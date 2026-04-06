@@ -96,14 +96,14 @@ export default function HistoryChart({history, code, loading}) {
             <div className="history-chart-topbar">
                 <div>
                     <h2>Wykres czasowy</h2>
-                    <p>Kurs sredni NBP dla {code || "wybranej waluty"}.</p>
+                    <p>Kurs średni NBP dla {code || "wybranej waluty"}.</p>
                 </div>
             </div>
 
             {loading ? (
-                <div className="history-chart-empty">Ladowanie wykresu...</div>
+                <div className="history-chart-empty">Ładowanie wykresu...</div>
             ) : history.length === 0 ? (
-                <div className="history-chart-empty">Wybierz zakres i pobierz historie, aby zobaczyc wykres.</div>
+                <div className="history-chart-empty">Wybierz zakres i pobierz historię, aby zobaczyc wykres.</div>
             ) : (
                 <div className="history-chart-body">
                     <div className="history-chart-stats">

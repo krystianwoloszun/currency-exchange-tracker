@@ -26,10 +26,10 @@ export default function CurrencyPage({onUnauthorized}) {
                 if (err instanceof AuthError) {
                     clearToken();
                     onUnauthorized?.();
-                    setError("Brak dostepu. Zaloguj sie ponownie.");
+                    setError("Brak dostępu. Zaloguj się ponownie.");
                     return;
                 }
-                setError("Nie udalo sie pobrac walut. Sprobuj pozniej.");
+                setError("Nie udało się pobrać walut. Spróbuj później.");
             })
             .finally(() => {
                 if (!mounted) return;
@@ -48,7 +48,7 @@ export default function CurrencyPage({onUnauthorized}) {
                 <p>Aktualne kursy wybranych walut i szybkie przeliczenie na PLN.</p>
             </header>
             {loading ? (
-                <p className="currency-status">Ladowanie walut...</p>
+                <p className="currency-status">Ładowanie walut...</p>
             ) : error ? (
                 <p className="currency-status currency-status-error">{error}</p>
             ) : (

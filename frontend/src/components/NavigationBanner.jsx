@@ -33,7 +33,7 @@ export default function NavigationBanner({currentPage, onNavigate, onLogout}) {
                 </nav>
             ) : (
                 <div className={styles.bannerInfo}>
-                    Zaloguj sie lub utworz konto, aby korzystac z funkcji aplikacji.
+                    Zaloguj się lub utwórz konto, aby korzystać z funkcji aplikacji.
                 </div>
             )}
 
