@@ -102,8 +102,8 @@ class NbpServiceTest{
         List<Rate> result = nbpService.getRateHistory("USD", LocalDate.of(2026, 3, 10), LocalDate.of(2026, 3, 11));
 
         assertEquals(2, result.size());
-        assertEquals("USD", result.get(0).getCode());
-        assertEquals("dolar amerykanski", result.get(0).getCurrencyName());
+        assertEquals("USD", result.getFirst().getCode());
+        assertEquals("dolar amerykanski", result.getFirst().getCurrencyName());
         assertEquals(new BigDecimal("4.10"), result.get(0).getMidRate());
         assertEquals(LocalDate.of(2026, 3, 10), result.get(0).getEffectiveDate());
         assertEquals(LocalDate.of(2026, 3, 11), result.get(1).getEffectiveDate());
