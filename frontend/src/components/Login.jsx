@@ -36,7 +36,8 @@ export default function Login({onLogin, onGoToRegister}) {
         return rawMessage;
     };
 
-    const handleLogin = async () => {
+    const handleLogin = async (e) => {
+        e?.preventDefault();
         const credentials = validateCredentials();
         if (!credentials) return;
 
@@ -75,31 +76,33 @@ export default function Login({onLogin, onGoToRegister}) {
             <section className={styles.card}>
                 <h2 className={styles.title}>Logowanie</h2>
 
-                <label className={styles.field}>
-                    <span>Nazwa użytkownika</span>
-                    <input
-                        placeholder="Wpisz nazwę użytkownika"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        className={styles.input}
-                    />
-                </label>
+                <form onSubmit={handleLogin}>
+                    <label className={styles.field}>
+                        <span>Nazwa użytkownika</span>
+                        <input
+                            placeholder="Wpisz nazwę użytkownika"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className={styles.input}
+                        />
+                    </label>
 
-                <label className={styles.field}>
-                    <span>Hasło</span>
-                    <input
-                        placeholder="Wpisz hasło"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className={styles.input}
-                    />
-                </label>
+                    <label className={styles.field}>
+                        <span>Hasło</span>
+                        <input
+                            placeholder="Wpisz hasło"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className={styles.input}
+                        />
+                    </label>
 
-                <div className={styles.actions}>
-                    <button type="button" className={styles.primaryButton} onClick={handleLogin}>Zaloguj</button>
-                    <button type="button" className={styles.secondaryButton} onClick={onGoToRegister}>Przejdź do rejestracji</button>
-                </div>
+                    <div className={styles.actions}>
+                        <button type="submit" className={styles.primaryButton}>Zaloguj</button>
+                        <button type="button" className={styles.secondaryButton} onClick={onGoToRegister}>Przejdź do rejestracji</button>
+                    </div>
+                </form>
 
                 <div className={styles.messageSlot}>
                     {message && <p className={`${styles.message} ${messageType === "error" ? styles.messageError : styles.messageSuccess}`}>{message}</p>}

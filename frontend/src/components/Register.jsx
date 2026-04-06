@@ -47,7 +47,8 @@ export default function Register({onBackToLogin}) {
         return rawMessage;
     };
 
-    const handleRegister = async () => {
+    const handleRegister = async (e) => {
+        e?.preventDefault();
         const credentials = validateCredentials();
         if (!credentials) return;
 
@@ -89,42 +90,44 @@ export default function Register({onBackToLogin}) {
             <section className={styles.card}>
                 <h2 className={styles.title}>Rejestracja</h2>
 
-                <label className={styles.field}>
-                    <span>Nazwa użytkownika</span>
-                    <input
-                        placeholder="Wpisz nazwę użytkownika"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        className={styles.input}
-                    />
-                </label>
+                <form onSubmit={handleRegister}>
+                    <label className={styles.field}>
+                        <span>Nazwa użytkownika</span>
+                        <input
+                            placeholder="Wpisz nazwę użytkownika"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className={styles.input}
+                        />
+                    </label>
 
-                <label className={styles.field}>
-                    <span>Hasło</span>
-                    <input
-                        placeholder="Wpisz hasło"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className={styles.input}
-                    />
-                </label>
+                    <label className={styles.field}>
+                        <span>Hasło</span>
+                        <input
+                            placeholder="Wpisz hasło"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className={styles.input}
+                        />
+                    </label>
 
-                <ul className={styles.requirements}>
-                    {PASSWORD_REQUIREMENTS.map((requirement) => {
-                        const isMet = !passwordErrors.includes(requirement.label);
-                        return (
-                            <li key={requirement.id} className={`${styles.requirementItem} ${isMet ? styles.requirementMet : styles.requirementUnmet}`}>
-                                {requirement.label}
-                            </li>
-                        );
-                    })}
-                </ul>
+                    <ul className={styles.requirements}>
+                        {PASSWORD_REQUIREMENTS.map((requirement) => {
+                            const isMet = !passwordErrors.includes(requirement.label);
+                            return (
+                                <li key={requirement.id} className={`${styles.requirementItem} ${isMet ? styles.requirementMet : styles.requirementUnmet}`}>
+                                    {requirement.label}
+                                </li>
+                            );
+                        })}
+                    </ul>
 
-                <div className={styles.actions}>
-                    <button type="button" className={styles.primaryButton} onClick={handleRegister}>Zarejestruj</button>
-                    <button type="button" className={styles.secondaryButton} onClick={onBackToLogin}>Wróć do logowania</button>
-                </div>
+                    <div className={styles.actions}>
+                        <button type="submit" className={styles.primaryButton}>Zarejestruj</button>
+                        <button type="button" className={styles.secondaryButton} onClick={onBackToLogin}>Wróć do logowania</button>
+                    </div>
+                </form>
 
                 <div className={styles.messageSlot}>
                     {message && <p className={`${styles.message} ${messageType === "error" ? styles.messageError : styles.messageSuccess}`}>{message}</p>}
