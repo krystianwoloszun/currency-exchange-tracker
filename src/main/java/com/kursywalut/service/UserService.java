@@ -25,7 +25,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordPolicyValidator passwordPolicyValidator;
 
-    //Rejestracja
     public User registerUser(String username, String password) {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new UsernameAlreadyExistsException("Username already exists");
@@ -39,7 +38,6 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    //Uwierzytelnianie
     public boolean authenticate(String username, String password) {
         return userRepository.findByUsername(username).map(user -> passwordEncoder.matches(password, user.getPassword())).orElse(false);
     }

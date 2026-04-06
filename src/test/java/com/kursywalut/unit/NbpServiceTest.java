@@ -6,8 +6,6 @@ import com.kursywalut.model.Rate;
 import com.kursywalut.service.NbpService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,9 +32,9 @@ class NbpServiceTest{
     @Test
     void testGetRate_success() {
         Rate rate = new Rate();
-        rate.setCurrency("dolar amerykanski");
+        rate.setCurrencyName("dolar amerykanski");
         rate.setCode("USD");
-        rate.setMid(new BigDecimal("4.25"));
+        rate.setMidRate(new BigDecimal("4.25"));
         NbpResponse response = new NbpResponse();
         response.setRates(List.of(rate));
         when(restTemplate.getForObject(anyString(), eq(NbpResponse.class))).thenReturn(response);
@@ -56,9 +54,9 @@ class NbpServiceTest{
     @Test
     void testConvertToPLN() {
         Rate rate = new Rate();
-        rate.setCurrency("dolar amerykanski");
+        rate.setCurrencyName("dolar amerykanski");
         rate.setCode("USD");
-        rate.setMid(new BigDecimal("4.0"));
+        rate.setMidRate(new BigDecimal("4.0"));
 
         NbpResponse response = new NbpResponse();
         response.setRates(List.of(rate));
@@ -72,9 +70,9 @@ class NbpServiceTest{
     @Test
     void testConvertFromPLN() {
         Rate rate = new Rate();
-        rate.setCurrency("dolar amerykanski");
+        rate.setCurrencyName("dolar amerykanski");
         rate.setCode("USD");
-        rate.setMid(new BigDecimal("4.0"));
+        rate.setMidRate(new BigDecimal("4.0"));
         NbpResponse response = new NbpResponse();
         response.setRates(List.of(rate));
         when(restTemplate.getForObject(anyString(), eq(NbpResponse.class))).thenReturn(response);
@@ -87,11 +85,11 @@ class NbpServiceTest{
     @Test
     void testGetRateHistory_success() {
         Rate rate1 = new Rate();
-        rate1.setMid(new BigDecimal("4.10"));
+        rate1.setMidRate(new BigDecimal("4.10"));
         rate1.setEffectiveDate(LocalDate.of(2026, 3, 10));
 
         Rate rate2 = new Rate();
-        rate2.setMid(new BigDecimal("4.20"));
+        rate2.setMidRate(new BigDecimal("4.20"));
         rate2.setEffectiveDate(LocalDate.of(2026, 3, 11));
 
         NbpResponse response = new NbpResponse();
@@ -105,8 +103,8 @@ class NbpServiceTest{
 
         assertEquals(2, result.size());
         assertEquals("USD", result.get(0).getCode());
-        assertEquals("dolar amerykanski", result.get(0).getCurrency());
-        assertEquals(new BigDecimal("4.10"), result.get(0).getMid());
+        assertEquals("dolar amerykanski", result.get(0).getCurrencyName());
+        assertEquals(new BigDecimal("4.10"), result.get(0).getMidRate());
         assertEquals(LocalDate.of(2026, 3, 10), result.get(0).getEffectiveDate());
         assertEquals(LocalDate.of(2026, 3, 11), result.get(1).getEffectiveDate());
     }

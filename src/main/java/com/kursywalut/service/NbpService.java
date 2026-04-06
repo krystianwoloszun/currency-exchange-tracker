@@ -20,7 +20,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 
-/* Logika do NBP */
+// Logika do NBP
 @Service
 @RequiredArgsConstructor
 @Getter
@@ -35,12 +35,10 @@ public class NbpService {
     @Value("${nbp.api.table.url}")
     private String tableUrl;
 
-    // Wyciąga kurs z obiektu NbpResponse
     public BigDecimal extractRate(NbpResponse response) {
-        return response.getRates().getFirst().getMid();
+        return response.getRates().getFirst().getMidRate();
     }
 
-    // Pobiera cały JSON z NBP dla jednej waluty
     public NbpResponse getNbpResponse(String code) {
         String url = rateUrl + "/" + code + "?format=json";
         try {
@@ -51,7 +49,7 @@ public class NbpService {
             throw new NbpUnavailableException("NBP is temporarily unavailable");
         }
     }
-    // Historia kursw jednej waluty
+
     public NbpResponse getNbpHistoryResponse(String code, LocalDate startDate, LocalDate endDate) {
         String url = rateUrl + "/" + code + "/" + startDate + "/" + endDate + "?format=json";
         try {
@@ -63,7 +61,6 @@ public class NbpService {
         }
     }
 
-    // Lista walut
     public List<Rate> getAvailableCurrencies() {
         String url = tableUrl + "?format=json";
 
@@ -77,7 +74,6 @@ public class NbpService {
     }
 
 
-    // Kurs jednej waluty
     public BigDecimal getRate(String currencyCode) {
         return extractRate(getNbpResponse(currencyCode));
     }
@@ -90,16 +86,14 @@ public class NbpService {
         }
 
         return response.getRates().stream()
-                .map(rate -> new Rate(response.getCurrency(), response.getCode(), rate.getMid(), rate.getEffectiveDate()))
+                .map(rate -> new Rate(response.getCurrency(), response.getCode(), rate.getMidRate(), rate.getEffectiveDate()))
                 .toList();
     }
 
-    // Waluta → PLN
     public BigDecimal convertToPLN(BigDecimal amount, String currencyCode) {
         return amount.multiply(getRate(currencyCode));
     }
 
-    // PLN → Waluta
     public BigDecimal convertFromPLN(BigDecimal amount, String currencyCode) {
         return amount.divide(getRate(currencyCode), 2, RoundingMode.HALF_UP);
     }

@@ -103,7 +103,7 @@ export default function HistoryChart({history, code, loading}) {
             {loading ? (
                 <div className="history-chart-empty">Ładowanie wykresu...</div>
             ) : history.length === 0 ? (
-                <div className="history-chart-empty">Wybierz zakres i pobierz historię, aby zobaczyc wykres.</div>
+                <div className="history-chart-empty">Wybierz zakres i pobierz historię, aby zobaczyć wykres.</div>
             ) : (
                 <div className="history-chart-body">
                     <div className="history-chart-stats">

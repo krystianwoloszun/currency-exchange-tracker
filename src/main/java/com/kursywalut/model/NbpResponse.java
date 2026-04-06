@@ -5,7 +5,7 @@ import java.util.List;
 
 @Data
 public class NbpResponse {
-    private String currency; //nazwa
-    private String code; //np. USD, EUR
+    private String currency;
+    private String code;
     private List<Rate> rates;
 }

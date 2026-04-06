@@ -11,8 +11,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Rate {
-    private String currency; // nazwa waluty
+    private String currencyName; // nazwa waluty
     private String code;     // kod waluty (USD, EUR)
-    private BigDecimal mid;  // kurs
+    private BigDecimal midRate;  // kurs
     private LocalDate effectiveDate; // data kursu dla historii
 }
