@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import {convertCurrency} from "../api/currencyApi";
 import {AuthError} from "../api/apiFetch";
 import {clearToken} from "../auth/token";
+import {CURRENCY_FLAGS} from "../api/currencyFlags";
+import "flag-icons/css/flag-icons.min.css";
 import styles from "./Calculator.module.css";
 
 export default function Calculator({currencies = [], onUnauthorized}) {
@@ -12,6 +14,8 @@ export default function Calculator({currencies = [], onUnauthorized}) {
     const [resultCurrency, setResultCurrency] = useState("");
 
     const formattedResult = result !== null ? `${Number(result).toFixed(2)} ${resultCurrency}` : null;
+    const currentCurrency = currencies.find((c) => c.code === code);
+    const currentRate = currentCurrency?.mid;
 
     useEffect(() => {
         if (currencies.length > 0 && !currencies.some((currency) => currency.code === code)) {
@@ -60,6 +64,17 @@ export default function Calculator({currencies = [], onUnauthorized}) {
                     <p className={styles.eyebrow}>Kalkulator</p>
                     <h2 className={styles.title}>Przelicz kurs waluty</h2>
                 </div>
+                {currentCurrency && (
+                    <div className={styles.currencyDisplay}>
+                        <div className={styles.currencyFlag}>
+                            <span className={`fi fi-${CURRENCY_FLAGS.get(code) || ""}`}></span>
+                        </div>
+                        <div className={styles.currencyInfo}>
+                            <span className={styles.currencyCode}>{code}</span>
+                            <strong className={styles.currencyRate}>{Number(currentRate).toFixed(4)} PLN</strong>
+                        </div>
+                    </div>
+                )}
             </div>
 
             <div className={styles.formGrid}>

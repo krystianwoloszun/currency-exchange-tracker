@@ -1,19 +1,6 @@
 import "flag-icons/css/flag-icons.min.css";
+import {FEATURED_CURRENCIES} from "../api/currencyFlags";
 import "./RatesSidebar.css";
-
-const FEATURED_COUNTRIES = [
-    {code: "USD", flagCode: "us"},
-    {code: "EUR", flagCode: "eu"},
-    {code: "CAD", flagCode: "ca"},
-    {code: "GBP", flagCode: "gb"},
-    {code: "CHF", flagCode: "ch"},
-    {code: "CZK", flagCode: "cz"},
-    {code: "HUF", flagCode: "hu"},
-    {code: "NOK", flagCode: "no"},
-    {code: "SEK", flagCode: "se"},
-    {code: "DKK", flagCode: "dk"},
-    {code: "JPY", flagCode: "jp"},
-];
 
 function formatRate(value) {
     return new Intl.NumberFormat("pl-PL", {
@@ -24,7 +11,7 @@ function formatRate(value) {
 
 export default function RatesSidebar({currencies}) {
     const ratesByCode = new Map(currencies.map((currency) => [currency.code, currency]));
-    const items = FEATURED_COUNTRIES
+    const items = FEATURED_CURRENCIES
         .map((item) => ({
             ...item,
             rate: ratesByCode.get(item.code),
