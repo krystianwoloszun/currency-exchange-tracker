@@ -26,7 +26,8 @@ public class UserService implements UserDetailsService {
     private PasswordPolicyValidator passwordPolicyValidator;
 
     public User registerUser(String username, String password) {
-        if (userRepository.findByUsername(username).isPresent()) {
+        String normalizedUsername = username.toLowerCase();
+        if (userRepository.findByUsername(normalizedUsername).isPresent()) {
             throw new UsernameAlreadyExistsException("Username already exists");
         }
         PasswordValidationResult validationResult = passwordPolicyValidator.validate(password);
@@ -34,18 +35,19 @@ public class UserService implements UserDetailsService {
             throw new InvalidPasswordException("Hasło musi zawierać: " + String.join(", ", validationResult.errors()) + ".");
         }
         String encodedPassword = passwordEncoder.encode(password);
-        User user = User.builder().username(username).password(encodedPassword).build();
+        User user = User.builder().username(normalizedUsername).password(encodedPassword).build();
         return userRepository.save(user);
     }
 
     public boolean authenticate(String username, String password) {
-        return userRepository.findByUsername(username).map(user -> passwordEncoder.matches(password, user.getPassword())).orElse(false);
+        String normalizedUsername = username.toLowerCase();
+        return userRepository.findByUsername(normalizedUsername).map(user -> passwordEncoder.matches(password, user.getPassword())).orElse(false);
     }
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = userRepository.findByUsername(username.toLowerCase()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
     }

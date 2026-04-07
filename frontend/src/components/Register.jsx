@@ -21,7 +21,7 @@ export default function Register({onBackToLogin}) {
         PASSWORD_REQUIREMENTS.filter((requirement) => !requirement.test(value)).map((requirement) => requirement.label);
 
     const validateCredentials = () => {
-        const normalizedUsername = username.trim();
+        const normalizedUsername = username.trim().toLowerCase();
 
         if (!normalizedUsername || !password || !confirmPassword) {
             setMessage("Uzupełnij nazwę użytkownika, hasło i potwierdzenie hasła.");

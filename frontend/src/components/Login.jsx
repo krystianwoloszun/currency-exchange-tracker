@@ -10,7 +10,7 @@ export default function Login({onLogin, onGoToRegister}) {
     const [messageType, setMessageType] = useState("");
 
     const validateCredentials = () => {
-        const normalizedUsername = username.trim();
+        const normalizedUsername = username.trim().toLowerCase();
 
         if (!normalizedUsername || !password) {
             setMessage("Uzupełnij nazwę użytkownika i hasło.");
