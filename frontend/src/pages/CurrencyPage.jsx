@@ -18,6 +18,7 @@ export default function CurrencyPage({onUnauthorized}) {
         getAvailableCurrencies()
             .then((data) => {
                 if (!mounted) return;
+                console.log("API Response:", data);
                 setCurrencies(data);
                 setError("");
             })
