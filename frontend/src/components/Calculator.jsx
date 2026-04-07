@@ -6,6 +6,16 @@ import {CURRENCY_FLAGS} from "../api/currencyFlags";
 import "flag-icons/css/flag-icons.min.css";
 import styles from "./Calculator.module.css";
 
+const resultFormatter = new Intl.NumberFormat("pl-PL", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+});
+
+const rateFormatter = new Intl.NumberFormat("pl-PL", {
+    minimumFractionDigits: 4,
+    maximumFractionDigits: 4,
+});
+
 export default function Calculator({currencies = [], onUnauthorized}) {
     const [code, setCode] = useState("");
     const [amount, setAmount] = useState("");
@@ -13,7 +23,8 @@ export default function Calculator({currencies = [], onUnauthorized}) {
     const [result, setResult] = useState(null);
     const [resultCurrency, setResultCurrency] = useState("");
 
-    const formattedResult = result !== null ? `${Number(result).toFixed(2)} ${resultCurrency}` : null;
+    const formattedResult =
+        result !== null ? `${resultFormatter.format(Number(result))} ${resultCurrency}` : null;
     const currentCurrency = currencies.find((c) => c.code === code);
     const currentRate = currentCurrency?.mid;
 
@@ -71,7 +82,9 @@ export default function Calculator({currencies = [], onUnauthorized}) {
                         </div>
                         <div className={styles.currencyInfo}>
                             <span className={styles.currencyCode}>{code}</span>
-                            <strong className={styles.currencyRate}>{Number(currentRate).toFixed(4)} PLN</strong>
+                            <strong className={styles.currencyRate}>
+                                {rateFormatter.format(Number(currentRate))} PLN
+                            </strong>
                         </div>
                     </div>
                 )}
