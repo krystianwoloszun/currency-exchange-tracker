@@ -83,7 +83,7 @@ export default function Calculator({currencies = [], onUnauthorized}) {
                         <div className={styles.currencyInfo}>
                             <span className={styles.currencyCode}>{code}</span>
                             <strong className={styles.currencyRate}>
-                                {rateFormatter.format(Number(currentRate))} PLN
+                                {rateFormatter.format(Number(currentRate))}
                             </strong>
                         </div>
                     </div>
