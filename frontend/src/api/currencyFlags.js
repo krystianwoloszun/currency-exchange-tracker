@@ -1,0 +1,52 @@
+export const CURRENCY_FLAGS = new Map([
+    ["THB", "th"],
+    ["USD", "us"],
+    ["AUD", "au"],
+    ["HKD", "hk"],
+    ["CAD", "ca"],
+    ["NZD", "nz"],
+    ["SGD", "sg"],
+    ["EUR", "eu"],
+    ["HUF", "hu"],
+    ["CHF", "ch"],
+    ["GBP", "gb"],
+    ["UAH", "ua"],
+    ["JPY", "jp"],
+    ["CZK", "cz"],
+    ["DKK", "dk"],
+    ["ISK", "is"],
+    ["NOK", "no"],
+    ["SEK", "se"],
+    ["RON", "ro"],
+    ["TRY", "tr"],
+    ["ILS", "il"],
+    ["CLP", "cl"],
+    ["PHP", "ph"],
+    ["MXN", "mx"],
+    ["ZAR", "za"],
+    ["BRL", "br"],
+    ["MYR", "my"],
+    ["IDR", "id"],
+    ["INR", "in"],
+    ["KRW", "kr"],
+    ["CNY", "cn"],
+    ["XDR", "ch"],
+]);
+
+export const FEATURED_CURRENCIES = [
+    {code: "USD", flagCode: "us"},
+    {code: "EUR", flagCode: "eu"},
+    {code: "CAD", flagCode: "ca"},
+    {code: "GBP", flagCode: "gb"},
+    {code: "CHF", flagCode: "ch"},
+    {code: "CZK", flagCode: "cz"},
+    {code: "HUF", flagCode: "hu"},
+    {code: "NOK", flagCode: "no"},
+    {code: "SEK", flagCode: "se"},
+    {code: "DKK", flagCode: "dk"},
+    {code: "JPY", flagCode: "jp"},
+];
+
+export const getFlagCode = (currencyCode) => {
+    return CURRENCY_FLAGS.get(currencyCode) || "";
+};
