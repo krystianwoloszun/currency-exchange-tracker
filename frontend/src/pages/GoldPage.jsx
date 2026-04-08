@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {AuthError} from "../api/apiFetch";
 import {getCurrentGoldPrice, getGoldPriceHistory, getTodayGoldPrice} from "../api/goldApi";
 import {clearToken} from "../auth/token";
-import {isValidIsoCalendarDate} from "../utils/isoCalendarDate";
+import {INVALID_ISO_CALENDAR_DATE_MESSAGE, isValidIsoCalendarDate} from "../utils/isoCalendarDate";
 import GoldHistoryChart from "../components/GoldHistoryChart";
 import GoldHistoryModule from "../components/GoldHistoryModule";
 import GoldSidebar from "../components/GoldSidebar";
@@ -87,12 +87,18 @@ export default function GoldPage({onUnauthorized}) {
 
     const fetchHistory = async (nextStartDate, nextEndDate) => {
         if (!nextStartDate || !nextEndDate) {
+            const startEl = document.getElementById("gold-start-date");
+            const endEl = document.getElementById("gold-end-date");
+            if (startEl?.validity?.badInput || endEl?.validity?.badInput) {
+                setError(INVALID_ISO_CALENDAR_DATE_MESSAGE);
+                return;
+            }
             setError("Wybierz zakres dat.");
             return;
         }
 
         if (!isValidIsoCalendarDate(nextStartDate) || !isValidIsoCalendarDate(nextEndDate)) {
-            setError("Podaj prawidłowe daty (istniejące dni w kalendarzu).");
+            setError(INVALID_ISO_CALENDAR_DATE_MESSAGE);
             return;
         }
 
@@ -165,6 +171,7 @@ export default function GoldPage({onUnauthorized}) {
                         onStartDateChange={setStartDate}
                         onEndDateChange={setEndDate}
                         onSubmit={handleSubmit}
+                        onInvalidDate={() => setError(INVALID_ISO_CALENDAR_DATE_MESSAGE)}
                     />
                 </section>
             </main>

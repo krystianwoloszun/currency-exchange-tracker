@@ -1,3 +1,41 @@
+/** Komunikat przy nieistniejącym dniu (np. 31.02) lub odrzuconym wpisie przez przeglądarkę. */
+export const INVALID_ISO_CALENDAR_DATE_MESSAGE =
+    "Podaj prawidłowe daty (istniejące dni w kalendarzu).";
+
+/**
+ * Obsługa `<input type="date">`: przy błędnym dniu przeglądarka często wysyła pusty `value`
+ * z `validity.badInput === true` — wtedy nie czyścimy stanu (żeby nie pokazywać „Wybierz zakres dat”).
+ * Część silników ustawia `badInput` dopiero po kolejnej klatce — stąd `requestAnimationFrame`.
+ */
+export function resolveDateInputChange(event, onChange, onInvalidDate) {
+    const target = event.target;
+    const {value, validity} = target;
+
+    if (value !== "" && !isValidIsoCalendarDate(value)) {
+        onInvalidDate?.();
+        return;
+    }
+
+    if (value === "") {
+        if (validity.badInput) {
+            onInvalidDate?.();
+            return;
+        }
+        requestAnimationFrame(() => {
+            if (target.value === "" && target.validity.badInput) {
+                onInvalidDate?.();
+                return;
+            }
+            if (target.value === "") {
+                onChange("");
+            }
+        });
+        return;
+    }
+
+    onChange(value);
+}
+
 /**
  * Sprawdza, czy łańcuch ma postać YYYY-MM-DD i odpowiada rzeczywistemu dniowi
  * w kalendarzu (długości miesięcy, lata przestępne).
