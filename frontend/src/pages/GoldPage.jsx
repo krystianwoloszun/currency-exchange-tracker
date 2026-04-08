@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {AuthError} from "../api/apiFetch";
 import {getCurrentGoldPrice, getGoldPriceHistory, getTodayGoldPrice} from "../api/goldApi";
 import {clearToken} from "../auth/token";
+import {isValidIsoCalendarDate} from "../utils/isoCalendarDate";
 import GoldHistoryChart from "../components/GoldHistoryChart";
 import GoldHistoryModule from "../components/GoldHistoryModule";
 import GoldSidebar from "../components/GoldSidebar";
@@ -87,6 +88,11 @@ export default function GoldPage({onUnauthorized}) {
     const fetchHistory = async (nextStartDate, nextEndDate) => {
         if (!nextStartDate || !nextEndDate) {
             setError("Wybierz zakres dat.");
+            return;
+        }
+
+        if (!isValidIsoCalendarDate(nextStartDate) || !isValidIsoCalendarDate(nextEndDate)) {
+            setError("Podaj prawidłowe daty (istniejące dni w kalendarzu).");
             return;
         }
 

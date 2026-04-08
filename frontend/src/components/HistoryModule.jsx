@@ -1,4 +1,5 @@
 import "./HistoryModule.css";
+import {isValidIsoCalendarDate} from "../utils/isoCalendarDate";
 
 const rateFormatter = new Intl.NumberFormat("pl-PL", {
     minimumFractionDigits: 4,
@@ -34,6 +35,20 @@ export default function HistoryModule({
     onEndDateChange,
     onSubmit,
 }) {
+    const handleStartDateChange = (value) => {
+        if (value !== "" && !isValidIsoCalendarDate(value)) {
+            return;
+        }
+        onStartDateChange(value);
+    };
+
+    const handleEndDateChange = (value) => {
+        if (value !== "" && !isValidIsoCalendarDate(value)) {
+            return;
+        }
+        onEndDateChange(value);
+    };
+
     return (
         <section className="history-module">
             <div className="history-form">
@@ -59,7 +74,7 @@ export default function HistoryModule({
                         id="history-start-date"
                         type="date"
                         value={startDate}
-                        onChange={(e) => onStartDateChange(e.target.value)}
+                        onChange={(e) => handleStartDateChange(e.target.value)}
                         min={minDate}
                         max={endDate || undefined}
                     />
@@ -71,7 +86,7 @@ export default function HistoryModule({
                         id="history-end-date"
                         type="date"
                         value={endDate}
-                        onChange={(e) => onEndDateChange(e.target.value)}
+                        onChange={(e) => handleEndDateChange(e.target.value)}
                         min={startDate || minDate}
                         max={maxDate}
                     />

@@ -1,5 +1,6 @@
 import {useRef} from "react";
 import "./HistoryModule.css";
+import {isValidIsoCalendarDate} from "../utils/isoCalendarDate";
 
 const priceFormatter = new Intl.NumberFormat("pl-PL", {
     minimumFractionDigits: 2,
@@ -43,6 +44,20 @@ export default function GoldHistoryModule({
     const startDateRef = useRef(null);
     const endDateRef = useRef(null);
 
+    const handleStartDateChange = (value) => {
+        if (value !== "" && !isValidIsoCalendarDate(value)) {
+            return;
+        }
+        onStartDateChange(value);
+    };
+
+    const handleEndDateChange = (value) => {
+        if (value !== "" && !isValidIsoCalendarDate(value)) {
+            return;
+        }
+        onEndDateChange(value);
+    };
+
     return (
         <section className="history-module">
             <div className="history-form" style={{gridTemplateColumns: "repeat(3, minmax(0, 1fr))"}}>
@@ -54,7 +69,7 @@ export default function GoldHistoryModule({
                             id="gold-start-date"
                             type="date"
                             value={startDate}
-                            onChange={(e) => onStartDateChange(e.target.value)}
+                            onChange={(e) => handleStartDateChange(e.target.value)}
                             onFocus={(e) => openNativeDatePicker(e.currentTarget)}
                             min={minDate}
                             max={endDate || undefined}
@@ -78,7 +93,7 @@ export default function GoldHistoryModule({
                             id="gold-end-date"
                             type="date"
                             value={endDate}
-                            onChange={(e) => onEndDateChange(e.target.value)}
+                            onChange={(e) => handleEndDateChange(e.target.value)}
                             onFocus={(e) => openNativeDatePicker(e.currentTarget)}
                             min={startDate || minDate}
                             max={maxDate}

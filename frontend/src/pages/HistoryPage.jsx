@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {AuthError} from "../api/apiFetch";
 import {getAvailableCurrencies, getRateHistory} from "../api/currencyApi";
 import {clearToken} from "../auth/token";
+import {isValidIsoCalendarDate} from "../utils/isoCalendarDate";
 import HistoryChart from "../components/HistoryChart";
 import HistoryModule from "../components/HistoryModule";
 import RatesSidebar from "../components/RatesSidebar";
@@ -80,6 +81,11 @@ export default function HistoryPage({onUnauthorized}) {
 
         if (!nextStartDate || !nextEndDate) {
             setError("Wybierz zakres dat.");
+            return;
+        }
+
+        if (!isValidIsoCalendarDate(nextStartDate) || !isValidIsoCalendarDate(nextEndDate)) {
+            setError("Podaj prawidłowe daty (istniejące dni w kalendarzu).");
             return;
         }
 
