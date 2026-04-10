@@ -70,7 +70,12 @@ public class NbpService {
             throw new RuntimeException("Brak danych z NBP");
         }
 
-        return response[0].getRates();
+        NbpTableResponse table = response[0];
+        LocalDate effectiveDate = LocalDate.parse(table.getEffectiveDate());
+
+        return table.getRates().stream()
+                .map(rate -> new Rate(rate.getCurrencyName(), rate.getCode(), rate.getMidRate(), effectiveDate))
+                .toList();
     }
 
 
