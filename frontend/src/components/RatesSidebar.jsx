@@ -16,7 +16,7 @@ function formatEffectiveDate(value) {
     return parsed.toLocaleDateString("pl-PL");
 }
 
-export default function RatesSidebar({currencies}) {
+export default function RatesSidebar({currencies, selectedCode, onCurrencySelect}) {
     const ratesByCode = new Map(currencies.map((currency) => [currency.code, currency]));
     const items = FEATURED_CURRENCIES
         .map((item) => ({
@@ -39,7 +39,12 @@ export default function RatesSidebar({currencies}) {
 
             <div className="rates-sidebar-list">
                 {items.map((item) => (
-                    <article key={item.code} className="rates-card">
+                    <button
+                        key={item.code}
+                        type="button"
+                        className={`rates-card ${selectedCode === item.code ? "rates-card-active" : ""}`}
+                        onClick={() => onCurrencySelect?.(item.code)}
+                    >
                         <div className="rates-card-main">
                             <div className="rates-flag" aria-hidden="true">
                                 <span className={`fi fi-${item.flagCode}`}></span>
@@ -50,7 +55,7 @@ export default function RatesSidebar({currencies}) {
                             <span className="rates-code">{item.code}</span>
                             <strong className="rates-value">{formatRate(item.rate.mid)} PLN</strong>
                         </div>
-                    </article>
+                    </button>
                 ))}
             </div>
         </div>

@@ -11,28 +11,40 @@ const resultFormatter = new Intl.NumberFormat("pl-PL", {
     maximumFractionDigits: 2,
 });
 
-const rateFormatter = new Intl.NumberFormat("pl-PL", {
-    minimumFractionDigits: 4,
-    maximumFractionDigits: 4,
-});
-
 const MAX_AMOUNT = 100_000_000;
 
-export default function Calculator({currencies = [], onUnauthorized}) {
-    const [code, setCode] = useState("");
+function formatEffectiveDate(value) {
+    if (!value) return "";
+    const parsed = new Date(`${value}T00:00:00`);
+    if (Number.isNaN(parsed.getTime())) return String(value);
+    return parsed.toLocaleDateString("pl-PL");
+}
+
+export default function Calculator({currencies = [], selectedCode, onCodeChange, onUnauthorized}) {
+    const [internalCode, setInternalCode] = useState("");
     const [amount, setAmount] = useState("");
     const [direction, setDirection] = useState("TO_PLN");
     const [result, setResult] = useState(null);
     const [resultCurrency, setResultCurrency] = useState("");
+    const code = selectedCode ?? internalCode;
 
     const formattedResult =
         result !== null ? `${resultFormatter.format(Number(result))} ${resultCurrency}` : null;
     const currentCurrency = currencies.find((c) => c.code === code);
-    const currentRate = currentCurrency?.mid;
+    const formattedEffectiveDate = formatEffectiveDate(currentCurrency?.effectiveDate);
+
+    const updateCode = (nextCode) => {
+        if (selectedCode !== undefined) {
+            onCodeChange?.(nextCode);
+            return;
+        }
+
+        setInternalCode(nextCode);
+    };
 
     useEffect(() => {
         if (currencies.length > 0 && !currencies.some((currency) => currency.code === code)) {
-            setCode(currencies[0].code);
+            updateCode(currencies[0].code);
         }
     }, [code, currencies]);
 
@@ -92,9 +104,7 @@ export default function Calculator({currencies = [], onUnauthorized}) {
                         </div>
                         <div className={styles.currencyInfo}>
                             <span className={styles.currencyCode}>{code}</span>
-                            <strong className={styles.currencyRate}>
-                                {rateFormatter.format(Number(currentRate))}
-                            </strong>
+                            <strong className={styles.currencyRate}>{formattedEffectiveDate || "-"}</strong>
                         </div>
                     </div>
                 )}
@@ -106,7 +116,7 @@ export default function Calculator({currencies = [], onUnauthorized}) {
                     <select
                         id="currency-code"
                         value={code}
-                        onChange={(e) => setCode(e.target.value)}
+                        onChange={(e) => updateCode(e.target.value)}
                         className={styles.select}
                     >
                         {currencies.map((c) => (

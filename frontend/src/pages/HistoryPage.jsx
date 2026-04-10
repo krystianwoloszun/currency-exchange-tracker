@@ -142,7 +142,11 @@ export default function HistoryPage({onUnauthorized}) {
 
             <main className="history-layout">
                 <aside className="history-sidebar">
-                    <RatesSidebar currencies={currencies}/>
+                    <RatesSidebar
+                        currencies={currencies}
+                        selectedCode={code}
+                        onCurrencySelect={setCode}
+                    />
                 </aside>
 
                 <section className="history-main">

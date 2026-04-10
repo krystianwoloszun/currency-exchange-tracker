@@ -8,6 +8,7 @@ import "./CurrencyPage.css";
 
 export default function CurrencyPage({onUnauthorized}) {
     const [currencies, setCurrencies] = useState([]);
+    const [selectedCode, setSelectedCode] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
@@ -20,6 +21,11 @@ export default function CurrencyPage({onUnauthorized}) {
                 if (!mounted) return;
                 console.log("API Response:", data);
                 setCurrencies(data);
+                if (data.length > 0) {
+                    setSelectedCode((current) =>
+                        data.some((currency) => currency.code === current) ? current : data[0].code
+                    );
+                }
                 setError("");
             })
             .catch((err) => {
@@ -55,10 +61,19 @@ export default function CurrencyPage({onUnauthorized}) {
             ) : (
                 <main className="currency-layout">
                     <aside className="currency-sidebar">
-                        <RatesSidebar currencies={currencies}/>
+                        <RatesSidebar
+                            currencies={currencies}
+                            selectedCode={selectedCode}
+                            onCurrencySelect={setSelectedCode}
+                        />
                     </aside>
                     <section className="currency-main">
-                        <Calculator currencies={currencies} onUnauthorized={onUnauthorized}/>
+                        <Calculator
+                            currencies={currencies}
+                            selectedCode={selectedCode}
+                            onCodeChange={setSelectedCode}
+                            onUnauthorized={onUnauthorized}
+                        />
                     </section>
                 </main>
             )}

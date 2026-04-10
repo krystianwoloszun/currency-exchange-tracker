@@ -37,6 +37,24 @@
     border-radius: 18px;
     background: rgba(148, 163, 184, 0.12);
     border: 1px solid rgba(148, 163, 184, 0.16);
+    width: 100%;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.rates-card:hover {
+    transform: translateY(-1px);
+    border-color: rgba(191, 219, 254, 0.5);
+    background: rgba(148, 163, 184, 0.18);
+}
+
+.rates-card-active {
+    border-color: rgba(147, 197, 253, 0.9);
+    background: rgba(59, 130, 246, 0.2);
+    box-shadow: 0 12px 22px rgba(15, 23, 42, 0.18);
 }
 
 .rates-card-main {
