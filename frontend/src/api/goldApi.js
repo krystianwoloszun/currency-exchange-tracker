@@ -2,15 +2,37 @@ import {apiFetch} from "./apiFetch";
 
 const API_BASE = `${import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api"}/gold`;
 
+function normalizeGoldPrice(entry) {
+    if (!entry || typeof entry !== "object") {
+        return null;
+    }
+
+    return {
+        date: entry.date ?? entry.data ?? null,
+        price: entry.price ?? entry.cena ?? null,
+    };
+}
+
+function normalizeGoldPriceList(payload) {
+    if (!Array.isArray(payload)) {
+        return [];
+    }
+
+    return payload.map(normalizeGoldPrice).filter(Boolean);
+}
+
 export async function getCurrentGoldPrice() {
-    return apiFetch(API_BASE);
+    const data = await apiFetch(API_BASE);
+    return normalizeGoldPriceList(data);
 }
 
 export async function getTodayGoldPrice() {
-    return apiFetch(`${API_BASE}/today`);
+    const data = await apiFetch(`${API_BASE}/today`);
+    return normalizeGoldPriceList(data);
 }
 
 export async function getGoldPriceHistory(startDate, endDate) {
     const params = new URLSearchParams({startDate, endDate});
-    return apiFetch(`${API_BASE}/history?${params.toString()}`);
+    const data = await apiFetch(`${API_BASE}/history?${params.toString()}`);
+    return normalizeGoldPriceList(data);
 }
