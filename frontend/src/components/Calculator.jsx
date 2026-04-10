@@ -16,6 +16,8 @@ const rateFormatter = new Intl.NumberFormat("pl-PL", {
     maximumFractionDigits: 4,
 });
 
+const MAX_AMOUNT = 100_000_000;
+
 export default function Calculator({currencies = [], onUnauthorized}) {
     const [code, setCode] = useState("");
     const [amount, setAmount] = useState("");
@@ -37,6 +39,10 @@ export default function Calculator({currencies = [], onUnauthorized}) {
     const handleConvert = async () => {
         if (!amount || Number(amount) <= 0) {
             alert("Podaj poprawną kwotę!");
+            return;
+        }
+        if (Number(amount) > MAX_AMOUNT) {
+            alert(`Maksymalna kwota to ${resultFormatter.format(MAX_AMOUNT)}.`);
             return;
         }
         try {
@@ -62,6 +68,10 @@ export default function Calculator({currencies = [], onUnauthorized}) {
 
         if (Number(value) < 0) {
             setAmount("0");
+            return;
+        }
+        if (Number(value) > MAX_AMOUNT) {
+            setAmount(String(MAX_AMOUNT));
             return;
         }
 
@@ -116,6 +126,7 @@ export default function Calculator({currencies = [], onUnauthorized}) {
                         onChange={(e) => handleAmountChange(e.target.value)}
                         step="0.01"
                         min="0"
+                        max={MAX_AMOUNT}
                         className={styles.input}
                         placeholder="Np. 100"
                     />
