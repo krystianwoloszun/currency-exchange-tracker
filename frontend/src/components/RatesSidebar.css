@@ -10,11 +10,16 @@
     margin-bottom: 18px;
 }
 
-
 .rates-sidebar-header h2 {
     margin: 0;
     font-size: 28px;
     line-height: 1.1;
+}
+
+.rates-sidebar-date {
+    margin: 8px 0 0;
+    color: #cbd5e1;
+    font-size: 14px;
 }
 
 .rates-sidebar-list {

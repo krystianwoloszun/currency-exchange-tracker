@@ -9,6 +9,13 @@ function formatRate(value) {
     }).format(Number(value));
 }
 
+function formatEffectiveDate(value) {
+    if (!value) return "";
+    const parsed = new Date(`${value}T00:00:00`);
+    if (Number.isNaN(parsed.getTime())) return String(value);
+    return parsed.toLocaleDateString("pl-PL");
+}
+
 export default function RatesSidebar({currencies}) {
     const ratesByCode = new Map(currencies.map((currency) => [currency.code, currency]));
     const items = FEATURED_CURRENCIES
@@ -18,8 +25,17 @@ export default function RatesSidebar({currencies}) {
         }))
         .filter((item) => item.rate);
 
+    const effectiveDate = currencies.find((currency) => currency?.effectiveDate)?.effectiveDate;
+    const formattedEffectiveDate = formatEffectiveDate(effectiveDate);
+
     return (
         <div className="rates-sidebar">
+            <div className="rates-sidebar-header">
+                <h2>Kursy walut</h2>
+                {formattedEffectiveDate ? (
+                    <p className="rates-sidebar-date">Dane z dnia {formattedEffectiveDate}</p>
+                ) : null}
+            </div>
 
             <div className="rates-sidebar-list">
                 {items.map((item) => (
