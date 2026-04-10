@@ -31,6 +31,13 @@
     color: #ead9b8;
 }
 
+.gold-sidebar-header-date {
+    margin: 0 0 8px;
+    color: #f8e7c6;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
 .gold-sidebar-list {
     display: flex;
     flex-direction: column;

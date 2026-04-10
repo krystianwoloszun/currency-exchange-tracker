@@ -20,11 +20,16 @@ function formatDateValue(value) {
 }
 
 export default function GoldSidebar({currentPrice, todayPrice, loading, error}) {
+    const effectiveDate = currentPrice?.date || todayPrice?.date;
+
     return (
         <aside className="gold-sidebar">
             <div className="gold-sidebar-header">
                 <span className="gold-sidebar-eyebrow">NBP</span>
                 <h2>Złoto</h2>
+                {effectiveDate ? (
+                    <p className="gold-sidebar-header-date">Dane z dnia {formatDateValue(effectiveDate)}</p>
+                ) : null}
                 <p>Podgląd bieżących notowań i najważniejszych informacji o cenie 1 g złota.</p>
             </div>
 
