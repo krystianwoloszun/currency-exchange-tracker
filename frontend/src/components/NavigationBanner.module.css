@@ -8,6 +8,9 @@
   background: linear-gradient(135deg, #16324f 0%, #224d73 100%);
   box-shadow: 0 14px 30px rgba(14, 33, 51, 0.18);
   box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .brandBlock {
