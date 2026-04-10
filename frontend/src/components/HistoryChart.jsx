@@ -109,7 +109,7 @@ export default function HistoryChart({history, code, loading}) {
                     <div className="history-chart-stats">
                         <span>Min: {formatRateLabel(min)}</span>
                         <span>Max: {formatRateLabel(max)}</span>
-                        <span>Punktow: {history.length}</span>
+                        <span>Punktów: {history.length}</span>
                     </div>
 
                     <svg className="history-chart-svg" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`Wykres kursu ${code}`}>
