@@ -145,7 +145,10 @@ export default function Calculator({currencies = [], selectedCode, onCodeChange,
             </div>
 
             <div className={styles.directionBlock}>
-                <span className={styles.label}>Kierunek przeliczenia</span>
+                <div className={styles.directionLabelRow}>
+                    <span className={styles.label}>Kierunek przeliczenia</span>
+                    <span className={styles.directionHint}>Kliknij aby wybrać kierunek kalkulatora</span>
+                </div>
                 <div className={styles.radioGroup}>
                     <label className={`${styles.radioCard} ${direction === "TO_PLN" ? styles.radioCardActive : ""}`}>
                         <input
