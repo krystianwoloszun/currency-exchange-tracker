@@ -5,7 +5,7 @@
         linear-gradient(180deg, #eff6ff 0%, #e2e8f0 100%);
     width: 100%;
     min-height: calc(100vh - 120px);
-    padding: 24px;
+    padding: 24px clamp(20px, 4vw, 40px);
     box-sizing: border-box;
 }
 
@@ -27,7 +27,7 @@
 
 .currency-main {
     background-color: rgba(255, 255, 255, 0.94);
-    padding: 30px 40px;
+    padding: 30px clamp(28px, 4vw, 52px);
     border-radius: 24px;
     box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
     width: 100%;
@@ -79,11 +79,11 @@
 
 @media (max-width: 640px) {
     .currency-page {
-        padding: 16px;
+        padding: 16px clamp(14px, 4vw, 24px);
     }
 
     .currency-main {
-        padding: 22px 18px;
+        padding: 22px clamp(16px, 4vw, 28px);
         border-radius: 20px;
     }
 }
