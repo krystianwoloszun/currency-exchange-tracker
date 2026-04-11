@@ -11,14 +11,12 @@ const resultFormatter = new Intl.NumberFormat("pl-PL", {
     maximumFractionDigits: 2,
 });
 
-const MAX_AMOUNT = 100_000_000;
+const rateFormatter = new Intl.NumberFormat("pl-PL", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4,
+});
 
-function formatEffectiveDate(value) {
-    if (!value) return "";
-    const parsed = new Date(`${value}T00:00:00`);
-    if (Number.isNaN(parsed.getTime())) return String(value);
-    return parsed.toLocaleDateString("pl-PL");
-}
+const MAX_AMOUNT = 100_000_000;
 
 export default function Calculator({currencies = [], selectedCode, onCodeChange, onUnauthorized}) {
     const [internalCode, setInternalCode] = useState("");
@@ -31,7 +29,10 @@ export default function Calculator({currencies = [], selectedCode, onCodeChange,
     const formattedResult =
         result !== null ? `${resultFormatter.format(Number(result))} ${resultCurrency}` : null;
     const currentCurrency = currencies.find((c) => c.code === code);
-    const formattedEffectiveDate = formatEffectiveDate(currentCurrency?.effectiveDate);
+    const formattedMidRate =
+        currentCurrency?.mid != null
+            ? `${rateFormatter.format(Number(currentCurrency.mid))} PLN`
+            : "-";
 
     const updateCode = (nextCode) => {
         if (selectedCode !== undefined) {
@@ -104,7 +105,7 @@ export default function Calculator({currencies = [], selectedCode, onCodeChange,
                         </div>
                         <div className={styles.currencyInfo}>
                             <span className={styles.currencyCode}>{code}</span>
-                            <strong className={styles.currencyRate}>{formattedEffectiveDate || "-"}</strong>
+                            <strong className={styles.currencyRate}>{formattedMidRate}</strong>
                         </div>
                     </div>
                 )}
