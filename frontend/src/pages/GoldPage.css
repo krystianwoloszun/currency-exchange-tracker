@@ -1,7 +1,7 @@
 .gold-page {
     width: 100%;
     min-height: calc(100vh - 120px);
-    padding: 24px;
+    padding: 24px clamp(32px, 7vw, 80px);
     box-sizing: border-box;
     background:
         radial-gradient(circle at top left, rgba(251, 191, 36, 0.28), transparent 28%),
@@ -59,8 +59,8 @@
     }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 640px) {
     .gold-page {
-        padding: 16px;
+        padding: 20px clamp(22px, 6vw, 40px);
     }
 }

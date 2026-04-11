@@ -5,7 +5,7 @@
   gap: 24px;
   align-items: stretch;
   margin: 0;
-  padding: 20px;
+  padding: clamp(20px, 4vw, 36px);
   font-family: Arial, sans-serif;
   box-sizing: border-box;
 }
