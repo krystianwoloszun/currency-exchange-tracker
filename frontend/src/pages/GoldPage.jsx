@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {AuthError} from "../api/apiFetch";
-import {getCurrentGoldPrice, getGoldPriceHistory, getTodayGoldPrice} from "../api/goldApi";
+import {getCurrentGoldPrice, getGoldPriceHistory} from "../api/goldApi";
 import {clearToken} from "../auth/token";
 import {INVALID_ISO_CALENDAR_DATE_MESSAGE, isValidIsoCalendarDate} from "../utils/isoCalendarDate";
 import GoldHistoryChart from "../components/GoldHistoryChart";
@@ -36,7 +36,6 @@ export default function GoldPage({onUnauthorized}) {
     const [endDate, setEndDate] = useState(defaultEndDate);
     const [history, setHistory] = useState([]);
     const [currentPrice, setCurrentPrice] = useState(null);
-    const [todayPrice, setTodayPrice] = useState(null);
     const [loadingSidebar, setLoadingSidebar] = useState(true);
     const [loadingHistory, setLoadingHistory] = useState(false);
     const [error, setError] = useState("");
@@ -45,40 +44,26 @@ export default function GoldPage({onUnauthorized}) {
     useEffect(() => {
         let mounted = true;
 
-        Promise.allSettled([getCurrentGoldPrice(), getTodayGoldPrice()])
-            .then((results) => {
+        (async () => {
+            try {
+                const data = await getCurrentGoldPrice();
                 if (!mounted) return;
-
-                const authFailure = results.find((result) => result.status === "rejected" && result.reason instanceof AuthError);
-                if (authFailure) {
+                setCurrentPrice(Array.isArray(data) ? data[0] ?? null : null);
+                setSidebarError("");
+            } catch (err) {
+                if (!mounted) return;
+                if (err instanceof AuthError) {
                     clearToken();
                     onUnauthorized?.();
                     setSidebarError("Brak dostępu. Zaloguj się ponownie.");
                     return;
                 }
-
-                const [currentResult, todayResult] = results;
-
-                if (currentResult.status === "fulfilled") {
-                    setCurrentPrice(Array.isArray(currentResult.value) ? currentResult.value[0] ?? null : null);
-                }
-
-                if (todayResult.status === "fulfilled") {
-                    setTodayPrice(Array.isArray(todayResult.value) ? todayResult.value[0] ?? null : null);
-                } else {
-                    setTodayPrice(null);
-                }
-
-                if (currentResult.status === "rejected" && todayResult.status === "rejected") {
-                    setSidebarError("Nie udało się pobrać bieżących notowań złota.");
-                } else {
-                    setSidebarError("");
-                }
-            })
-            .finally(() => {
-                if (!mounted) return;
-                setLoadingSidebar(false);
-            });
+                setCurrentPrice(null);
+                setSidebarError("Nie udało się pobrać bieżących notowań złota.");
+            } finally {
+                if (mounted) setLoadingSidebar(false);
+            }
+        })();
 
         return () => {
             mounted = false;
@@ -151,7 +136,6 @@ export default function GoldPage({onUnauthorized}) {
                 <aside className="gold-sidebarWrap">
                     <GoldSidebar
                         currentPrice={currentPrice}
-                        todayPrice={todayPrice}
                         loading={loadingSidebar}
                         error={sidebarError}
                     />

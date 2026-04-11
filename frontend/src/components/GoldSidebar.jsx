@@ -19,8 +19,8 @@ function formatDateValue(value) {
     return `${day}.${month}.${year}`;
 }
 
-export default function GoldSidebar({currentPrice, todayPrice, loading, error}) {
-    const effectiveDate = currentPrice?.date || todayPrice?.date;
+export default function GoldSidebar({currentPrice, loading, error}) {
+    const effectiveDate = currentPrice?.date;
 
     return (
         <aside className="gold-sidebar">
@@ -30,7 +30,6 @@ export default function GoldSidebar({currentPrice, todayPrice, loading, error}) 
                 {effectiveDate ? (
                     <p className="gold-sidebar-header-date">Dane z dnia {formatDateValue(effectiveDate)}</p>
                 ) : null}
-                <p>Podgląd bieżących notowań i najważniejszych informacji o cenie 1 g złota.</p>
             </div>
 
             {loading ? (
@@ -43,12 +42,6 @@ export default function GoldSidebar({currentPrice, todayPrice, loading, error}) 
                         <span className="gold-sidebar-label">Ostatnie dostępne notowanie</span>
                         <strong className="gold-sidebar-value">{formatPrice(currentPrice?.price)}</strong>
                         <span className="gold-sidebar-date">{formatDateValue(currentPrice?.date)}</span>
-                    </article>
-
-                    <article className="gold-sidebar-card">
-                        <span className="gold-sidebar-label">Dzisiejsze notowanie</span>
-                        <strong className="gold-sidebar-value">{formatPrice(todayPrice?.price)}</strong>
-                        <span className="gold-sidebar-date">{formatDateValue(todayPrice?.date)}</span>
                     </article>
 
                     {/*<article className="gold-sidebar-card gold-sidebar-card-muted">*/}
