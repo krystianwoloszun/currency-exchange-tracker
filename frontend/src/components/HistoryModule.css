@@ -12,6 +12,11 @@
     align-items: end;
 }
 
+/* Historia złota: waluta ukryta — tylko Od, Do, przycisk */
+.history-form--gold {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .history-field {
     display: flex;
     flex-direction: column;
@@ -94,6 +99,10 @@
 @media (max-width: 820px) {
     .history-form {
         grid-template-columns: 1fr 1fr;
+    }
+
+    .history-form--gold .history-button {
+        grid-column: 1 / -1;
     }
 }
 

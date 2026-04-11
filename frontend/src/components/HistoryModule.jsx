@@ -1,5 +1,5 @@
 import "./HistoryModule.css";
-import {resolveDateInputChange} from "../utils/isoCalendarDate";
+import DateRangeFields from "./DateRangeFields";
 
 const rateFormatter = new Intl.NumberFormat("pl-PL", {
     minimumFractionDigits: 4,
@@ -55,29 +55,17 @@ export default function HistoryModule({
                     </select>
                 </div>
 
-                <div className="history-field">
-                    <label htmlFor="history-start-date">Od</label>
-                    <input
-                        id="history-start-date"
-                        type="date"
-                        value={startDate}
-                        onChange={(e) => resolveDateInputChange(e, onStartDateChange, onInvalidDate)}
-                        min={minDate}
-                        max={endDate || undefined}
-                    />
-                </div>
-
-                <div className="history-field">
-                    <label htmlFor="history-end-date">Do</label>
-                    <input
-                        id="history-end-date"
-                        type="date"
-                        value={endDate}
-                        onChange={(e) => resolveDateInputChange(e, onEndDateChange, onInvalidDate)}
-                        min={startDate || minDate}
-                        max={maxDate}
-                    />
-                </div>
+                <DateRangeFields
+                    startId="history-start-date"
+                    endId="history-end-date"
+                    startDate={startDate}
+                    endDate={endDate}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    onStartDateChange={onStartDateChange}
+                    onEndDateChange={onEndDateChange}
+                    onInvalidDate={onInvalidDate}
+                />
 
                 <button type="button" className="history-button" onClick={onSubmit} disabled={loadingCurrencies || loadingHistory}>
                     {loadingHistory ? "Ładowanie..." : "Pokaż historię"}

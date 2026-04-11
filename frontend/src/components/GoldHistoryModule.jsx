@@ -1,6 +1,5 @@
-import {useRef} from "react";
 import "./HistoryModule.css";
-import {resolveDateInputChange} from "../utils/isoCalendarDate";
+import DateRangeFields from "./DateRangeFields";
 
 const priceFormatter = new Intl.NumberFormat("pl-PL", {
     minimumFractionDigits: 2,
@@ -20,15 +19,6 @@ function formatDateValue(value) {
     return `${day}.${month}.${year}`;
 }
 
-function openNativeDatePicker(input) {
-    if (!input) return;
-    if (typeof input.showPicker === "function") {
-        input.showPicker();
-        return;
-    }
-    input.focus();
-}
-
 export default function GoldHistoryModule({
     startDate,
     endDate,
@@ -42,59 +32,20 @@ export default function GoldHistoryModule({
     onSubmit,
     onInvalidDate,
 }) {
-    const startDateRef = useRef(null);
-    const endDateRef = useRef(null);
-
     return (
         <section className="history-module">
-            <div className="history-form" style={{gridTemplateColumns: "repeat(3, minmax(0, 1fr))"}}>
-                <div className="history-field">
-                    <label htmlFor="gold-start-date">Od</label>
-                    <div className="history-dateField">
-                        <input
-                            ref={startDateRef}
-                            id="gold-start-date"
-                            type="date"
-                            value={startDate}
-                            onChange={(e) => resolveDateInputChange(e, onStartDateChange, onInvalidDate)}
-                            onFocus={(e) => openNativeDatePicker(e.currentTarget)}
-                            min={minDate}
-                            max={endDate || undefined}
-                        />
-                        <button
-                            type="button"
-                            className="history-dateButton"
-                            aria-label="Otwórz kalendarz daty początkowej"
-                            onClick={() => openNativeDatePicker(startDateRef.current)}
-                        >
-                            Kalendarz
-                        </button>
-                    </div>
-                </div>
-
-                <div className="history-field">
-                    <label htmlFor="gold-end-date">Do</label>
-                    <div className="history-dateField">
-                        <input
-                            ref={endDateRef}
-                            id="gold-end-date"
-                            type="date"
-                            value={endDate}
-                            onChange={(e) => resolveDateInputChange(e, onEndDateChange, onInvalidDate)}
-                            onFocus={(e) => openNativeDatePicker(e.currentTarget)}
-                            min={startDate || minDate}
-                            max={maxDate}
-                        />
-                        <button
-                            type="button"
-                            className="history-dateButton"
-                            aria-label="Otwórz kalendarz daty końcowej"
-                            onClick={() => openNativeDatePicker(endDateRef.current)}
-                        >
-                            Kalendarz
-                        </button>
-                    </div>
-                </div>
+            <div className="history-form history-form--gold">
+                <DateRangeFields
+                    startId="gold-start-date"
+                    endId="gold-end-date"
+                    startDate={startDate}
+                    endDate={endDate}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    onStartDateChange={onStartDateChange}
+                    onEndDateChange={onEndDateChange}
+                    onInvalidDate={onInvalidDate}
+                />
 
                 <button type="button" className="history-button" onClick={onSubmit} disabled={loadingHistory}>
                     {loadingHistory ? "Ładowanie..." : "Pokaż historię"}
