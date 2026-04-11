@@ -80,20 +80,51 @@
     position: static;
     flex-direction: column;
     align-items: stretch;
-    padding: 18px clamp(22px, 6vw, 40px);
+    gap: 14px;
+    padding: 16px clamp(18px, 5vw, 28px);
   }
 
+  .brandBlock {
+    width: 100%;
+  }
+
+  /* Jedna linia z nagłówkiem: nawigacja w 3 równych kolumnach jak belka pod tytułem */
   .nav {
+    flex: none;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .navButton {
+    min-width: 0;
+    min-height: 44px;
+    padding: 10px 8px;
+    font-size: 0.8125rem;
+    line-height: 1.25;
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
+    text-align: center;
   }
 
   .bannerInfo {
+    flex: none;
+    width: 100%;
     text-align: left;
+    font-size: 0.95rem;
+    line-height: 1.45;
   }
 
+  /* W jednej kolumnie z brandingiem — bez wyśrodkowania na całą szerokość */
   .logoutButton {
-    align-self: center;
-    width: fit-content;
+    align-self: flex-start;
+    width: auto;
     max-width: 100%;
+    margin-top: 2px;
+    padding: 11px 20px;
+    min-height: 44px;
   }
 }
