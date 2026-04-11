@@ -2,6 +2,7 @@ import {useMemo, useState} from "react";
 import CurrencyPage from "./pages/CurrencyPage";
 import HistoryPage from "./pages/HistoryPage";
 import GoldPage from "./pages/GoldPage";
+import AboutPage from "./pages/AboutPage";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import NavigationBanner from "./components/NavigationBanner";
@@ -24,6 +25,8 @@ function App() {
 
     const renderPage = () => {
         switch (currentPage) {
+            case "about":
+                return <AboutPage/>;
             case "gold":
                 return <GoldPage onUnauthorized={logout}/>;
             case "history":
@@ -43,7 +46,7 @@ function App() {
                         {renderPage()}
                     </div>
                     <footer className={styles.footer}>
-                        <span>© 2026 Krystian Wołoszun. All Rights Reserved.</span>
+                        <span>© 2026 Krystian Woloszun. All Rights Reserved.</span>
                     </footer>
                 </div>
             ) : (
@@ -57,7 +60,7 @@ function App() {
                         )}
                     </div>
                     <footer className={styles.footer}>
-                        <span>© 2026 Krystian Wołoszun. All Rights Reserved.</span>
+                        <span>© 2026 Krystian Woloszun. All Rights Reserved.</span>
                     </footer>
                 </div>
             )}
