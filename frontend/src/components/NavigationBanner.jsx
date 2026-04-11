@@ -31,6 +31,15 @@ export default function NavigationBanner({currentPage, onNavigate, onLogout}) {
                             {item.label}
                         </button>
                     ))}
+                    {showLogout && (
+                        <button
+                            type="button"
+                            className={`${styles.logoutButton} ${styles.logoutButtonMobile}`}
+                            onClick={onLogout}
+                        >
+                            Wyloguj sie
+                        </button>
+                    )}
                 </nav>
             ) : (
                 <div className={styles.bannerInfo}>
@@ -39,7 +48,11 @@ export default function NavigationBanner({currentPage, onNavigate, onLogout}) {
             )}
 
             {showLogout && (
-                <button type="button" className={styles.logoutButton} onClick={onLogout}>
+                <button
+                    type="button"
+                    className={`${styles.logoutButton} ${styles.logoutButtonDesktop}`}
+                    onClick={onLogout}
+                >
                     Wyloguj sie
                 </button>
             )}

@@ -75,31 +75,39 @@
   border-color: #f0a599;
 }
 
+.logoutButtonMobile {
+  display: none;
+}
+
 @media (max-width: 640px) {
   .banner {
     position: static;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     gap: 14px;
     padding: 16px clamp(18px, 5vw, 28px);
   }
 
   .brandBlock {
     width: 100%;
+    align-items: center;
+    text-align: center;
   }
 
-  /* Jedna linia z nagłówkiem: nawigacja w 3 równych kolumnach jak belka pod tytułem */
   .nav {
     flex: none;
-    width: 100%;
+    width: min(100%, 420px);
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
     align-items: stretch;
+    justify-items: center;
   }
 
-  .navButton {
+  .navButton,
+  .logoutButtonMobile {
     min-width: 0;
+    width: 100%;
     min-height: 44px;
     padding: 10px 8px;
     font-size: 0.8125rem;
@@ -113,18 +121,17 @@
   .bannerInfo {
     flex: none;
     width: 100%;
-    text-align: left;
+    text-align: center;
     font-size: 0.95rem;
     line-height: 1.45;
   }
 
-  /* W jednej kolumnie z brandingiem — bez wyśrodkowania na całą szerokość */
-  .logoutButton {
-    align-self: flex-start;
-    width: auto;
-    max-width: 100%;
-    margin-top: 2px;
-    padding: 11px 20px;
-    min-height: 44px;
+  .logoutButtonDesktop {
+    display: none;
+  }
+
+  .logoutButtonMobile {
+    display: inline-flex;
+    grid-column: 2 / 3;
   }
 }
