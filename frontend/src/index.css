@@ -1,4 +1,5 @@
 :root {
+  --app-scale: 0.75;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -26,6 +27,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  zoom: var(--app-scale);
 }
 
 h1 {
