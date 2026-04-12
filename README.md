@@ -17,14 +17,14 @@ The application allows users to:
 
 The backend provides a REST API, and the frontend presents data through a calculator, historical views, and sidebars with current rates.
 
-### User interface
-## Calculator
+## User interface
+### Calculator
 <img width="1827" height="850" alt="image" src="https://github.com/user-attachments/assets/52d28f8a-05c6-42d6-b1c3-5a1de09fba30" />
 
-## Rates History
+### Rates History
 <img width="1882" height="884" alt="image" src="https://github.com/user-attachments/assets/c8b39970-cece-4759-a5cb-670c533597cd" />
 
-## Login
+### Login
 <img width="1906" height="875" alt="image" src="https://github.com/user-attachments/assets/cb0406ab-b1c9-4c2a-baee-2cc371e50c4a" />
 
 
