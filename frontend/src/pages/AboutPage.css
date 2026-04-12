@@ -38,8 +38,77 @@
 }
 
 .about-main h2 {
-    margin: 0;
+    margin: 0 0 16px;
     font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+}
+
+.about-main h3 {
+    margin: 24px 0 12px;
+    font-size: 1.4rem;
+    color: #1e293b;
+}
+
+.about-main p {
+    line-height: 1.6;
+    margin-bottom: 16px;
+    color: #334155;
+}
+
+.about-main ul {
+    margin-bottom: 24px;
+    padding-left: 20px;
+}
+
+.about-main li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.hosting-note {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    border-radius: 8px;
+}
+
+.hosting-note h4 {
+    margin: 0 0 8px;
+    color: #92400e;
+    font-size: 1.1rem;
+}
+
+.hosting-note p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #78350f;
+}
+
+.github-section {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.github-button {
+    display: inline-block;
+    background-color: #24292e;
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 8px;
+}
+
+.github-button:hover {
+    background-color: #1b1f23;
+    transform: translateY(-1px);
+}
+
+.github-button:active {
+    transform: translateY(0);
 }
 
 @media (max-width: 640px) {
