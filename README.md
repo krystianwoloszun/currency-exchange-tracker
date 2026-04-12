@@ -1,4 +1,4 @@
-# CurrencyRates (KursyWalut)
+# KursyWalut
 
 Full-stack application for checking currency rates and gold prices based on NBP (National Bank of Poland) API data. The project combines a Spring Boot backend with a React frontend, featuring a currency calculator, historical data, and simple JWT-based authentication.
 
