@@ -67,7 +67,7 @@ export default function Login({onLogin, onGoToRegister}) {
         <div className={styles.root}>
             <section className={styles.hero}>
                 <span className={styles.eyebrow}>Kursy Walut</span>
-                <h1 className={styles.heroTitle}>Zaloguj się do aplikacji NBP</h1>
+                <h1 className={styles.heroTitle}>Zaloguj się do aplikacji</h1>
                 <p className={styles.heroText}>
                     Szybki dostęp do kalkulatora walut, historii kursów i bocznych paneli z aktualnymi notowaniami.
                 </p>

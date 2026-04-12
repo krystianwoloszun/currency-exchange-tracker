@@ -14,8 +14,7 @@ export default function NavigationBanner({currentPage, onNavigate, onLogout}) {
     return (
         <header className={styles.banner}>
             <div className={styles.brandBlock}>
-                <span className={styles.eyebrow}>Kursy Walut</span>
-                <strong className={styles.title}>Aplikacja NBP</strong>
+                <strong className={styles.eyebrow}>Kursy Walut</strong>
             </div>
 
             {showNavigation ? (

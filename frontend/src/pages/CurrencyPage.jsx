@@ -51,7 +51,7 @@ export default function CurrencyPage({onUnauthorized}) {
     return (
         <div className="currency-page">
             <header className="currency-header">
-                <h1>Kalkulator walut NBP</h1>
+                <h1>Kalkulator walut</h1>
                 <p>Aktualne kursy wybranych walut i szybkie przeliczenie na PLN.</p>
             </header>
             {loading ? (

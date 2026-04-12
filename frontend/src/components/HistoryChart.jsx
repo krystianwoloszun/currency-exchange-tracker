@@ -96,7 +96,7 @@ export default function HistoryChart({history, code, loading}) {
             <div className="history-chart-topbar">
                 <div>
                     <h2>Wykres czasowy</h2>
-                    <p>Kurs średni NBP dla {code || "wybranej waluty"}.</p>
+                    <p>Kurs średni dla {code || "wybranej waluty"}.</p>
                 </div>
             </div>
 

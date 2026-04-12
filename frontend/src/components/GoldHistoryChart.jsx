@@ -95,7 +95,7 @@ export default function GoldHistoryChart({history, loading}) {
             <div className="history-chart-topbar">
                 <div>
                     <h2>Wykres ceny złota</h2>
-                    <p>Notowania NBP dla 1 g złota w wybranym zakresie.</p>
+                    <p>Notowania dla 1 g złota w wybranym zakresie.</p>
                 </div>
             </div>
 
