@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {apiFetch} from "../api/apiFetch";
+import {API_BASE_URL} from "../config/apiBaseUrl";
 import styles from "./Login.module.css";
 
 const PASSWORD_REQUIREMENTS = [
@@ -67,8 +68,7 @@ export default function Register({onBackToLogin}) {
         }
 
         try {
-            const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api";
-            const res = await apiFetch(`${apiBase}/auth/register`, {
+            const res = await apiFetch(`${API_BASE_URL}/auth/register`, {
                 method: "POST",
                 body: JSON.stringify(credentials),
             });

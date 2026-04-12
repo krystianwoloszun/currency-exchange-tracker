@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {apiFetch, AuthError} from "../api/apiFetch";
+import {API_BASE_URL} from "../config/apiBaseUrl";
 import {setToken} from "../auth/token";
 import styles from "./Login.module.css";
 
@@ -42,8 +43,7 @@ export default function Login({onLogin, onGoToRegister}) {
         if (!credentials) return;
 
         try {
-            const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api";
-            const token = await apiFetch(`${apiBase}/auth/login`, {
+            const token = await apiFetch(`${API_BASE_URL}/auth/login`, {
                 method: "POST",
                 body: JSON.stringify(credentials),
             });

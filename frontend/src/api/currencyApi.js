@@ -1,6 +1,7 @@
+import {API_BASE_URL} from "../config/apiBaseUrl";
 import {apiFetch} from "./apiFetch";
 
-const API_BASE = `${import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api"}/currency`;
+const API_BASE = `${API_BASE_URL}/currency`;
 
 export async function getAvailableCurrencies() {
     const data = await apiFetch(`${API_BASE}/available`);

@@ -24,7 +24,7 @@ public class SecurityConfig {
     private final UserService userService;
     private final JwtFilter jwtFilter;
     
-    @Value("${cors.allowed-origins:http://localhost:5173}")
+    @Value("${cors.allowed-origins}")
     private String allowedOrigins;
 
     public SecurityConfig(UserService userService, JwtFilter jwtFilter) {

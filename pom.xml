@@ -90,6 +90,13 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Ładowanie .env przy starcie (lokalnie); na hostingu nadpisują prawdziwe zmienne środowiskowe -->
+        <dependency>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>dotenv-java</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
