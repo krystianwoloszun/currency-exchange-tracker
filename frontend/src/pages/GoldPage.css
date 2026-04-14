@@ -1,6 +1,6 @@
 .gold-page {
     width: 100%;
-    min-height: calc(100vh - 120px);
+    height: 100%;
     padding: 24px clamp(32px, 7vw, 80px);
     box-sizing: border-box;
     background:
