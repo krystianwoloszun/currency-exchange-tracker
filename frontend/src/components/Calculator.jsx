@@ -1,9 +1,9 @@
-import {useEffect, useState} from "react";
-import {convertCurrency} from "../api/currencyApi";
-import {AuthError} from "../api/apiFetch";
-import {clearToken} from "../auth/token";
-import {CURRENCY_FLAGS} from "../api/currencyFlags";
-import {toast} from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { convertCurrency } from "../api/currencyApi";
+import { AuthError } from "../api/apiFetch";
+import { clearToken } from "../auth/token";
+import { CURRENCY_FLAGS } from "../api/currencyFlags";
+import { toast } from "react-hot-toast";
 import "flag-icons/css/flag-icons.min.css";
 import styles from "./Calculator.module.css";
 
@@ -19,7 +19,7 @@ const rateFormatter = new Intl.NumberFormat("pl-PL", {
 
 const MAX_AMOUNT = 100_000_000;
 
-export default function Calculator({currencies = [], selectedCode, onCodeChange, onUnauthorized}) {
+export default function Calculator({ currencies = [], selectedCode, onCodeChange, onUnauthorized }) {
     const [internalCode, setInternalCode] = useState("");
     const [amount, setAmount] = useState("");
     const [direction, setDirection] = useState("TO_PLN");

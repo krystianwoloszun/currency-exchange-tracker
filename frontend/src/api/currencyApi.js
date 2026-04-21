@@ -1,5 +1,5 @@
-import {API_BASE_URL} from "../config/apiBaseUrl";
-import {apiFetch} from "./apiFetch";
+import { API_BASE_URL } from "../config/apiBaseUrl";
+import { apiFetch } from "./apiFetch";
 
 const API_BASE = `${API_BASE_URL}/currency`;
 
@@ -12,7 +12,7 @@ export async function getAvailableCurrencies() {
 }
 
 export async function convertCurrency(amount, code, direction) {
-    const params = new URLSearchParams({amount, code, direction});
+    const params = new URLSearchParams({ amount, code, direction });
     return apiFetch(`${API_BASE}/conversion?${params.toString()}`);
 }
 
@@ -21,7 +21,7 @@ export async function getRate(code) {
 }
 
 export async function getRateHistory(code, startDate, endDate) {
-    const params = new URLSearchParams({startDate, endDate});
+    const params = new URLSearchParams({ startDate, endDate });
     return apiFetch(`${API_BASE}/${code}/history?${params.toString()}`);
 }
 

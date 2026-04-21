@@ -1,17 +1,17 @@
-import {useState} from "react";
-import {apiFetch} from "../api/apiFetch";
-import {API_BASE_URL} from "../config/apiBaseUrl";
+import { useState } from "react";
+import { apiFetch } from "../api/apiFetch";
+import { API_BASE_URL } from "../config/apiBaseUrl";
 import styles from "./Login.module.css";
 
 const PASSWORD_REQUIREMENTS = [
-    {id: "length", label: "minimum 8 znaków", test: (value) => value.length >= 8},
-    {id: "uppercase", label: "przynajmniej 1 wielka litera", test: (value) => /[A-Z]/.test(value)},
-    {id: "lowercase", label: "przynajmniej 1 mała litera", test: (value) => /[a-z]/.test(value)},
-    {id: "digit", label: "przynajmniej 1 cyfra", test: (value) => /\d/.test(value)},
-    {id: "special", label: "przynajmniej 1 znak specjalny", test: (value) => /[^A-Za-z0-9]/.test(value)},
+    { id: "length", label: "minimum 8 znaków", test: (value) => value.length >= 8 },
+    { id: "uppercase", label: "przynajmniej 1 wielka litera", test: (value) => /[A-Z]/.test(value) },
+    { id: "lowercase", label: "przynajmniej 1 mała litera", test: (value) => /[a-z]/.test(value) },
+    { id: "digit", label: "przynajmniej 1 cyfra", test: (value) => /\d/.test(value) },
+    { id: "special", label: "przynajmniej 1 znak specjalny", test: (value) => /[^A-Za-z0-9]/.test(value) },
 ];
 
-export default function Register({onBackToLogin}) {
+export default function Register({ onBackToLogin }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");

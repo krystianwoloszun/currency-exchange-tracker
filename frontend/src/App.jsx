@@ -1,4 +1,4 @@
-import {useMemo, useState} from "react";
+import { useMemo, useState } from "react";
 import CurrencyPage from "./pages/CurrencyPage";
 import HistoryPage from "./pages/HistoryPage";
 import GoldPage from "./pages/GoldPage";
@@ -6,7 +6,7 @@ import AboutPage from "./pages/AboutPage";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import NavigationBanner from "./components/NavigationBanner";
-import {clearToken, getToken} from "./auth/token";
+import { clearToken, getToken } from "./auth/token";
 import styles from "./App.module.css";
 
 function App() {
@@ -26,14 +26,14 @@ function App() {
     const renderPage = () => {
         switch (currentPage) {
             case "about":
-                return <AboutPage/>;
+                return <AboutPage />;
             case "gold":
-                return <GoldPage onUnauthorized={logout}/>;
+                return <GoldPage onUnauthorized={logout} />;
             case "history":
-                return <HistoryPage onUnauthorized={logout}/>;
+                return <HistoryPage onUnauthorized={logout} />;
             case "calculator":
             default:
-                return <CurrencyPage onUnauthorized={logout}/>;
+                return <CurrencyPage onUnauthorized={logout} />;
         }
     };
 
@@ -41,7 +41,7 @@ function App() {
         <div className="App">
             {isAuthed ? (
                 <div className={styles.authed}>
-                    <NavigationBanner currentPage={currentPage} onNavigate={setCurrentPage} onLogout={logout}/>
+                    <NavigationBanner currentPage={currentPage} onNavigate={setCurrentPage} onLogout={logout} />
                     <div className={styles.content}>
                         {renderPage()}
                     </div>
@@ -51,12 +51,12 @@ function App() {
                 </div>
             ) : (
                 <div className={styles.authed}>
-                    <NavigationBanner/>
+                    <NavigationBanner />
                     <div className={styles.page}>
                         {authView === "register" ? (
-                            <Register onBackToLogin={() => setAuthView("login")}/>
+                            <Register onBackToLogin={() => setAuthView("login")} />
                         ) : (
-                            <Login onLogin={(t) => setToken(t)} onGoToRegister={() => setAuthView("register")}/>
+                            <Login onLogin={(t) => setToken(t)} onGoToRegister={() => setAuthView("register")} />
                         )}
                     </div>
                     <footer className={styles.footer}>

@@ -34,7 +34,7 @@ class GoldPriceServiceTest {
     @Test
     void testGetCurrentGoldPriceSuccess() {
         GoldPrice goldPrice = new GoldPrice(LocalDate.of(2026, 4, 1), new BigDecimal("412.35"));
-        when(restTemplate.getForObject(anyString(), eq(GoldPrice[].class))).thenReturn(new GoldPrice[]{goldPrice});
+        when(restTemplate.getForObject(anyString(), eq(GoldPrice[].class))).thenReturn(new GoldPrice[] { goldPrice });
 
         List<GoldPrice> result = goldPriceService.getCurrentGoldPrice();
 
@@ -47,7 +47,8 @@ class GoldPriceServiceTest {
         when(restTemplate.getForObject(anyString(), eq(GoldPrice[].class)))
                 .thenThrow(HttpClientErrorException.NotFound.class);
 
-        assertThrows(GoldPriceNotFoundException.class, () -> goldPriceService.getGoldPriceByDate(LocalDate.of(2026, 4, 1)));
+        assertThrows(GoldPriceNotFoundException.class,
+                () -> goldPriceService.getGoldPriceByDate(LocalDate.of(2026, 4, 1)));
     }
 
     @Test
@@ -55,9 +56,11 @@ class GoldPriceServiceTest {
         GoldPrice first = new GoldPrice(LocalDate.of(2026, 3, 10), new BigDecimal("401.11"));
         GoldPrice second = new GoldPrice(LocalDate.of(2026, 3, 11), new BigDecimal("402.22"));
 
-        when(restTemplate.getForObject(anyString(), eq(GoldPrice[].class))).thenReturn(new GoldPrice[]{first, second});
+        when(restTemplate.getForObject(anyString(), eq(GoldPrice[].class)))
+                .thenReturn(new GoldPrice[] { first, second });
 
-        List<GoldPrice> result = goldPriceService.getGoldPriceHistory(LocalDate.of(2026, 3, 10), LocalDate.of(2026, 3, 11));
+        List<GoldPrice> result = goldPriceService.getGoldPriceHistory(LocalDate.of(2026, 3, 10),
+                LocalDate.of(2026, 3, 11));
 
         assertEquals(2, result.size());
         assertEquals(LocalDate.of(2026, 3, 10), result.get(0).getDate());

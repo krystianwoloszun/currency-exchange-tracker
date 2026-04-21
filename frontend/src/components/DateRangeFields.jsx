@@ -1,5 +1,5 @@
 import "./HistoryModule.css";
-import {resolveDateInputChange} from "../utils/isoCalendarDate";
+import { resolveDateInputChange } from "../utils/isoCalendarDate";
 
 export default function DateRangeFields({
     startId,

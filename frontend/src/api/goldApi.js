@@ -1,5 +1,5 @@
-import {API_BASE_URL} from "../config/apiBaseUrl";
-import {apiFetch} from "./apiFetch";
+import { API_BASE_URL } from "../config/apiBaseUrl";
+import { apiFetch } from "./apiFetch";
 
 const API_BASE = `${API_BASE_URL}/gold`;
 
@@ -33,7 +33,7 @@ export async function getTodayGoldPrice() {
 }
 
 export async function getGoldPriceHistory(startDate, endDate) {
-    const params = new URLSearchParams({startDate, endDate});
+    const params = new URLSearchParams({ startDate, endDate });
     const data = await apiFetch(`${API_BASE}/history?${params.toString()}`);
     return normalizeGoldPriceList(data);
 }

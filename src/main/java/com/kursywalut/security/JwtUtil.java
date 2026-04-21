@@ -14,7 +14,8 @@ public class JwtUtil {
     private final long expiration = 1000 * 60 * 60; // 1h
 
     public String generateToken(String username) {
-        return Jwts.builder().setSubject(username).setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + expiration)).signWith(key).compact();
+        return Jwts.builder().setSubject(username).setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration)).signWith(key).compact();
     }
 
     public String extractUsername(String token) {

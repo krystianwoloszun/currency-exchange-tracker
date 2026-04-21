@@ -78,7 +78,6 @@ public class NbpService {
                 .toList();
     }
 
-
     public BigDecimal getRate(String currencyCode) {
         return extractRate(getNbpResponse(currencyCode));
     }
@@ -91,7 +90,8 @@ public class NbpService {
         }
 
         return response.getRates().stream()
-                .map(rate -> new Rate(response.getCurrency(), response.getCode(), rate.getMidRate(), rate.getEffectiveDate()))
+                .map(rate -> new Rate(response.getCurrency(), response.getCode(), rate.getMidRate(),
+                        rate.getEffectiveDate()))
                 .toList();
     }
 

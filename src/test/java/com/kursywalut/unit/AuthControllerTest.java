@@ -43,7 +43,9 @@ public class AuthControllerTest {
                 }
                 """;
 
-        mockMvc.perform(post("/api/auth/login").contentType(MediaType.APPLICATION_JSON).content(loginJson)).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.isEmptyString())));
+        mockMvc.perform(post("/api/auth/login").contentType(MediaType.APPLICATION_JSON).content(loginJson))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.isEmptyString())));
     }
 
     @Test
@@ -73,6 +75,7 @@ public class AuthControllerTest {
         mockMvc.perform(post("/api/auth/register").contentType(MediaType.APPLICATION_JSON).content(registerJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Hasło musi zawierać: przynajmniej 1 wielka litera, przynajmniej 1 znak specjalny."));
+                .andExpect(jsonPath("$.message")
+                        .value("Hasło musi zawierać: przynajmniej 1 wielka litera, przynajmniej 1 znak specjalny."));
     }
 }

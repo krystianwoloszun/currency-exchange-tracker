@@ -1,8 +1,8 @@
-import {useEffect, useState} from "react";
-import {AuthError} from "../api/apiFetch";
-import {getAvailableCurrencies, getRateHistory} from "../api/currencyApi";
-import {clearToken} from "../auth/token";
-import {INVALID_ISO_CALENDAR_DATE_MESSAGE, isValidIsoCalendarDate} from "../utils/isoCalendarDate";
+import { useEffect, useState } from "react";
+import { AuthError } from "../api/apiFetch";
+import { getAvailableCurrencies, getRateHistory } from "../api/currencyApi";
+import { clearToken } from "../auth/token";
+import { INVALID_ISO_CALENDAR_DATE_MESSAGE, isValidIsoCalendarDate } from "../utils/isoCalendarDate";
 import HistoryChart from "../components/HistoryChart";
 import HistoryModule from "../components/HistoryModule";
 import RatesSidebar from "../components/RatesSidebar";
@@ -31,7 +31,7 @@ function countDaysInclusive(startDate, endDate) {
     return Math.floor((parseDate(endDate) - parseDate(startDate)) / millisecondsPerDay) + 1;
 }
 
-export default function HistoryPage({onUnauthorized}) {
+export default function HistoryPage({ onUnauthorized }) {
     const [currencies, setCurrencies] = useState([]);
     const [code, setCode] = useState("");
     const [startDate, setStartDate] = useState(defaultStartDate);

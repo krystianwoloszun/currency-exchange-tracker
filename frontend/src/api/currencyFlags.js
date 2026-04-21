@@ -34,17 +34,17 @@ export const CURRENCY_FLAGS = new Map([
 ]);
 
 export const FEATURED_CURRENCIES = [
-    {code: "USD", flagCode: "us"},
-    {code: "EUR", flagCode: "eu"},
-    {code: "CAD", flagCode: "ca"},
-    {code: "GBP", flagCode: "gb"},
-    {code: "CHF", flagCode: "ch"},
-    {code: "CZK", flagCode: "cz"},
-    {code: "HUF", flagCode: "hu"},
-    {code: "NOK", flagCode: "no"},
-    {code: "SEK", flagCode: "se"},
-    {code: "DKK", flagCode: "dk"},
-    {code: "JPY", flagCode: "jp"},
+    { code: "USD", flagCode: "us" },
+    { code: "EUR", flagCode: "eu" },
+    { code: "CAD", flagCode: "ca" },
+    { code: "GBP", flagCode: "gb" },
+    { code: "CHF", flagCode: "ch" },
+    { code: "CZK", flagCode: "cz" },
+    { code: "HUF", flagCode: "hu" },
+    { code: "NOK", flagCode: "no" },
+    { code: "SEK", flagCode: "se" },
+    { code: "DKK", flagCode: "dk" },
+    { code: "JPY", flagCode: "jp" },
 ];
 
 export const getFlagCode = (currencyCode) => {

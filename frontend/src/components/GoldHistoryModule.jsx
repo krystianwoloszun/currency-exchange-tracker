@@ -62,18 +62,18 @@ export default function GoldHistoryModule({
                 <div className="history-results">
                     <table className="history-table">
                         <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Cena</th>
-                        </tr>
+                            <tr>
+                                <th>Data</th>
+                                <th>Cena</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {history.map((entry) => (
-                            <tr key={`gold-${entry.date}`}>
-                                <td>{formatDateValue(entry.date)}</td>
-                                <td>{formatPriceValue(entry.price)} PLN</td>
-                            </tr>
-                        ))}
+                            {history.map((entry) => (
+                                <tr key={`gold-${entry.date}`}>
+                                    <td>{formatDateValue(entry.date)}</td>
+                                    <td>{formatPriceValue(entry.price)} PLN</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>

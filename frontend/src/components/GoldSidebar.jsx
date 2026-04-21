@@ -19,7 +19,7 @@ function formatDateValue(value) {
     return `${day}.${month}.${year}`;
 }
 
-export default function GoldSidebar({currentPrice, loading, error}) {
+export default function GoldSidebar({ currentPrice, loading, error }) {
     const effectiveDate = currentPrice?.date;
 
     return (

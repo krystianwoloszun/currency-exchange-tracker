@@ -1,12 +1,12 @@
-import {useEffect, useState} from "react";
-import {getAvailableCurrencies} from "../api/currencyApi";
-import {AuthError} from "../api/apiFetch";
-import {clearToken} from "../auth/token";
+import { useEffect, useState } from "react";
+import { getAvailableCurrencies } from "../api/currencyApi";
+import { AuthError } from "../api/apiFetch";
+import { clearToken } from "../auth/token";
 import Calculator from "../components/Calculator";
 import RatesSidebar from "../components/RatesSidebar";
 import "./CurrencyPage.css";
 
-export default function CurrencyPage({onUnauthorized}) {
+export default function CurrencyPage({ onUnauthorized }) {
     const [currencies, setCurrencies] = useState([]);
     const [selectedCode, setSelectedCode] = useState("");
     const [loading, setLoading] = useState(true);

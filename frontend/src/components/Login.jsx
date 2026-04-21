@@ -1,10 +1,10 @@
-import {useState} from "react";
-import {apiFetch, AuthError} from "../api/apiFetch";
-import {API_BASE_URL} from "../config/apiBaseUrl";
-import {setToken} from "../auth/token";
+import { useState } from "react";
+import { apiFetch, AuthError } from "../api/apiFetch";
+import { API_BASE_URL } from "../config/apiBaseUrl";
+import { setToken } from "../auth/token";
 import styles from "./Login.module.css";
 
-export default function Login({onLogin, onGoToRegister}) {
+export default function Login({ onLogin, onGoToRegister }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");

@@ -82,18 +82,18 @@ export default function HistoryModule({
                 <div className="history-results">
                     <table className="history-table">
                         <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Kurs</th>
-                        </tr>
+                            <tr>
+                                <th>Data</th>
+                                <th>Kurs</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {history.map((entry) => (
-                            <tr key={`${entry.code}-${entry.effectiveDate}`}>
-                                <td>{formatDateValue(entry.effectiveDate)}</td>
-                                <td>{formatRateValue(entry.mid)} PLN</td>
-                            </tr>
-                        ))}
+                            {history.map((entry) => (
+                                <tr key={`${entry.code}-${entry.effectiveDate}`}>
+                                    <td>{formatDateValue(entry.effectiveDate)}</td>
+                                    <td>{formatRateValue(entry.mid)} PLN</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>

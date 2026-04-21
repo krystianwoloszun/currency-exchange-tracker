@@ -1,7 +1,7 @@
-import {getToken} from "../auth/token";
+import { getToken } from "../auth/token";
 
 export class ApiError extends Error {
-    constructor(message, {status, data} = {}) {
+    constructor(message, { status, data } = {}) {
         super(message);
         this.name = "ApiError";
         this.status = status;
@@ -10,8 +10,8 @@ export class ApiError extends Error {
 }
 
 export class AuthError extends ApiError {
-    constructor(message, {status, data} = {}) {
-        super(message, {status, data});
+    constructor(message, { status, data } = {}) {
+        super(message, { status, data });
         this.name = "AuthError";
     }
 }
@@ -50,7 +50,7 @@ export async function apiFetch(url, options = {}) {
     }
 
     console.log("Fetching:", url);
-    const response = await fetch(url, {...options, headers});
+    const response = await fetch(url, { ...options, headers });
     console.log("Response status:", response.status, "URL:", url);
 
     if (response.ok) {
@@ -68,9 +68,9 @@ export async function apiFetch(url, options = {}) {
     console.error("API Error:", message, "URL:", url, "Status:", response.status);
 
     if (response.status === 401 || response.status === 403) {
-        throw new AuthError(message, {status: response.status, data});
+        throw new AuthError(message, { status: response.status, data });
     }
 
-    throw new ApiError(message, {status: response.status, data});
+    throw new ApiError(message, { status: response.status, data });
 }
 

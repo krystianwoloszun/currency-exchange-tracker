@@ -1,13 +1,13 @@
 import styles from "./NavigationBanner.module.css";
 
 const navItems = [
-    {id: "calculator", label: "Kalkulator"},
-    {id: "history", label: "Historia"},
-    {id: "gold", label: "Zloto"},
-    {id: "about", label: "O aplikacji"},
+    { id: "calculator", label: "Kalkulator" },
+    { id: "history", label: "Historia" },
+    { id: "gold", label: "Zloto" },
+    { id: "about", label: "O aplikacji" },
 ];
 
-export default function NavigationBanner({currentPage, onNavigate, onLogout}) {
+export default function NavigationBanner({ currentPage, onNavigate, onLogout }) {
     const showNavigation = Boolean(onNavigate);
     const showLogout = Boolean(onLogout);
 

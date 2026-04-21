@@ -1,8 +1,8 @@
-import {useEffect, useState} from "react";
-import {AuthError} from "../api/apiFetch";
-import {getCurrentGoldPrice, getGoldPriceHistory} from "../api/goldApi";
-import {clearToken} from "../auth/token";
-import {INVALID_ISO_CALENDAR_DATE_MESSAGE, isValidIsoCalendarDate} from "../utils/isoCalendarDate";
+import { useEffect, useState } from "react";
+import { AuthError } from "../api/apiFetch";
+import { getCurrentGoldPrice, getGoldPriceHistory } from "../api/goldApi";
+import { clearToken } from "../auth/token";
+import { INVALID_ISO_CALENDAR_DATE_MESSAGE, isValidIsoCalendarDate } from "../utils/isoCalendarDate";
 import GoldHistoryChart from "../components/GoldHistoryChart";
 import GoldHistoryModule from "../components/GoldHistoryModule";
 import GoldSidebar from "../components/GoldSidebar";
@@ -31,7 +31,7 @@ function countDaysInclusive(startDate, endDate) {
     return Math.floor((parseDate(endDate) - parseDate(startDate)) / millisecondsPerDay) + 1;
 }
 
-export default function GoldPage({onUnauthorized}) {
+export default function GoldPage({ onUnauthorized }) {
     const [startDate, setStartDate] = useState(defaultStartDate);
     const [endDate, setEndDate] = useState(defaultEndDate);
     const [history, setHistory] = useState([]);
@@ -142,7 +142,7 @@ export default function GoldPage({onUnauthorized}) {
                 </aside>
 
                 <section className="gold-main">
-                    <GoldHistoryChart history={history} loading={loadingHistory}/>
+                    <GoldHistoryChart history={history} loading={loadingHistory} />
 
                     <GoldHistoryModule
                         startDate={startDate}

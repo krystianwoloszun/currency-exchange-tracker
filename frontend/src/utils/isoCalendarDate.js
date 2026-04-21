@@ -9,7 +9,7 @@ export const INVALID_ISO_CALENDAR_DATE_MESSAGE =
  */
 export function resolveDateInputChange(event, onChange, onInvalidDate) {
     const target = event.target;
-    const {value, validity} = target;
+    const { value, validity } = target;
 
     if (value !== "" && !isValidIsoCalendarDate(value)) {
         onInvalidDate?.();

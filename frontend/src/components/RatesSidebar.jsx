@@ -1,5 +1,5 @@
 import "flag-icons/css/flag-icons.min.css";
-import {FEATURED_CURRENCIES} from "../api/currencyFlags";
+import { FEATURED_CURRENCIES } from "../api/currencyFlags";
 import "./RatesSidebar.css";
 
 function formatRate(value) {
@@ -16,7 +16,7 @@ function formatEffectiveDate(value) {
     return parsed.toLocaleDateString("pl-PL");
 }
 
-export default function RatesSidebar({currencies, selectedCode, onCurrencySelect}) {
+export default function RatesSidebar({ currencies, selectedCode, onCurrencySelect }) {
     const ratesByCode = new Map(currencies.map((currency) => [currency.code, currency]));
     const items = FEATURED_CURRENCIES
         .map((item) => ({

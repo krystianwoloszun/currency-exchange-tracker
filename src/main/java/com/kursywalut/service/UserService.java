@@ -32,7 +32,8 @@ public class UserService implements UserDetailsService {
         }
         PasswordValidationResult validationResult = passwordPolicyValidator.validate(password);
         if (!validationResult.valid()) {
-            throw new InvalidPasswordException("Hasło musi zawierać: " + String.join(", ", validationResult.errors()) + ".");
+            throw new InvalidPasswordException(
+                    "Hasło musi zawierać: " + String.join(", ", validationResult.errors()) + ".");
         }
         String encodedPassword = passwordEncoder.encode(password);
         User user = User.builder().username(normalizedUsername).password(encodedPassword).build();
@@ -41,14 +42,16 @@ public class UserService implements UserDetailsService {
 
     public boolean authenticate(String username, String password) {
         String normalizedUsername = username.toLowerCase();
-        return userRepository.findByUsername(normalizedUsername).map(user -> passwordEncoder.matches(password, user.getPassword())).orElse(false);
+        return userRepository.findByUsername(normalizedUsername)
+                .map(user -> passwordEncoder.matches(password, user.getPassword())).orElse(false);
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username.toLowerCase()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = userRepository.findByUsername(username.toLowerCase())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
     }
 }

@@ -12,8 +12,8 @@ export default function AboutPage() {
                 <section className="about-main">
                     <h2>Czym jest KursyWalut?</h2>
                     <p>
-                        Aplikacja <strong>KursyWalut</strong> to kompleksowe rozwiązanie full-stackowe, które pozwala na bieżąco monitorować 
-                        notowania walut oraz ceny złota publikowane przez Narodowy Bank Polski (NBP). 
+                        Aplikacja <strong>KursyWalut</strong> to kompleksowe rozwiązanie full-stackowe, które pozwala na bieżąco monitorować
+                        notowania walut oraz ceny złota publikowane przez Narodowy Bank Polski (NBP).
                         Projekt łączy w sobie wydajny backend w technologii Spring Boot oraz nowoczesny, responsywny interfejs stworzony w React.
                     </p>
 
@@ -34,8 +34,8 @@ export default function AboutPage() {
                     <div className="hosting-note">
                         <h4>Ważna informacja o hostingu</h4>
                         <p>
-                            Aplikacja korzysta z darmowej architektury serwerowej (Render). Ze względu na to, przy dłuższym braku aktywności, 
-                            serwer backendowy przechodzi w stan uśpienia. Jeśli dane nie ładują się od razu, wykonaj dowolną akcję 
+                            Aplikacja korzysta z darmowej architektury serwerowej (Render). Ze względu na to, przy dłuższym braku aktywności,
+                            serwer backendowy przechodzi w stan uśpienia. Jeśli dane nie ładują się od razu, wykonaj dowolną akcję
                             (np. spróbuj się zalogować lub zarejestrować) – serwer "obudzi się" w ciągu kilkunastu sekund.
                         </p>
                     </div>
@@ -43,12 +43,12 @@ export default function AboutPage() {
                     <div className="github-section">
                         <h3>Open Source</h3>
                         <p>
-                            Projekt jest oprogramowaniem typu Open Source. Kod źródłowy jest dostępny publicznie w serwisie GitHub. 
+                            Projekt jest oprogramowaniem typu Open Source. Kod źródłowy jest dostępny publicznie w serwisie GitHub.
                             Zachęcam do przeglądania kodu, zgłaszania uwag lub własnych usprawnień!
                         </p>
-                        <a 
-                            href="https://github.com/krystianwoloszun/kursywalut" 
-                            target="_blank" 
+                        <a
+                            href="https://github.com/krystianwoloszun/kursywalut"
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="github-button"
                         >
