@@ -21,6 +21,8 @@ public class CurrencyController {
     private static final LocalDate HISTORY_MIN_DATE = LocalDate.of(2002, 1, 2); //dane z nbp sa dostepne od 02.01.2002, okres pobranych danych nie moze przekraczac 93 dni
     private static final long HISTORY_MAX_DAYS = 93;
 
+    private static final BigDecimal MAX_AMOUNT = new BigDecimal("100000000");
+
     private final NbpService nbpService;
 
     @GetMapping("/{code:[A-Z]{3}}")
@@ -58,6 +60,10 @@ public class CurrencyController {
     public BigDecimal convert(@RequestParam BigDecimal amount, @RequestParam String code, @RequestParam ConversionDirection direction) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new InvalidCurrencyRequestException("Kwota musi byc wieksza od zera");
+        }
+
+        if (amount.compareTo(MAX_AMOUNT) > 0) {
+            throw new InvalidCurrencyRequestException("Kwota nie może przekraczać 100 000 000.");
         }
 
         if (code == null || code.isBlank()) {
