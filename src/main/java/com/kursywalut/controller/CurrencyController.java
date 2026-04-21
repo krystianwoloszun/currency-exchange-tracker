@@ -6,11 +6,12 @@ import com.kursywalut.model.ConversionDirection;
 import com.kursywalut.model.Rate;
 import com.kursywalut.service.NbpService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.time.temporal.ChronoUnit;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @RestController
@@ -18,8 +19,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CurrencyController {
 
-    private static final LocalDate HISTORY_MIN_DATE = LocalDate.of(2002, 1, 2); //dane z nbp sa dostepne od 02.01.2002, okres pobranych danych nie moze przekraczac 93 dni
-    private static final long HISTORY_MAX_DAYS = 93;
+    @Value("${app.nbp.currency.history.min-date}")
+    private String currencyHistoryMinDateStr;
+
+    @Value("${app.nbp.currency.history.max-days}")
+    private long currencyHistoryMaxDays;
 
     private static final BigDecimal MAX_AMOUNT = new BigDecimal("100000000");
 
@@ -44,13 +48,14 @@ public class CurrencyController {
             throw new InvalidCurrencyRequestException("Data poczatkowa nie moze byc pozniejsza niz data koncowa");
         }
 
-        if (startDate.isBefore(HISTORY_MIN_DATE) || endDate.isBefore(HISTORY_MIN_DATE)) {
-            throw new InvalidCurrencyRequestException("Historia kursow walut jest dostepna od 2002-01-02");
+        LocalDate minDate = LocalDate.parse(currencyHistoryMinDateStr);
+        if (startDate.isBefore(minDate) || endDate.isBefore(minDate)) {
+            throw new InvalidCurrencyRequestException("Historia kursow walut jest dostepna od " + minDate);
         }
 
         long requestedDays = ChronoUnit.DAYS.between(startDate, endDate) + 1;
-        if (requestedDays > HISTORY_MAX_DAYS) {
-            throw new InvalidCurrencyRequestException("Zakres dat dla historii kursow nie moze przekraczac 93 dni");
+        if (requestedDays > currencyHistoryMaxDays) {
+            throw new InvalidCurrencyRequestException("Zakres dat dla historii kursow nie moze przekraczac " + currencyHistoryMaxDays + " dni");
         }
 
         return nbpService.getRateHistory(code.toUpperCase(), startDate, endDate);
@@ -87,4 +92,3 @@ public class CurrencyController {
         return rates;
     }
 }
-

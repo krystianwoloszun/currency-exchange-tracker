@@ -4,6 +4,7 @@ import com.kursywalut.exception.InvalidGoldRequestException;
 import com.kursywalut.model.GoldPrice;
 import com.kursywalut.service.GoldPriceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +21,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GoldPriceController {
 
-    private static final LocalDate GOLD_HISTORY_MIN_DATE = LocalDate.of(2013, 1, 2); //dane z nbp sa dostepne od 02.01.2013
-    private static final long GOLD_HISTORY_MAX_DAYS = 93;
-    private static final int GOLD_MAX_TOP_COUNT = 93;
+    @Value("${app.nbp.gold.history.min-date}")
+    private String goldHistoryMinDateStr;
+
+    @Value("${app.nbp.gold.history.max-days}")
+    private long goldHistoryMaxDays;
+
+    @Value("${app.nbp.gold.max-top-count}")
+    private int goldMaxTopCount;
 
     private final GoldPriceService goldPriceService;
 
@@ -41,8 +47,8 @@ public class GoldPriceController {
         if (topCount <= 0) {
             throw new InvalidGoldRequestException("Liczba notowan musi byc wieksza od zera");
         }
-        if (topCount > GOLD_MAX_TOP_COUNT) {
-            throw new InvalidGoldRequestException("Liczba notowan dla zlota nie moze przekraczac 93");
+        if (topCount > goldMaxTopCount) {
+            throw new InvalidGoldRequestException("Liczba notowan dla zlota nie moze przekraczac " + goldMaxTopCount);
         }
 
         return goldPriceService.getLatestGoldPrices(topCount);
@@ -64,16 +70,17 @@ public class GoldPriceController {
         validateDate(endDate);
 
         long requestedDays = ChronoUnit.DAYS.between(startDate, endDate) + 1;
-        if (requestedDays > GOLD_HISTORY_MAX_DAYS) {
-            throw new InvalidGoldRequestException("Zakres dat dla cen zlota nie moze przekraczac 93 dni");
+        if (requestedDays > goldHistoryMaxDays) {
+            throw new InvalidGoldRequestException("Zakres dat dla cen zlota nie moze przekraczac " + goldHistoryMaxDays + " dni");
         }
 
         return goldPriceService.getGoldPriceHistory(startDate, endDate);
     }
 
     private void validateDate(LocalDate date) {
-        if (date.isBefore(GOLD_HISTORY_MIN_DATE)) {
-            throw new InvalidGoldRequestException("Historia cen zlota jest dostepna od 2013-01-02");
+        LocalDate minDate = LocalDate.parse(goldHistoryMinDateStr);
+        if (date.isBefore(minDate)) {
+            throw new InvalidGoldRequestException("Historia cen zlota jest dostepna od " + minDate);
         }
     }
 }
