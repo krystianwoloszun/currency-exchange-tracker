@@ -48,7 +48,7 @@ public class CurrencyController {
             throw new InvalidCurrencyRequestException("Data poczatkowa nie moze byc pozniejsza niz data koncowa");
         }
 
-        LocalDate minDate = LocalDate.parse(currencyHistoryMinDateStr);
+        LocalDate minDate = LocalDate.parse(currencyHistoryMinDateStr.trim());
         if (startDate.isBefore(minDate) || endDate.isBefore(minDate)) {
             throw new InvalidCurrencyRequestException("Historia kursow walut jest dostepna od " + minDate);
         }

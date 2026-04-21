@@ -71,7 +71,7 @@ public class NbpService {
         }
 
         NbpTableResponse table = response[0];
-        LocalDate effectiveDate = LocalDate.parse(table.getEffectiveDate());
+        LocalDate effectiveDate = LocalDate.parse(table.getEffectiveDate().trim());
 
         return table.getRates().stream()
                 .map(rate -> new Rate(rate.getCurrencyName(), rate.getCode(), rate.getMidRate(), effectiveDate))

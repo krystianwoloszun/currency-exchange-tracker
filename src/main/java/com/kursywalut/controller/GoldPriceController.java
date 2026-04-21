@@ -78,7 +78,7 @@ public class GoldPriceController {
     }
 
     private void validateDate(LocalDate date) {
-        LocalDate minDate = LocalDate.parse(goldHistoryMinDateStr);
+        LocalDate minDate = LocalDate.parse(goldHistoryMinDateStr.trim());
         if (date.isBefore(minDate)) {
             throw new InvalidGoldRequestException("Historia cen zlota jest dostepna od " + minDate);
         }
