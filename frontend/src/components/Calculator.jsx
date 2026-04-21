@@ -3,6 +3,7 @@ import {convertCurrency} from "../api/currencyApi";
 import {AuthError} from "../api/apiFetch";
 import {clearToken} from "../auth/token";
 import {CURRENCY_FLAGS} from "../api/currencyFlags";
+import {toast} from "react-hot-toast";
 import "flag-icons/css/flag-icons.min.css";
 import styles from "./Calculator.module.css";
 
@@ -51,11 +52,11 @@ export default function Calculator({currencies = [], selectedCode, onCodeChange,
 
     const handleConvert = async () => {
         if (!amount || Number(amount) <= 0) {
-            alert("Podaj poprawną kwotę!");
+            toast.error("Podaj poprawną kwotę!");
             return;
         }
         if (Number(amount) > MAX_AMOUNT) {
-            alert(`Maksymalna kwota to ${resultFormatter.format(MAX_AMOUNT)}.`);
+            toast.error(`Maksymalna kwota to ${resultFormatter.format(MAX_AMOUNT)}.`);
             return;
         }
         try {
@@ -66,10 +67,10 @@ export default function Calculator({currencies = [], selectedCode, onCodeChange,
             if (err instanceof AuthError) {
                 clearToken();
                 onUnauthorized?.();
-                 alert("Brak dostępu. Zaloguj się ponownie.");
+                toast.error("Brak dostępu. Zaloguj się ponownie.");
                 return;
             }
-            alert(err?.message || "Wystąpił błąd podczas konwersji");
+            toast.error(err?.message || "Wystąpił błąd podczas konwersji");
         }
     };
 
@@ -188,3 +189,4 @@ export default function Calculator({currencies = [], selectedCode, onCodeChange,
         </div>
     );
 }
+
