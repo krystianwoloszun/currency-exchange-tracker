@@ -1,5 +1,3 @@
-import { getToken } from "../auth/token";
-
 export class ApiError extends Error {
     constructor(message, { status, data } = {}) {
         super(message);
@@ -38,19 +36,14 @@ async function safeReadBody(response) {
 }
 
 export async function apiFetch(url, options = {}) {
-    const token = getToken();
     const headers = new Headers(options.headers || {});
 
     if (!headers.has("Content-Type") && options.body != null) {
         headers.set("Content-Type", "application/json");
     }
 
-    if (token && !headers.has("Authorization")) {
-        headers.set("Authorization", `Bearer ${token}`);
-    }
-
     console.log("Fetching:", url);
-    const response = await fetch(url, { ...options, headers });
+    const response = await fetch(url, { ...options, credentials: "include", headers });
     console.log("Response status:", response.status, "URL:", url);
 
     if (response.ok) {
@@ -73,4 +66,3 @@ export async function apiFetch(url, options = {}) {
 
     throw new ApiError(message, { status: response.status, data });
 }
-

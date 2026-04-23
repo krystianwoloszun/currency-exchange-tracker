@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { AuthError } from "../api/apiFetch";
 import { getAvailableCurrencies, getRateHistory } from "../api/currencyApi";
-import { clearToken } from "../auth/token";
 import { INVALID_ISO_CALENDAR_DATE_MESSAGE, isValidIsoCalendarDate } from "../utils/isoCalendarDate";
 import HistoryChart from "../components/HistoryChart";
 import HistoryModule from "../components/HistoryModule";
@@ -56,7 +55,6 @@ export default function HistoryPage({ onUnauthorized }) {
             .catch((err) => {
                 if (!mounted) return;
                 if (err instanceof AuthError) {
-                    clearToken();
                     onUnauthorized?.();
                     setError("Brak dostępu. Zaloguj się ponownie.");
                     return;
@@ -117,7 +115,6 @@ export default function HistoryPage({ onUnauthorized }) {
             setHistory(Array.isArray(data) ? data : []);
         } catch (err) {
             if (err instanceof AuthError) {
-                clearToken();
                 onUnauthorized?.();
                 setError("Brak dostępu. Zaloguj się ponownie.");
                 return;

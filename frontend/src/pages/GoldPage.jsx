@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { AuthError } from "../api/apiFetch";
 import { getCurrentGoldPrice, getGoldPriceHistory } from "../api/goldApi";
-import { clearToken } from "../auth/token";
 import { INVALID_ISO_CALENDAR_DATE_MESSAGE, isValidIsoCalendarDate } from "../utils/isoCalendarDate";
 import GoldHistoryChart from "../components/GoldHistoryChart";
 import GoldHistoryModule from "../components/GoldHistoryModule";
@@ -53,7 +52,6 @@ export default function GoldPage({ onUnauthorized }) {
             } catch (err) {
                 if (!mounted) return;
                 if (err instanceof AuthError) {
-                    clearToken();
                     onUnauthorized?.();
                     setSidebarError("Brak dostępu. Zaloguj się ponownie.");
                     return;
@@ -109,7 +107,6 @@ export default function GoldPage({ onUnauthorized }) {
             setHistory(Array.isArray(data) ? data : []);
         } catch (err) {
             if (err instanceof AuthError) {
-                clearToken();
                 onUnauthorized?.();
                 setError("Brak dostępu. Zaloguj się ponownie.");
                 return;

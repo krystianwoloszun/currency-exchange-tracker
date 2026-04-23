@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { convertCurrency } from "../api/currencyApi";
 import { AuthError } from "../api/apiFetch";
-import { clearToken } from "../auth/token";
 import { CURRENCY_FLAGS } from "../api/currencyFlags";
 import { toast } from "react-hot-toast";
 import "flag-icons/css/flag-icons.min.css";
@@ -65,7 +64,6 @@ export default function Calculator({ currencies = [], selectedCode, onCodeChange
             setResultCurrency(direction === "TO_PLN" ? "PLN" : code);
         } catch (err) {
             if (err instanceof AuthError) {
-                clearToken();
                 onUnauthorized?.();
                 toast.error("Brak dostępu. Zaloguj się ponownie.");
                 return;
@@ -189,4 +187,3 @@ export default function Calculator({ currencies = [], selectedCode, onCodeChange
         </div>
     );
 }
-

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { apiFetch, AuthError } from "../api/apiFetch";
 import { API_BASE_URL } from "../config/apiBaseUrl";
-import { setToken } from "../auth/token";
 import styles from "./Login.module.css";
 
 export default function Login({ onLogin, onGoToRegister }) {
@@ -43,13 +42,12 @@ export default function Login({ onLogin, onGoToRegister }) {
         if (!credentials) return;
 
         try {
-            const token = await apiFetch(`${API_BASE_URL}/auth/login`, {
+            await apiFetch(`${API_BASE_URL}/auth/login`, {
                 method: "POST",
                 body: JSON.stringify(credentials),
             });
 
-            setToken(token);
-            onLogin?.(token);
+            onLogin?.();
             setMessage("Logowanie powiodło się.");
             setMessageType("success");
         } catch (error) {

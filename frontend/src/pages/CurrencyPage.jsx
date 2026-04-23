@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAvailableCurrencies } from "../api/currencyApi";
 import { AuthError } from "../api/apiFetch";
-import { clearToken } from "../auth/token";
 import Calculator from "../components/Calculator";
 import RatesSidebar from "../components/RatesSidebar";
 import "./CurrencyPage.css";
@@ -31,7 +30,6 @@ export default function CurrencyPage({ onUnauthorized }) {
             .catch((err) => {
                 if (!mounted) return;
                 if (err instanceof AuthError) {
-                    clearToken();
                     onUnauthorized?.();
                     setError("Brak dostępu. Zaloguj się ponownie.");
                     return;
@@ -80,4 +78,3 @@ export default function CurrencyPage({ onUnauthorized }) {
         </div>
     );
 }
-
