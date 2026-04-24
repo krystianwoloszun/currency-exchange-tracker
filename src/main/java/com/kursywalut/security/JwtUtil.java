@@ -30,6 +30,10 @@ public class JwtUtil {
                 .compact();
     }
 
+    public long getExpirationMs() {
+        return expiration;
+    }
+
     public String extractUsername(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
