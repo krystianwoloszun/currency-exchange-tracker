@@ -12,7 +12,7 @@ export default function AboutPage() {
                 <section className="about-main">
                     <h2>Czym jest KursyWalut?</h2>
                     <p>
-                        Aplikacja <strong>KursyWalut</strong> to kompleksowe rozwiązanie full-stackowe, które pozwala na bieżąco monitorować
+                        <strong>KursyWalut</strong> to full-stackowa aplikacja, która pozwala na bieżąco monitorować
                         notowania walut oraz ceny złota publikowane przez Narodowy Bank Polski (NBP).
                         Projekt łączy w sobie wydajny backend w technologii Spring Boot oraz nowoczesny, responsywny interfejs stworzony w React.
                     </p>
@@ -21,7 +21,7 @@ export default function AboutPage() {
                     <ul>
                         <li><strong>Aktualne kursy:</strong> Pobieranie najnowszych danych z tabeli A NBP.</li>
                         <li><strong>Kalkulator walutowy:</strong> Szybkie przeliczanie kwot między PLN a wybraną walutą.</li>
-                        <li><strong>Historia notowań:</strong> Przeglądanie zmian kursów i cen złota na interaktywnych wykresach w wybranym zakresie dat.</li>
+                        <li><strong>Historia notowań:</strong> Przeglądanie zmian kursów i cen złota na wykresach w wybranym zakresie dat.</li>
                         <li><strong>Bezpieczeństwo:</strong> System rejestracji i logowania oparty o tokeny JWT (JSON Web Token).</li>
                     </ul>
 
@@ -36,7 +36,7 @@ export default function AboutPage() {
                         <p>
                             Aplikacja korzysta z darmowej architektury serwerowej (Render). Ze względu na to, przy dłuższym braku aktywności,
                             serwer backendowy przechodzi w stan uśpienia. Jeśli dane nie ładują się od razu, wykonaj dowolną akcję
-                            (np. spróbuj się zalogować lub zarejestrować) – serwer "obudzi się" w ciągu kilkunastu sekund.
+                            (np. spróbuj się zalogować lub zarejestrować) – serwer "obudzi się" po około jednej minucie.
                         </p>
                     </div>
 
