@@ -160,13 +160,16 @@ To change the API address, set the environment variable:
 VITE_API_BASE_URL=http://localhost:8080/api
 ```
 
+For local development, this is usually placed in `frontend/.env`.
+
 ## Backend Configuration
 
 Key settings from `application.properties`:
 
 ```properties
 server.port=${PORT:8080}
-cors.allowed-origins=${CORS_ALLOWED_ORIGINS:http://localhost:5173,https://kursywalut-seven.vercel.app}
+server.forward-headers-strategy=framework
+cors.allowed-origin-patterns=${CORS_ALLOWED_ORIGIN_PATTERNS:${CORS_ALLOWED_ORIGINS:http://localhost:*,http://127.0.0.1:*,https://kursywalut-seven.vercel.app}}
 
 spring.datasource.url=jdbc:h2:mem:testdb
 spring.h2.console.enabled=true
@@ -175,6 +178,42 @@ nbp.api.rate.url=https://api.nbp.pl/api/exchangerates/rates/A
 nbp.api.table.url=https://api.nbp.pl/api/exchangerates/tables/A
 nbp.api.gold.url=https://api.nbp.pl/api/cenyzlota
 ```
+
+`CORS_ALLOWED_ORIGIN_PATTERNS` is the preferred environment variable. `CORS_ALLOWED_ORIGINS` is still accepted for backward compatibility.
+
+## Deployment Configuration
+
+### Vercel Frontend
+
+Set the frontend API base URL:
+
+```bash
+VITE_API_BASE_URL=https://kursywalut.onrender.com/api
+```
+
+After changing `VITE_*` variables, redeploy the Vercel project because Vite embeds them during build.
+
+### Render Backend
+
+Set allowed frontend origins for CORS:
+
+```bash
+CORS_ALLOWED_ORIGIN_PATTERNS=https://kursywalut-seven.vercel.app
+```
+
+For deployments that also need local testing against the deployed backend:
+
+```bash
+CORS_ALLOWED_ORIGIN_PATTERNS=https://kursywalut-seven.vercel.app,http://localhost:*,http://127.0.0.1:*
+```
+
+Render should also keep:
+
+```bash
+PORT=8080
+```
+
+Redeploy or restart the Render service after changing environment variables.
 
 ## Example API Endpoints
 
@@ -260,7 +299,7 @@ docker run -p 8080:8080 kursywalut
 
 - **Free Hosting Behavior:** The backend is hosted on a free tier (Render), which means the application goes to sleep after a period of inactivity. The first request after a long break (e.g., trying to log in or register) may take a while to wake up the server.
 - Currency and gold data come from the public NBP API, so application availability depends on the external service.
-- The JWT token is generated with a key created at application startup, so after a backend restart, previous tokens become invalid.
+- JWT tokens are signed with `jwt.secret`. Tokens become invalid if the secret changes.
 - The H2 database runs in-memory, so user data disappears after the application is stopped.
 
 ## Future Improvements
