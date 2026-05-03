@@ -2,6 +2,8 @@ package com.kursywalut.unit;
 
 import com.kursywalut.model.User;
 import com.kursywalut.repository.UserRepository;
+import com.kursywalut.security.JwtUtil;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -25,6 +28,8 @@ public class AuthControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @BeforeEach
     public void setup() {
@@ -44,6 +49,25 @@ public class AuthControllerTest {
                 """;
 
         mockMvc.perform(post("/api/auth/login").contentType(MediaType.APPLICATION_JSON).content(loginJson))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.isEmptyString())));
+    }
+
+    @Test
+    public void testLoginIgnoresStaleAuthCookie() throws Exception {
+        String loginJson = """
+                {
+                    "username": "testuser",
+                    "password": "password123"
+                }
+                """;
+
+        String staleToken = jwtUtil.generateToken("deleted-user");
+
+        mockMvc.perform(post("/api/auth/login")
+                        .cookie(new Cookie("authToken", staleToken))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(loginJson))
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.isEmptyString())));
     }
@@ -77,5 +101,15 @@ public class AuthControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message")
                         .value("Hasło musi zawierać: przynajmniej 1 wielka litera, przynajmniej 1 znak specjalny."));
+    }
+
+    @Test
+    public void testAuthCorsPreflightAllowsLocalhostPorts() throws Exception {
+        mockMvc.perform(options("/api/auth/register")
+                        .header("Origin", "http://localhost:5174")
+                        .header("Access-Control-Request-Method", "POST")
+                        .header("Access-Control-Request-Headers", "content-type"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:5174"));
     }
 }
