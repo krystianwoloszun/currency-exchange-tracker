@@ -3,7 +3,7 @@ import styles from "./NavigationBanner.module.css";
 const navItems = [
     { id: "calculator", label: "Kalkulator" },
     { id: "history", label: "Historia" },
-    { id: "gold", label: "Zloto" },
+    { id: "gold", label: "Złoto" },
     { id: "about", label: "O aplikacji" },
 ];
 
@@ -36,13 +36,13 @@ export default function NavigationBanner({ currentPage, onNavigate, onLogout }) 
                             className={`${styles.logoutButton} ${styles.logoutButtonMobile}`}
                             onClick={onLogout}
                         >
-                            Wyloguj sie
+                            Wyloguj się
                         </button>
                     )}
                 </nav>
             ) : (
                 <div className={styles.bannerInfo}>
-                    Zaloguj sie lub utworz konto, aby korzystac z funkcji aplikacji.
+                    Zaloguj sie lub utwórz konto, aby korzystac z funkcji aplikacji.
                 </div>
             )}
 
@@ -52,7 +52,7 @@ export default function NavigationBanner({ currentPage, onNavigate, onLogout }) 
                     className={`${styles.logoutButton} ${styles.logoutButtonDesktop}`}
                     onClick={onLogout}
                 >
-                    Wyloguj sie
+                    Wyloguj się
                 </button>
             )}
         </header>
