@@ -119,7 +119,9 @@ export default function GoldPage({ onUnauthorized }) {
     };
 
     const handleSubmit = async () => {
-        await fetchHistory(startDate, endDate);
+        const startEl = document.getElementById("gold-start-date");
+        const endEl = document.getElementById("gold-end-date");
+        await fetchHistory(startEl?.value ?? startDate, endEl?.value ?? endDate);
     };
 
     return (

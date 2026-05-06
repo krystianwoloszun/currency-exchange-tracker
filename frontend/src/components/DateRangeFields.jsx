@@ -18,8 +18,9 @@ export default function DateRangeFields({
                 <label htmlFor={startId}>Od</label>
                 <input
                     id={startId}
+                    className="history-date-input"
                     type="date"
-                    value={startDate}
+                    defaultValue={startDate}
                     onChange={(e) => resolveDateInputChange(e, onStartDateChange, onInvalidDate)}
                     min={minDate}
                     max={endDate || undefined}
@@ -30,8 +31,9 @@ export default function DateRangeFields({
                 <label htmlFor={endId}>Do</label>
                 <input
                     id={endId}
+                    className="history-date-input"
                     type="date"
-                    value={endDate}
+                    defaultValue={endDate}
                     onChange={(e) => resolveDateInputChange(e, onEndDateChange, onInvalidDate)}
                     min={startDate || minDate}
                     max={maxDate}

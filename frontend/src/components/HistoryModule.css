@@ -40,6 +40,16 @@
     width: 100%;
 }
 
+.history-date-input {
+    color-scheme: light;
+}
+
+.history-date-input::-webkit-calendar-picker-indicator {
+    display: block;
+    opacity: 1;
+    cursor: pointer;
+}
+
 .history-button {
     background: #18486b;
     color: #ffffff;

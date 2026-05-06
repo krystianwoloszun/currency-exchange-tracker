@@ -127,7 +127,9 @@ export default function HistoryPage({ onUnauthorized }) {
     };
 
     const handleSubmit = async () => {
-        await fetchHistory(code, startDate, endDate);
+        const startEl = document.getElementById("history-start-date");
+        const endEl = document.getElementById("history-end-date");
+        await fetchHistory(code, startEl?.value ?? startDate, endEl?.value ?? endDate);
     };
 
     return (
