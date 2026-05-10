@@ -6,7 +6,7 @@
   align-items: stretch;
   margin: 0;
   padding: clamp(20px, 4vw, 36px);
-  font-family: Arial, sans-serif;
+  font-family: Inter, sans-serif;
   box-sizing: border-box;
 }
 

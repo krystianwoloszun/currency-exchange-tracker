@@ -54,10 +54,15 @@
   border-radius: 16px;
   background: #f8fafc;
   box-sizing: border-box;
-  font: inherit;
+
+  font-size: 16px;
+
+  font-weight: 400;
+
   color: #0f172a;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
+
 
 .select:focus,
 .input:focus {

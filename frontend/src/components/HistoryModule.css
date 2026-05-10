@@ -3,7 +3,12 @@
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 24px;
+
+    font-size: 16px;
+
 }
+
+
 
 .history-form {
     display: grid;
@@ -33,12 +38,15 @@
     padding: 10px 12px;
     border: 1px solid #ced6de;
     border-radius: 8px;
-    font: inherit;
+    font-size: 16px;
+    font-weight: 400;
+
     color: #1c2733;
     background: #ffffff;
     box-sizing: border-box;
     width: 100%;
 }
+
 
 .history-date-input {
     color-scheme: light;

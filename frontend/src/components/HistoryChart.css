@@ -92,7 +92,10 @@
 .history-chart-axis-label {
     fill: #607384;
     font-size: 12px;
+    font-family: Inter, sans-serif;
 }
+
+
 
 @media (max-width: 640px) {
     .history-chart {
