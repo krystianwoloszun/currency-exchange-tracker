@@ -19,13 +19,13 @@ The backend provides a REST API, and the frontend presents data through a calcul
 
 ## User interface
 ### Calculator
-<img width="1827" height="850" alt="image" src="https://github.com/user-attachments/assets/52d28f8a-05c6-42d6-b1c3-5a1de09fba30" />
+<img width="1854" height="928" alt="image" src="https://github.com/user-attachments/assets/e9707ad9-d80b-4efc-89ac-020f568b3915" />
 
 ### Rates History
-<img width="1882" height="884" alt="image" src="https://github.com/user-attachments/assets/c8b39970-cece-4759-a5cb-670c533597cd" />
+<img width="1855" height="926" alt="image" src="https://github.com/user-attachments/assets/1513259f-7a49-4226-8e7d-792b67a657a1" />
 
 ### Login
-<img width="1906" height="875" alt="image" src="https://github.com/user-attachments/assets/cb0406ab-b1c9-4c2a-baee-2cc371e50c4a" />
+<img width="1865" height="923" alt="image" src="https://github.com/user-attachments/assets/abaa3572-e695-44f3-90dc-ec63360b3839" />
 
 
 
