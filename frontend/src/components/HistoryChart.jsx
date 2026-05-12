@@ -56,7 +56,7 @@ function buildChartPoints(history) {
     const width = 760;
     const height = 240;
     const left = 72;
-    const right = 16;
+    const right = 56;
     const top = 16;
     const bottom = 40;
     const innerWidth = width - left - right;
@@ -89,7 +89,7 @@ function buildChartPoints(history) {
 }
 
 export default function HistoryChart({ history, code, loading }) {
-    const { polylinePoints, dots, min, max, yAxisTicks, xAxisTicks, width, height, left, top, bottom } = buildChartPoints(history);
+    const { polylinePoints, dots, min, max, yAxisTicks, xAxisTicks, width, height, left, right, top, bottom } = buildChartPoints(history);
 
     return (
         <section className="history-chart">
@@ -115,7 +115,7 @@ export default function HistoryChart({ history, code, loading }) {
                     <svg className="history-chart-svg" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`Wykres kursu ${code}`}>
                         {yAxisTicks.map((tick) => (
                             <g key={`y-${tick.y}`}>
-                                <line x1={left} y1={tick.y} x2={width - 16} y2={tick.y} className="history-chart-grid" />
+                                <line x1={left} y1={tick.y} x2={width - right} y2={tick.y} className="history-chart-grid" />
                                 <text x={left - 10} y={tick.y + 4} textAnchor="end" className="history-chart-axis-label">
                                     {formatRateValue(tick.value)}
                                 </text>
@@ -131,7 +131,7 @@ export default function HistoryChart({ history, code, loading }) {
                             </g>
                         ))}
 
-                        <line x1={left} y1={height - bottom} x2={width - 16} y2={height - bottom} className="history-chart-axis" />
+                        <line x1={left} y1={height - bottom} x2={width - right} y2={height - bottom} className="history-chart-axis" />
                         <line x1={left} y1={top} x2={left} y2={height - bottom} className="history-chart-axis" />
                         <polyline fill="none" points={polylinePoints} className="history-chart-line" />
                         {dots.map((dot) => (
