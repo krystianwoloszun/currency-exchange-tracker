@@ -1,0 +1,40 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        VITE_API_BASE_URL: /api
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    environment:
+      PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-kursywalut}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-kursywalut}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-kursywalut}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      CORS_ALLOWED_ORIGIN_PATTERNS: ${CORS_ALLOWED_ORIGIN_PATTERNS:-http://localhost:*,http://127.0.0.1:*}
+      JWT_SECRET: ${JWT_SECRET:-Z29sZGVuLWtleS1mb3Itand0LXRva2VuLWdlbmVyYXRpb24xMjM0NTY3OA==}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-kursywalut}
+      POSTGRES_USER: ${POSTGRES_USER:-kursywalut}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kursywalut}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-kursywalut} -d ${POSTGRES_DB:-kursywalut}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
