@@ -60,7 +60,8 @@ The backend provides a REST API, and the frontend presents data through a calcul
 ### Integrations and Infrastructure
 
 - NBP API
-- Docker
+- Docker and Docker Compose
+- PostgreSQL in Docker for local runtime
 - Render for backend hosting
 - Vercel as a permitted origin for the frontend in CORS configuration
 
@@ -106,23 +107,35 @@ kursywalut/
 
 ## How to Run Locally
 
+The recommended local setup is Docker Compose. It builds the React frontend, packages it into the Spring Boot application image, and starts PostgreSQL as a separate container with a persistent Docker volume.
+
 ### Prerequisites
 
-- Java 21
-- Node.js 20+ and npm
-- Maven or the included `mvnw` wrapper
+- Docker
+- Docker Compose
 
-### Run Everything with Docker Compose
+Java, Maven, Node.js and npm are only needed if you want to run backend or frontend manually outside Docker.
 
-The Docker setup builds the React frontend into the Spring Boot application image and starts PostgreSQL as a separate service with a persistent Docker volume.
+### Start the Application
 
-Create your local environment file:
+Create a local `.env` file in the project root:
 
 ```bash
-cp .env.example .env
+touch .env
 ```
 
-Then adjust `POSTGRES_PASSWORD` and `JWT_SECRET` in `.env`. `JWT_SECRET` must be base64-encoded; for example:
+Add or adjust these values:
+
+```env
+APP_PORT=8080
+POSTGRES_DB=kursywalut
+POSTGRES_USER=kursywalut
+POSTGRES_PASSWORD=change-me
+JWT_SECRET=<base64-secret>
+CORS_ALLOWED_ORIGIN_PATTERNS=http://localhost:*,http://127.0.0.1:*
+```
+
+`JWT_SECRET` must be base64-encoded. You can generate one with:
 
 ```bash
 openssl rand -base64 32
@@ -134,11 +147,13 @@ Start the stack:
 docker compose up --build
 ```
 
-The application will be available at:
+The application, including the frontend, will be available at:
 
 ```text
 http://localhost:8080
 ```
+
+If you set a different `APP_PORT`, use that port instead.
 
 To stop it:
 
@@ -152,7 +167,37 @@ To remove the database volume as well:
 docker compose down -v
 ```
 
-### 1. Start the Backend
+### Useful Docker Commands
+
+Rebuild after dependency or Dockerfile changes:
+
+```bash
+docker compose build --no-cache
+```
+
+Follow logs:
+
+```bash
+docker compose logs -f app
+```
+
+Run the stack in the background:
+
+```bash
+docker compose up --build -d
+```
+
+## Optional Manual Development
+
+Docker is the default way to run the application. For development, you can still run the backend and frontend separately.
+
+Manual prerequisites:
+
+- Java 21
+- Node.js 20+ and npm
+- Maven or the included `mvnw` wrapper
+
+### Backend
 
 In the root directory of the project:
 
@@ -172,7 +217,7 @@ The backend starts by default at:
 http://localhost:8080
 ```
 
-### 2. Start the Frontend
+### Frontend
 
 In a separate terminal, go to the `frontend` directory:
 
@@ -204,7 +249,7 @@ For local development, this is usually placed in `frontend/.env`.
 
 ## Backend Configuration
 
-Key settings from `application.properties`:
+Key settings from `application.properties` for manual local runs:
 
 ```properties
 server.port=${PORT:8080}
@@ -217,6 +262,12 @@ spring.h2.console.enabled=true
 nbp.api.rate.url=https://api.nbp.pl/api/exchangerates/rates/A
 nbp.api.table.url=https://api.nbp.pl/api/exchangerates/tables/A
 nbp.api.gold.url=https://api.nbp.pl/api/cenyzlota
+```
+
+When running with Docker Compose, the datasource is overridden by environment variables from `docker-compose.yml` and points to the PostgreSQL container:
+
+```text
+jdbc:postgresql://postgres:5432/${POSTGRES_DB:-kursywalut}
 ```
 
 `CORS_ALLOWED_ORIGIN_PATTERNS` is the preferred environment variable. `CORS_ALLOWED_ORIGINS` is still accepted for backward compatibility.
@@ -321,18 +372,21 @@ npm run lint
 
 ## Docker
 
-The repository contains a `Dockerfile` for building the backend.
+The repository contains:
 
-Building the image:
+- `Dockerfile` - multi-stage build that builds the React frontend, copies it into Spring Boot static resources, builds the backend JAR, and runs it on Java 21.
+- `docker-compose.yml` - starts the application and PostgreSQL.
+
+Build only the application image:
 
 ```bash
 docker build -t kursywalut .
 ```
 
-Running the container:
+Running only the application container requires an external database or custom datasource configuration. For normal local use, prefer:
 
 ```bash
-docker run -p 8080:8080 kursywalut
+docker compose up --build
 ```
 
 ## Limitations and Notes
@@ -340,12 +394,12 @@ docker run -p 8080:8080 kursywalut
 - **Free Hosting Behavior:** The backend is hosted on a free tier (Render), which means the application goes to sleep after a period of inactivity. The first request after a long break (e.g., trying to log in or register) may take a while to wake up the server.
 - Currency and gold data come from the public NBP API, so application availability depends on the external service.
 - JWT tokens are signed with `jwt.secret`. Tokens become invalid if the secret changes.
-- The H2 database runs in-memory, so user data disappears after the application is stopped.
+- In Docker Compose, PostgreSQL data is stored in the `postgres_data` Docker volume and survives container restarts. Use `docker compose down -v` only when you want to remove it.
+- In manual local runs without datasource overrides, the application uses the in-memory H2 database, so user data disappears after the application is stopped.
 
 ## Future Improvements
 
 - Token refreshing and a persistent JWT secret from configuration,
-- Production database instead of in-memory H2,
 - OpenAPI / Swagger documentation,
 - Frontend tests,
-- Deployment in containers or via CI/CD.
+- CI/CD improvements for container builds and deployment.
