@@ -112,6 +112,46 @@ kursywalut/
 - Node.js 20+ and npm
 - Maven or the included `mvnw` wrapper
 
+### Run Everything with Docker Compose
+
+The Docker setup builds the React frontend into the Spring Boot application image and starts PostgreSQL as a separate service with a persistent Docker volume.
+
+Create your local environment file:
+
+```bash
+cp .env.example .env
+```
+
+Then adjust `POSTGRES_PASSWORD` and `JWT_SECRET` in `.env`. `JWT_SECRET` must be base64-encoded; for example:
+
+```bash
+openssl rand -base64 32
+```
+
+Start the stack:
+
+```bash
+docker compose up --build
+```
+
+The application will be available at:
+
+```text
+http://localhost:8080
+```
+
+To stop it:
+
+```bash
+docker compose down
+```
+
+To remove the database volume as well:
+
+```bash
+docker compose down -v
+```
+
 ### 1. Start the Backend
 
 In the root directory of the project:
