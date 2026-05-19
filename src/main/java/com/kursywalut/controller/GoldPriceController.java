@@ -1,5 +1,6 @@
 package com.kursywalut.controller;
 
+import com.kursywalut.exception.FutureDateException;
 import com.kursywalut.exception.InvalidGoldRequestException;
 import com.kursywalut.model.GoldPrice;
 import com.kursywalut.service.GoldPriceService;
@@ -69,6 +70,10 @@ public class GoldPriceController {
         validateDate(startDate);
         validateDate(endDate);
 
+        LocalDate latestAvailableDate = goldPriceService.getLatestAvailableGoldDate();
+        validateNotAfterLatestAvailableDate(startDate, latestAvailableDate);
+        validateNotAfterLatestAvailableDate(endDate, latestAvailableDate);
+
         long requestedDays = ChronoUnit.DAYS.between(startDate, endDate) + 1;
         if (requestedDays > goldHistoryMaxDays) {
             throw new InvalidGoldRequestException("Zakres dat dla cen zlota nie moze przekraczac " + goldHistoryMaxDays + " dni");
@@ -81,6 +86,12 @@ public class GoldPriceController {
         LocalDate minDate = LocalDate.parse(goldHistoryMinDateStr.trim());
         if (date.isBefore(minDate)) {
             throw new InvalidGoldRequestException("Historia cen zlota jest dostepna od " + minDate);
+        }
+    }
+
+    private void validateNotAfterLatestAvailableDate(LocalDate date, LocalDate latestAvailableDate) {
+        if (date.isAfter(latestAvailableDate)) {
+            throw new FutureDateException("Historia cen zlota jest dostepna do " + latestAvailableDate);
         }
     }
 }

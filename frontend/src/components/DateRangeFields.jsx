@@ -12,6 +12,10 @@ export default function DateRangeFields({
     onEndDateChange,
     onInvalidDate,
 }) {
+    const startMaxDate = endDate && maxDate
+        ? (endDate < maxDate ? endDate : maxDate)
+        : endDate || maxDate;
+
     return (
         <>
             <div className="history-field">
@@ -20,10 +24,10 @@ export default function DateRangeFields({
                     id={startId}
                     className="history-date-input"
                     type="date"
-                    defaultValue={startDate}
+                    value={startDate || ""}
                     onChange={(e) => resolveDateInputChange(e, onStartDateChange, onInvalidDate)}
                     min={minDate}
-                    max={endDate || undefined}
+                    max={startMaxDate || undefined}
                 />
             </div>
 
@@ -33,7 +37,7 @@ export default function DateRangeFields({
                     id={endId}
                     className="history-date-input"
                     type="date"
-                    defaultValue={endDate}
+                    value={endDate || ""}
                     onChange={(e) => resolveDateInputChange(e, onEndDateChange, onInvalidDate)}
                     min={startDate || minDate}
                     max={maxDate}

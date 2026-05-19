@@ -30,6 +30,15 @@ function countDaysInclusive(startDate, endDate) {
     return Math.floor((parseDate(endDate) - parseDate(startDate)) / millisecondsPerDay) + 1;
 }
 
+function formatDate(value) {
+    if (!value || !value.includes("-")) {
+        return value;
+    }
+
+    const [year, month, day] = value.split("-");
+    return `${day}.${month}.${year}`;
+}
+
 export default function HistoryPage({ onUnauthorized }) {
     const [currencies, setCurrencies] = useState([]);
     const [code, setCode] = useState("");
@@ -39,6 +48,7 @@ export default function HistoryPage({ onUnauthorized }) {
     const [loadingCurrencies, setLoadingCurrencies] = useState(true);
     const [loadingHistory, setLoadingHistory] = useState(false);
     const [error, setError] = useState("");
+    const latestAvailableDate = currencies.find((currency) => currency?.effectiveDate)?.effectiveDate || "";
 
     useEffect(() => {
         let mounted = true;
@@ -71,6 +81,12 @@ export default function HistoryPage({ onUnauthorized }) {
         };
     }, [onUnauthorized]);
 
+    useEffect(() => {
+        if (!latestAvailableDate) return;
+        setStartDate((value) => value && value > latestAvailableDate ? latestAvailableDate : value);
+        setEndDate((value) => value && value > latestAvailableDate ? latestAvailableDate : value);
+    }, [latestAvailableDate]);
+
     const fetchHistory = async (nextCode, nextStartDate, nextEndDate) => {
         if (!nextCode) {
             setError("Wybierz walutę.");
@@ -100,6 +116,11 @@ export default function HistoryPage({ onUnauthorized }) {
 
         if (nextStartDate < HISTORY_MIN_DATE || nextEndDate < HISTORY_MIN_DATE) {
             setError("Historia kursów walut jest dostępna od 02.01.2002.");
+            return;
+        }
+
+        if (latestAvailableDate && (nextStartDate > latestAvailableDate || nextEndDate > latestAvailableDate)) {
+            setError(`Historia kursów walut jest dostępna do ${formatDate(latestAvailableDate)}.`);
             return;
         }
 
@@ -165,7 +186,7 @@ export default function HistoryPage({ onUnauthorized }) {
                         loadingHistory={loadingHistory}
                         error={error}
                         minDate={HISTORY_MIN_DATE}
-                        maxDate={defaultEndDate()}
+                        maxDate={latestAvailableDate || defaultEndDate()}
                         onCodeChange={setCode}
                         onStartDateChange={setStartDate}
                         onEndDateChange={setEndDate}

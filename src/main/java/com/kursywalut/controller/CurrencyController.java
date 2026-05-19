@@ -1,6 +1,7 @@
 package com.kursywalut.controller;
 
 import com.kursywalut.exception.InvalidCurrencyRequestException;
+import com.kursywalut.exception.FutureDateException;
 import com.kursywalut.exception.NoAvailableCurrenciesException;
 import com.kursywalut.model.ConversionDirection;
 import com.kursywalut.model.Rate;
@@ -53,6 +54,10 @@ public class CurrencyController {
             throw new InvalidCurrencyRequestException("Historia kursow walut jest dostepna od " + minDate);
         }
 
+        LocalDate latestAvailableDate = nbpService.getLatestAvailableCurrencyDate();
+        validateNotAfterLatestAvailableDate(startDate, latestAvailableDate);
+        validateNotAfterLatestAvailableDate(endDate, latestAvailableDate);
+
         long requestedDays = ChronoUnit.DAYS.between(startDate, endDate) + 1;
         if (requestedDays > currencyHistoryMaxDays) {
             throw new InvalidCurrencyRequestException("Zakres dat dla historii kursow nie moze przekraczac " + currencyHistoryMaxDays + " dni");
@@ -90,5 +95,11 @@ public class CurrencyController {
             throw new NoAvailableCurrenciesException("Brak dostepnych kursow walut z NBP");
         }
         return rates;
+    }
+
+    private void validateNotAfterLatestAvailableDate(LocalDate date, LocalDate latestAvailableDate) {
+        if (date.isAfter(latestAvailableDate)) {
+            throw new FutureDateException("Historia kursow walut jest dostepna do " + latestAvailableDate);
+        }
     }
 }

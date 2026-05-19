@@ -78,6 +78,14 @@ public class NbpService {
                 .toList();
     }
 
+    public LocalDate getLatestAvailableCurrencyDate() {
+        List<Rate> rates = getAvailableCurrencies();
+        if (rates.isEmpty() || rates.getFirst().getEffectiveDate() == null) {
+            throw new NbpUnavailableException("NBP is temporarily unavailable");
+        }
+        return rates.getFirst().getEffectiveDate();
+    }
+
     public BigDecimal getRate(String currencyCode) {
         return extractRate(getNbpResponse(currencyCode));
     }

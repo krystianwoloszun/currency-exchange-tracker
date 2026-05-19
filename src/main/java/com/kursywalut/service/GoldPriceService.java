@@ -31,6 +31,14 @@ public class GoldPriceService {
         return fetchGoldPrices(goldUrl + "?format=json");
     }
 
+    public LocalDate getLatestAvailableGoldDate() {
+        List<GoldPrice> prices = getCurrentGoldPrice();
+        if (prices.isEmpty() || prices.getFirst().getDate() == null) {
+            throw new NbpUnavailableException("NBP is temporarily unavailable");
+        }
+        return prices.getFirst().getDate();
+    }
+
     public List<GoldPrice> getTodayGoldPrice() {
         return fetchGoldPrices(goldUrl + "/today?format=json");
     }

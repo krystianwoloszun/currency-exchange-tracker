@@ -67,6 +67,12 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body(HttpStatus.BAD_REQUEST, "INVALID_GOLD_REQUEST", ex.getMessage(), request));
     }
 
+    @ExceptionHandler(FutureDateException.class)
+    public ResponseEntity<ApiErrorResponse> handleFutureDate(FutureDateException ex, HttpServletRequest request) {
+        log.warn("Future date request: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body(HttpStatus.BAD_REQUEST, "FUTURE_DATE", ex.getMessage(), request));
+    }
+
     @ExceptionHandler(NoAvailableCurrenciesException.class)
     public ResponseEntity<ApiErrorResponse> handleNoAvailableCurrencies(NoAvailableCurrenciesException ex, HttpServletRequest request) {
         log.warn("No available currencies: {}", ex.getMessage());

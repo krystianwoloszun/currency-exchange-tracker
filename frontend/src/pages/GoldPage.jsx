@@ -30,6 +30,15 @@ function countDaysInclusive(startDate, endDate) {
     return Math.floor((parseDate(endDate) - parseDate(startDate)) / millisecondsPerDay) + 1;
 }
 
+function formatDate(value) {
+    if (!value || !value.includes("-")) {
+        return value;
+    }
+
+    const [year, month, day] = value.split("-");
+    return `${day}.${month}.${year}`;
+}
+
 export default function GoldPage({ onUnauthorized }) {
     const [startDate, setStartDate] = useState(defaultStartDate);
     const [endDate, setEndDate] = useState(defaultEndDate);
@@ -39,6 +48,7 @@ export default function GoldPage({ onUnauthorized }) {
     const [loadingHistory, setLoadingHistory] = useState(false);
     const [error, setError] = useState("");
     const [sidebarError, setSidebarError] = useState("");
+    const latestAvailableDate = currentPrice?.date || "";
 
     useEffect(() => {
         let mounted = true;
@@ -68,6 +78,12 @@ export default function GoldPage({ onUnauthorized }) {
         };
     }, [onUnauthorized]);
 
+    useEffect(() => {
+        if (!latestAvailableDate) return;
+        setStartDate((value) => value && value > latestAvailableDate ? latestAvailableDate : value);
+        setEndDate((value) => value && value > latestAvailableDate ? latestAvailableDate : value);
+    }, [latestAvailableDate]);
+
     const fetchHistory = async (nextStartDate, nextEndDate) => {
         if (!nextStartDate || !nextEndDate) {
             const startEl = document.getElementById("gold-start-date");
@@ -92,6 +108,11 @@ export default function GoldPage({ onUnauthorized }) {
 
         if (nextStartDate < GOLD_MIN_DATE || nextEndDate < GOLD_MIN_DATE) {
             setError("Historia cen złota jest dostępna od 2013-01-02.");
+            return;
+        }
+
+        if (latestAvailableDate && (nextStartDate > latestAvailableDate || nextEndDate > latestAvailableDate)) {
+            setError(`Historia cen złota jest dostępna do ${formatDate(latestAvailableDate)}.`);
             return;
         }
 
@@ -150,7 +171,7 @@ export default function GoldPage({ onUnauthorized }) {
                         loadingHistory={loadingHistory}
                         error={error}
                         minDate={GOLD_MIN_DATE}
-                        maxDate={defaultEndDate()}
+                        maxDate={latestAvailableDate || defaultEndDate()}
                         onStartDateChange={setStartDate}
                         onEndDateChange={setEndDate}
                         onSubmit={handleSubmit}
