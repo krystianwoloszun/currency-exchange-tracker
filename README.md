@@ -2,8 +2,6 @@
 
 Full-stack application for checking currency rates and gold prices based on NBP (National Bank of Poland) API data. The project combines a Spring Boot backend with a React frontend, featuring a currency calculator, historical data, and simple JWT-based authentication.
 
-**Live Application currently available:** [https://kursywalut-seven.vercel.app](https://kursywalut-seven.vercel.app)
-
 ## About the Project
 
 The application allows users to:
@@ -61,9 +59,7 @@ The backend provides a REST API, and the frontend presents data through a calcul
 
 - NBP API
 - Docker and Docker Compose
-- PostgreSQL in Docker for local runtime
-- Render for backend hosting
-- Vercel as a permitted origin for the frontend in CORS configuration
+- PostgreSQL in Docker for runtime data
 
 ## Key Features
 
@@ -107,7 +103,7 @@ kursywalut/
 
 ## How to Run Locally
 
-The recommended local setup is Docker Compose. It builds the React frontend, packages it into the Spring Boot application image, and starts PostgreSQL as a separate container with a persistent Docker volume.
+The recommended setup is Docker Compose. It builds the React frontend, packages it into the Spring Boot application image, and starts PostgreSQL as a separate container with a persistent Docker volume.
 
 ### Prerequisites
 
@@ -254,7 +250,7 @@ Key settings from `application.properties` for manual local runs:
 ```properties
 server.port=${PORT:8080}
 server.forward-headers-strategy=framework
-cors.allowed-origin-patterns=${CORS_ALLOWED_ORIGIN_PATTERNS:${CORS_ALLOWED_ORIGINS:http://localhost:*,http://127.0.0.1:*,https://kursywalut-seven.vercel.app}}
+cors.allowed-origin-patterns=${CORS_ALLOWED_ORIGIN_PATTERNS:${CORS_ALLOWED_ORIGINS:http://localhost:*,http://127.0.0.1:*}}
 
 spring.datasource.url=jdbc:h2:mem:testdb
 spring.h2.console.enabled=true
@@ -272,39 +268,22 @@ jdbc:postgresql://postgres:5432/${POSTGRES_DB:-kursywalut}
 
 `CORS_ALLOWED_ORIGIN_PATTERNS` is the preferred environment variable. `CORS_ALLOWED_ORIGINS` is still accepted for backward compatibility.
 
-## Deployment Configuration
+## Docker Runtime Configuration
 
-### Vercel Frontend
+Docker Compose passes the runtime configuration through environment variables. The most important values are:
 
-Set the frontend API base URL:
-
-```bash
-VITE_API_BASE_URL=https://kursywalut.onrender.com/api
+```env
+APP_PORT=8080
+POSTGRES_DB=kursywalut
+POSTGRES_USER=kursywalut
+POSTGRES_PASSWORD=change-me
+JWT_SECRET=<base64-secret>
+CORS_ALLOWED_ORIGIN_PATTERNS=http://localhost:*,http://127.0.0.1:*
 ```
 
-After changing `VITE_*` variables, redeploy the Vercel project because Vite embeds them during build.
+The Docker build sets `VITE_API_BASE_URL` to `/api`, so the frontend uses the same host and port as the backend when served from the Spring Boot container.
 
-### Render Backend
-
-Set allowed frontend origins for CORS:
-
-```bash
-CORS_ALLOWED_ORIGIN_PATTERNS=https://kursywalut-seven.vercel.app
-```
-
-For deployments that also need local testing against the deployed backend:
-
-```bash
-CORS_ALLOWED_ORIGIN_PATTERNS=https://kursywalut-seven.vercel.app,http://localhost:*,http://127.0.0.1:*
-```
-
-Render should also keep:
-
-```bash
-PORT=8080
-```
-
-Redeploy or restart the Render service after changing environment variables.
+If the application is exposed under a custom domain or reverse proxy, add that frontend origin to `CORS_ALLOWED_ORIGIN_PATTERNS`.
 
 ## Example API Endpoints
 
@@ -391,7 +370,6 @@ docker compose up --build
 
 ## Limitations and Notes
 
-- **Free Hosting Behavior:** The backend is hosted on a free tier (Render), which means the application goes to sleep after a period of inactivity. The first request after a long break (e.g., trying to log in or register) may take a while to wake up the server.
 - Currency and gold data come from the public NBP API, so application availability depends on the external service.
 - JWT tokens are signed with `jwt.secret`. Tokens become invalid if the secret changes.
 - In Docker Compose, PostgreSQL data is stored in the `postgres_data` Docker volume and survives container restarts. Use `docker compose down -v` only when you want to remove it.
@@ -402,4 +380,4 @@ docker compose up --build
 - Token refreshing and a persistent JWT secret from configuration,
 - OpenAPI / Swagger documentation,
 - Frontend tests,
-- CI/CD improvements for container builds and deployment.
+- CI/CD improvements for container builds.

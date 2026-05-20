@@ -113,13 +113,4 @@ public class AuthControllerTest {
                 .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:5174"));
     }
 
-    @Test
-    public void testAuthCorsPreflightAllowsProductionFrontend() throws Exception {
-        mockMvc.perform(options("/api/auth/register")
-                        .header("Origin", "https://kursywalut-seven.vercel.app")
-                        .header("Access-Control-Request-Method", "POST")
-                        .header("Access-Control-Request-Headers", "content-type"))
-                .andExpect(status().isOk())
-                .andExpect(header().string("Access-Control-Allow-Origin", "https://kursywalut-seven.vercel.app"));
-    }
 }

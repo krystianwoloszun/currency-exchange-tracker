@@ -31,15 +31,6 @@ export default function AboutPage() {
                         <strong>Frontend:</strong> React 19, Vite, CSS Modules, Chart.js.
                     </p>
 
-                    <div className="hosting-note">
-                        <h4>Ważna informacja o hostingu</h4>
-                        <p>
-                            Aplikacja korzysta z darmowej architektury serwerowej (Render). Ze względu na to, przy dłuższym braku aktywności,
-                            serwer backendowy przechodzi w stan uśpienia. Jeśli dane nie ładują się od razu, wykonaj dowolną akcję
-                            (np. spróbuj się zalogować lub zarejestrować) – serwer "obudzi się" po około jednej minucie.
-                        </p>
-                    </div>
-
                     <div className="github-section">
                         <h3>Open Source</h3>
                         <p>

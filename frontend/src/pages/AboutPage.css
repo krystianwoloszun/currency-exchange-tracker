@@ -64,26 +64,6 @@
     line-height: 1.5;
 }
 
-.hosting-note {
-    margin-top: 40px;
-    padding: 20px;
-    background-color: #fffbeb;
-    border-left: 4px solid #f59e0b;
-    border-radius: 8px;
-}
-
-.hosting-note h4 {
-    margin: 0 0 8px;
-    color: #92400e;
-    font-size: 1.1rem;
-}
-
-.hosting-note p {
-    margin: 0;
-    font-size: 0.95rem;
-    color: #78350f;
-}
-
 .github-section {
     margin-top: 40px;
     padding-top: 24px;
