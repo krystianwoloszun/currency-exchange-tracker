@@ -27,10 +27,12 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-kursywalut}
       POSTGRES_USER: ${POSTGRES_USER:-kursywalut}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kursywalut}
+    ports:
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-kursywalut} -d ${POSTGRES_DB:-kursywalut}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-kursywalut} -d ${POSTGRES_DB:-kursywalut}" ]
       interval: 10s
       timeout: 5s
       retries: 5
