@@ -1,4 +1,4 @@
-#Currency Exchange Tracker 
+# Currency Exchange Tracker 
 
 Full-stack application for checking currency rates and gold prices based on NBP (National Bank of Poland) API data. The project combines a Spring Boot backend with a React frontend, featuring a currency calculator, historical data, and simple JWT-based authentication.
 
@@ -374,10 +374,3 @@ docker compose up --build
 - JWT tokens are signed with `jwt.secret`. Tokens become invalid if the secret changes.
 - In Docker Compose, PostgreSQL data is stored in the `postgres_data` Docker volume and survives container restarts. Use `docker compose down -v` only when you want to remove it.
 - In manual local runs without datasource overrides, the application uses the in-memory H2 database, so user data disappears after the application is stopped.
-
-## Future Improvements
-
-- Token refreshing and a persistent JWT secret from configuration,
-- OpenAPI / Swagger documentation,
-- Frontend tests,
-- CI/CD improvements for container builds.
