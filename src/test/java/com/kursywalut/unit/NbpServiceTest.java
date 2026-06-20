@@ -1,20 +1,29 @@
 package com.kursywalut.unit;
 
 import com.kursywalut.exception.NbpCodeNotFoundException;
+import com.kursywalut.exception.NbpUnavailableException;
 import com.kursywalut.model.NbpResponse;
+import com.kursywalut.model.NbpTableResponse;
 import com.kursywalut.model.Rate;
 import com.kursywalut.service.NbpService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class NbpServiceTest {
 
@@ -25,87 +34,150 @@ class NbpServiceTest {
     void setup() {
         restTemplate = mock(RestTemplate.class);
         nbpService = new NbpService(restTemplate);
-        nbpService.setRateUrl("http://fake-url");
-        nbpService.setTableUrl("http://fake-table-url");
+        nbpService.setRateUrl("http://nbp/rates/A");
+        nbpService.setTableUrl("http://nbp/tables/A");
     }
 
-    @Test
-    void testGetRate_success() {
-        Rate rate = new Rate();
-        rate.setCurrencyName("dolar amerykanski");
-        rate.setCode("USD");
-        rate.setMidRate(new BigDecimal("4.25"));
+    private NbpResponse rateResponse(String code, String currency, List<Rate> rates) {
         NbpResponse response = new NbpResponse();
-        response.setRates(List.of(rate));
-        when(restTemplate.getForObject(anyString(), eq(NbpResponse.class))).thenReturn(response);
+        response.setCode(code);
+        response.setCurrency(currency);
+        response.setRates(rates);
+        return response;
+    }
 
-        BigDecimal result = nbpService.getRate("USD");
-        assertEquals(new BigDecimal("4.25"), result);
+    private Rate rate(BigDecimal mid, LocalDate effectiveDate) {
+        Rate rate = new Rate();
+        rate.setMidRate(mid);
+        rate.setEffectiveDate(effectiveDate);
+        return rate;
     }
 
     @Test
-    void testGetRate_notFound() {
+    void getRateReturnsMidRate() {
+        when(restTemplate.getForObject(anyString(), eq(NbpResponse.class)))
+                .thenReturn(rateResponse("USD", "dolar amerykanski", List.of(rate(new BigDecimal("4.25"), null))));
+
+        assertThat(nbpService.getRate("USD")).isEqualByComparingTo("4.25");
+    }
+
+    @Test
+    void getRateBuildsExpectedUrl() {
+        when(restTemplate.getForObject(anyString(), eq(NbpResponse.class)))
+                .thenReturn(rateResponse("USD", "dolar", List.of(rate(new BigDecimal("4.0"), null))));
+
+        nbpService.getRate("USD");
+
+        ArgumentCaptor<String> url = ArgumentCaptor.forClass(String.class);
+        verify(restTemplate).getForObject(url.capture(), eq(NbpResponse.class));
+        assertThat(url.getValue()).isEqualTo("http://nbp/rates/A/USD?format=json");
+    }
+
+    @Test
+    void getRateMapsNotFoundToDomainException() {
         when(restTemplate.getForObject(anyString(), eq(NbpResponse.class)))
                 .thenThrow(HttpClientErrorException.NotFound.class);
 
-        assertThrows(NbpCodeNotFoundException.class, () -> nbpService.getRate("XXX"));
+        assertThatThrownBy(() -> nbpService.getRate("XXX"))
+                .isInstanceOf(NbpCodeNotFoundException.class);
     }
 
     @Test
-    void testConvertToPLN() {
-        Rate rate = new Rate();
-        rate.setCurrencyName("dolar amerykanski");
-        rate.setCode("USD");
-        rate.setMidRate(new BigDecimal("4.0"));
+    void getRateMapsConnectionFailureToUnavailable() {
+        when(restTemplate.getForObject(anyString(), eq(NbpResponse.class)))
+                .thenThrow(new ResourceAccessException("connection refused"));
 
-        NbpResponse response = new NbpResponse();
-        response.setRates(List.of(rate));
-        when(restTemplate.getForObject(anyString(), eq(NbpResponse.class))).thenReturn(response);
-
-        BigDecimal amount = new BigDecimal("10");
-        BigDecimal result = nbpService.convertToPLN(amount, "USD");
-        assertEquals(new BigDecimal("40.0"), result);
+        assertThatThrownBy(() -> nbpService.getRate("USD"))
+                .isInstanceOf(NbpUnavailableException.class);
     }
 
     @Test
-    void testConvertFromPLN() {
-        Rate rate = new Rate();
-        rate.setCurrencyName("dolar amerykanski");
-        rate.setCode("USD");
-        rate.setMidRate(new BigDecimal("4.0"));
-        NbpResponse response = new NbpResponse();
-        response.setRates(List.of(rate));
-        when(restTemplate.getForObject(anyString(), eq(NbpResponse.class))).thenReturn(response);
+    void convertToPlnMultipliesByRate() {
+        when(restTemplate.getForObject(anyString(), eq(NbpResponse.class)))
+                .thenReturn(rateResponse("USD", "dolar", List.of(rate(new BigDecimal("4.0"), null))));
 
-        BigDecimal amount = new BigDecimal("40");
-        BigDecimal result = nbpService.convertFromPLN(amount, "USD");
-        assertEquals(new BigDecimal("10.00"), result);
+        assertThat(nbpService.convertToPLN(new BigDecimal("10"), "USD")).isEqualByComparingTo("40.0");
     }
 
     @Test
-    void testGetRateHistory_success() {
-        Rate rate1 = new Rate();
-        rate1.setMidRate(new BigDecimal("4.10"));
-        rate1.setEffectiveDate(LocalDate.of(2026, 3, 10));
+    void convertFromPlnDividesAndRoundsHalfUp() {
+        when(restTemplate.getForObject(anyString(), eq(NbpResponse.class)))
+                .thenReturn(rateResponse("USD", "dolar", List.of(rate(new BigDecimal("3.0"), null))));
 
-        Rate rate2 = new Rate();
-        rate2.setMidRate(new BigDecimal("4.20"));
-        rate2.setEffectiveDate(LocalDate.of(2026, 3, 11));
+        // 10 / 3 = 3.333... -> 3.33
+        assertThat(nbpService.convertFromPLN(new BigDecimal("10"), "USD")).isEqualByComparingTo("3.33");
+    }
 
-        NbpResponse response = new NbpResponse();
-        response.setCurrency("dolar amerykanski");
-        response.setCode("USD");
-        response.setRates(List.of(rate1, rate2));
-
+    @Test
+    void getRateHistoryMapsEachRateWithCurrencyMetadata() {
+        NbpResponse response = rateResponse("USD", "dolar amerykanski", List.of(
+                rate(new BigDecimal("4.10"), LocalDate.of(2026, 3, 10)),
+                rate(new BigDecimal("4.20"), LocalDate.of(2026, 3, 11))));
         when(restTemplate.getForObject(anyString(), eq(NbpResponse.class))).thenReturn(response);
 
         List<Rate> result = nbpService.getRateHistory("USD", LocalDate.of(2026, 3, 10), LocalDate.of(2026, 3, 11));
 
-        assertEquals(2, result.size());
-        assertEquals("USD", result.getFirst().getCode());
-        assertEquals("dolar amerykanski", result.getFirst().getCurrencyName());
-        assertEquals(new BigDecimal("4.10"), result.get(0).getMidRate());
-        assertEquals(LocalDate.of(2026, 3, 10), result.get(0).getEffectiveDate());
-        assertEquals(LocalDate.of(2026, 3, 11), result.get(1).getEffectiveDate());
+        assertThat(result).hasSize(2);
+        assertThat(result.get(0).getCode()).isEqualTo("USD");
+        assertThat(result.get(0).getCurrencyName()).isEqualTo("dolar amerykanski");
+        assertThat(result.get(0).getMidRate()).isEqualByComparingTo("4.10");
+        assertThat(result.get(0).getEffectiveDate()).isEqualTo(LocalDate.of(2026, 3, 10));
+        assertThat(result.get(1).getEffectiveDate()).isEqualTo(LocalDate.of(2026, 3, 11));
+    }
+
+    @Test
+    void getRateHistoryThrowsUnavailableOnEmptyResponse() {
+        when(restTemplate.getForObject(anyString(), eq(NbpResponse.class)))
+                .thenReturn(rateResponse("USD", "dolar", List.of()));
+
+        assertThatThrownBy(() -> nbpService.getRateHistory("USD", LocalDate.of(2026, 3, 10), LocalDate.of(2026, 3, 11)))
+                .isInstanceOf(NbpUnavailableException.class);
+    }
+
+    @Test
+    void getRateHistoryMapsNotFoundToDomainException() {
+        when(restTemplate.getForObject(anyString(), eq(NbpResponse.class)))
+                .thenThrow(HttpClientErrorException.NotFound.class);
+
+        assertThatThrownBy(() -> nbpService.getRateHistory("XXX", LocalDate.of(2026, 3, 10), LocalDate.of(2026, 3, 11)))
+                .isInstanceOf(NbpCodeNotFoundException.class);
+    }
+
+    @Test
+    void getAvailableCurrenciesMapsTableRatesWithEffectiveDate() {
+        NbpTableResponse table = new NbpTableResponse();
+        table.setEffectiveDate("2026-06-20");
+        table.setRates(List.of(
+                new Rate("dolar amerykanski", "USD", new BigDecimal("3.75"), null),
+                new Rate("euro", "EUR", new BigDecimal("4.30"), null)));
+        when(restTemplate.getForObject(anyString(), eq(NbpTableResponse[].class)))
+                .thenReturn(new NbpTableResponse[]{table});
+
+        List<Rate> result = nbpService.getAvailableCurrencies();
+
+        assertThat(result).hasSize(2);
+        assertThat(result.get(0).getCode()).isEqualTo("USD");
+        assertThat(result.get(0).getEffectiveDate()).isEqualTo(LocalDate.of(2026, 6, 20));
+        assertThat(result.get(1).getCode()).isEqualTo("EUR");
+    }
+
+    @Test
+    void getAvailableCurrenciesThrowsWhenNbpReturnsNothing() {
+        when(restTemplate.getForObject(anyString(), eq(NbpTableResponse[].class)))
+                .thenReturn(new NbpTableResponse[]{});
+
+        assertThatThrownBy(() -> nbpService.getAvailableCurrencies())
+                .isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    void getLatestAvailableCurrencyDateReturnsEffectiveDateOfFirstRate() {
+        NbpTableResponse table = new NbpTableResponse();
+        table.setEffectiveDate("2026-06-20");
+        table.setRates(List.of(new Rate("dolar", "USD", new BigDecimal("3.75"), null)));
+        when(restTemplate.getForObject(anyString(), eq(NbpTableResponse[].class)))
+                .thenReturn(new NbpTableResponse[]{table});
+
+        assertThat(nbpService.getLatestAvailableCurrencyDate()).isEqualTo(LocalDate.of(2026, 6, 20));
     }
 }
